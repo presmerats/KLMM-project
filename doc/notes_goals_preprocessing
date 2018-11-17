@@ -1,0 +1,98 @@
+SOP
+
+data raw:
+	each experiment is a measurement during 4 secs of s1,s2,s3 and error (cols 3,4,5 and 7)
+		-> verify with data selection
+
+	there is a preprocessing (folder seleccio) where only experiment where there is a fluctuation are selected
+
+	1/3600 frequency -> 227 microseconds between each measure
+
+	preprocessing:
+		- extract desired columns? v2 (time), v3(x1),v4(x2),v5(x3),h(error)
+			plot
+				series evolution
+			verify which colums is the error 
+				make an average and see
+				for experiments where there's no perturbation -> compare the avg
+		- filter experiments by those where perturbation appears? ->  really?
+		- averaging over 10ms or 100ms
+
+
+
+possible analysis
+
+	goal
+		find a relation between sop and numerrors
+
+
+	select a time window: like 100ms
+	select a number of data points -> downsampling
+
+	other features besides sop values
+		-numerrors value at the beginning of the window
+		-time from last stationary/stabilized regime
+		-each data point in the interval downsampled
+		-s1>0, s2>0, s3>0, s1>s2, s1>s3, s2>s3,
+		-PCA
+
+
+	select a target
+		- delta = 0 -> numerrors value
+
+		- delta = 10,20 -> small shift in the future then num errors value
+
+		correlation between sop and error, not in the future, just like direct
+		then for prediction, we can use time series forecasting on sop to extrct future sop values then with this relationship we extract numerrors value
+
+
+
+
+	models
+		regression
+			(kernelized) svm for regression
+
+			adv. we can take a lot of features
+
+		discretize -> classification
+			select balanced classes (look throught the numerror values distrib. and divide by 2/3)
+
+
+		autoencoder?
+			kind of non linear pca that extracts new features
+			but what is the supervised unsupervised here?
+
+		treelike:
+			extract features like
+				s1>0, s2>0, s3>0, s1>s2, s1>s3, s2>s3,
+
+			for each class -> see the number of examples
+				if enough samples -> then train a model for this class
+
+				then for each class -> do a linear regression and see if the coefccicient are significant
+
+			classes can be grouped
+
+			decision tree or random forest would be more likely model for this approach
+
+
+
+		other: kernelized PCA?
+			just funny idea to show a visualization in 3d where separation between classes is maximum...
+
+
+Preprocesing
+
+setup 0
+	regression with svm
+	v1[0...n]
+	v2[0...n]
+	v3[0..n] ? -> constraint unit sphere
+	goal: current value
+		e[n]
+
+setup 1
+	v1[0,...10]
+	v2[0....10]
+	goal: difference 
+		 e[0] - e[10]
