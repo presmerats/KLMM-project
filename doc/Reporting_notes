@@ -1,0 +1,32 @@
+Reporting
+
+
+
+Explain the dataset and the problem
+	- testbed that generates this dataset
+	
+	- one type or a few types of perturbation, NOT ALL types of perturbations are comprehended in the testbed (data generation process)
+
+
+Explain the previous analysis that exists
+
+	- Cite the Paper
+	- add the reference
+	- explain the analsysis
+	- show the results
+
+
+Explain the goals of this project
+
+	- regression Error value based on previous variables values
+	- classification -> error increase decrease?
+					 -> error value over threshold 
+
+Preprocessing explained
+
+
+Model explained
+	
+	and training
+
+Results & comparison

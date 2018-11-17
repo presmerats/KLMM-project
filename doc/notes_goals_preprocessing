@@ -16,8 +16,8 @@ data raw:
 				make an average and see
 				for experiments where there's no perturbation -> compare the avg
 		- filter experiments by those where perturbation appears? ->  really?
-		- averaging over 10ms or 100ms
-
+		- downsample/averaging over 10ms or 100ms
+			- see some time series library to do that?
 
 
 possible analysis
@@ -48,20 +48,20 @@ possible analysis
 
 
 	models
-		regression
+		1) regression
 			(kernelized) svm for regression
 
 			adv. we can take a lot of features
 
-		discretize -> classification
+		2) time series prediction
+			multivariate time series
+
+
+		3)discretize -> classification
 			select balanced classes (look throught the numerror values distrib. and divide by 2/3)
 
 
-		autoencoder?
-			kind of non linear pca that extracts new features
-			but what is the supervised unsupervised here?
-
-		treelike:
+		4) treelike:
 			extract features like
 				s1>0, s2>0, s3>0, s1>s2, s1>s3, s2>s3,
 
@@ -73,6 +73,12 @@ possible analysis
 			classes can be grouped
 
 			decision tree or random forest would be more likely model for this approach
+
+
+
+		autoencoder?
+			kind of non linear pca that extracts new features
+			but what is the supervised unsupervised here?
 
 
 
