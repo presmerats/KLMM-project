@@ -12,7 +12,7 @@ data raw:
 		- extract desired columns? v2 (time), v3(x1),v4(x2),v5(x3),h(error)
 			plot
 				series evolution
-			verify which colums is the error 
+			verify which colums is the error
 				make an average and see
 				for experiments where there's no perturbation -> compare the avg
 		- filter experiments by those where perturbation appears? ->  really?
@@ -24,7 +24,6 @@ possible analysis
 
 	goal
 		find a relation between sop and numerrors
-
 
 	select a time window: like 100ms
 	select a number of data points -> downsampling
