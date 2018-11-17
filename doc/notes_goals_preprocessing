@@ -16,8 +16,8 @@ data raw:
 				make an average and see
 				for experiments where there's no perturbation -> compare the avg
 		- filter experiments by those where perturbation appears? ->  really?
-		- averaging over 10ms or 100ms
-
+		- downsample/averaging over 10ms or 100ms
+			- see some time series library to do that?
 
 
 possible analysis
