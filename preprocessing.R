@@ -91,9 +91,44 @@ usage <- function(){
   # RVM
   library(kernlab)
   df2 <- features.time.window(dsdf,4)
-  df2 <- df2[1:10000,]
-  rvm(as.matrix(df2[,2:(ncol(df2)-2)]),y=df2[,ncol(df2)-1])
-
+  nrow(df2)
+  ncol(df2)
+  x <- as.matrix(df2[,2:(ncol(df2)-2)])
+  ytrain <- df2[,ncol(df2)-1]
+  head(x)
+  length(x)
+  nrow(x)
+  length(ytrain)
+  
+  model <- rvm(x),y=ytrain)
+  # print relevance vectors
+  alpha(model)
+  RVindex(model)
+  
+  #predict and plot
+  dftest <- read_files("./data/raw/csv_small2")
+  dsdf2 <- down.sample(dftest,40)
+  nrow(dsdf2)
+  
+  xtest <- as.matrix(dsdf2[,2:(ncol(dsdf2)-2)])
+  nrow(xtest)
+  head(xtest[,2])
+  summary(xtest)
+  
+  ytest.gt <- dsdf2[,ncol(dsdf2)-1]
+  summary(ytest.gt)
+  
+  ytest <- predict(model, xtest)
+  summary(ytest)
+  
+  # plot predict vs ground-truth
+  par(mfrow=c(1,1))
+  plot(ytest,type="l", main="RVM: predicted error vs real error with 4 csv files")
+  lines(ytest.gt, col="red")
+  
+  # sum of squares error?
+  rmse <- sqrt(sum((ytest - ytest.gt)^2)/nrow(xtest))
+  rmse    
 }
 
 
