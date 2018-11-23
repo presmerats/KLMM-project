@@ -19,7 +19,8 @@ read_files <- function(path) {
       file_path <- paste(path, f, sep = '/')
       print(paste("Reading:", file_path, total_size - group_number, "files left", sep = ' '))
       
-      df_temp <- read.csv(file = file_path, header = TRUE, sep=",")
+      #df_temp <- read.csv(file = file_path, header = TRUE, sep=",")
+      df_temp <- read.csv(file = file_path, header = TRUE, sep="\t",skip=22)
       df_temp['group'] <- group_number
       
       df <- rbind(df, df_temp)
@@ -44,7 +45,8 @@ usage <- function(){
   # save the complete dataset
   #read_files("./data/raw/csv")
   # load a small dataset to play
-  df <- read_files("./data/raw/csv_small")
+  #df <- read_files("./data/raw/csv_small")
+  df <- read_files("./data/new1")
   #load(file = 'data.Rdata')
   head(df)
 
@@ -133,3 +135,14 @@ usage <- function(){
 
 
 #usage()
+
+
+# tasks
+# 0) y -> remove noise with a moving average
+# 1) x: construct feature space (possibly using ts() then -> matrix of values)
+# 2) y() as a value or as an increment on the interval?
+# 3) determine if the errors (y target) are actually independent
+# 4) train RVM 
+#     - different kernels
+#     - different loss functions
+#     - different time window -> number of features
