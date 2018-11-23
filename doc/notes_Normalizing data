@@ -1,0 +1,16 @@
+Normalizing data 
+Normalizing data + margins 
+
+
+fluctuations
+	- maybe small freq fluctuations are noise
+	1-> sliding window /moving avg to have the same num of points
+	2-> new data -> different configs -> if in one config there's not so many noise -> mark it
+
+
+evaluation as regr model
+	-> mse, rmse
+
+
+evaluation as classification also
+	-> take t1  and t1+delta -> up? down? -> 2 classes -> accuracy evaluation
