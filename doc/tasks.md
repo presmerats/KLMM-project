@@ -2,40 +2,40 @@
 
 ## Tasks
 
-0. determine if new Y samples have less noise -> decide if changing dataset or applying mov.avg
-  a. y -> new dataset comparison
+### 0. determine if new Y samples have less noise -> decide if changing dataset or applying mov.avg
+  a. __y -> new dataset comparison__
   b. __y -> remove noise with a moving average__
 
-2. determine if the errors (y target) are actually independent?
+###  2. determine if the errors (y target) are actually independent?
   * this is related to regression samples ->for each t there's x and xt, xt-1,..,xt-w and yt
   * can it be considered independent?
   * covariance/correlation with sop vars? (will only extract linear relationship)
 
-1. y() as a value or as an increment on the interval?
+###  1. y() as a value or as an increment on the interval?
   prepare both:
   * for different intervals 10ms 20ms 50ms 100ms 500ms 1000ms
   * with t-w and t+d but for each t
 
 
-3. x: construct feature space (possibly using ts() then -> matrix of values)
+###  3. x: construct feature space (possibly using ts() then -> matrix of values)
   * option 1: window w. for different w intervals 10ms, 20ms, 50ms, 100ms, 500ms, 1000ms
   * option 2: dilated window n*w? only taking value every n values? 
 
-3b. save training data versions x+y for the different combinations
+### 3b. save training data versions x+y for the different combinations
   1. x+y w=10,20,50,100,500,1000ms and d=10,20,50,100,500,1000ms
   2. x_dilated window+y  for n=10,100 w=10,20,.1000 d=10,20,..1000
   3. x+y_ini-last for n=.. w=.. d=..
   4. x_dilated_window+y_ini-last for n=.. w=.. d=..
 
 
-4. sample dataset: train, validation & test
+### 4. sample dataset: train, validation & test
 
-5. error/accuracy measure: 
+### 5. error/accuracy measure: 
   *      RMSE?, 
   *      accuracy on error up/down class given dt,
   *      accuracy = 1 - predicted_error/error_budget(mean error)  
 
-6. experiment design: 
+### 6. experiment design: 
   - downsampling/aggregation: 4,33,300..? verify this!
   - w: different time window -> number of features
   - d: different prediction window
@@ -47,13 +47,13 @@
     - only error
     - both error & sops
 
-7. start training:
+### 7. start training:
   - follow experiment design scheduling
 
 
 ## Experiment design:
 
-hyperparams/experiments to perform:
+### hyperparams/experiments to perform:
 
 * downsampling: 4,33,40,330
 * w: time window, how many backward values of each variable to consider
@@ -76,7 +76,7 @@ hyperparams/experiments to perform:
   * sops+initial error in w
 * loss functions:?
 
-tentative experiments design 1:
+### tentative experiments design 1:
 
 Initial hyper params list yields around 12 "factors", simplify to 2 values each -> 2^12 ...
 Tentative 1:
@@ -90,7 +90,8 @@ Tentative 1:
 
 For a total of 5*3*3*5*5*4(linear kernel) + 5*3*3*5*4(Gaussian kernel) = 5400 model fittings 
 
-tentative experiments design 2:
+
+### tentative experiments design 2:
 
 Do a global search first, then do a local search approach. Meaning that w,d, input type will be searched more broadly and shallowly. Then once those hyperparams have some optimal values, we will intensify our search for the best kernels and kernel params
 
