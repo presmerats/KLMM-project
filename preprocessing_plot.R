@@ -5,7 +5,7 @@ plot.basic <- function(x,title=""){
   plot(x$x1, col="green", type="l",main=title)
   points(x$x2, col="red", type="l",main=title)
   points(x$x3, col="blue", type="l",main=title)
-  plot(x$error, col="black", type="l" ,main=title)
+  plot(x$error, col="black", type="l" ,main=title, ylim=c(70000,91000))
 }
 
 plot.lagged <- function(x,title="",limx=1000){

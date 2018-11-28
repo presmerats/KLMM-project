@@ -8,7 +8,7 @@ source("preprocessing_features.R")
 # Dataframe construction---------------------------------------------------
 # Reading all .csv files in a given path and returning the merge dataframe
 # parameters: path (str)
-read_files <- function(path) {
+read_files <- function(path,theskip=0, keeps=c("V1","V2","V3","V4","V6",'group')) {
   files <- list.files(path = path)
   total_size <- length(files) - 2
   df <- data.frame()
@@ -19,8 +19,8 @@ read_files <- function(path) {
       file_path <- paste(path, f, sep = '/')
       print(paste("Reading:", file_path, total_size - group_number, "files left", sep = ' '))
       
-      #df_temp <- read.csv(file = file_path, header = TRUE, sep=",")
-      df_temp <- read.csv(file = file_path, header = TRUE, sep="\t",skip=22)
+      df_temp <- read.csv(file = file_path, header = TRUE, sep=",")
+      #df_temp <- read.csv(file = file_path, header = TRUE, sep="\t",skip=theskip)
       df_temp['group'] <- group_number
       
       df <- rbind(df, df_temp)
@@ -38,6 +38,221 @@ read_files <- function(path) {
 }
 
 
+read_files2 <- function(path,theskip=0, keeps=c("V1","V2","V3","V4","V6",'group')) {
+  files <- list.files(path = path)
+  total_size <- length(files) - 2
+  df <- data.frame()
+  group_number <- 1
+  for(f in files) {
+    #skipping sampleMaxError.csv and sampleMinError.csv
+      file_path <- paste(path, f, sep = '/')
+      print(paste("Reading:", file_path, total_size - group_number, "files left", sep = ' '))
+      
+      #df_temp <- read.csv(file = file_path, header = TRUE, sep=",")
+      df_temp <- read.csv(file = file_path, header = TRUE, sep="\t",skip=theskip)
+      df_temp['group'] <- group_number
+      
+      df <- rbind(df, df_temp)
+      group_number <- group_number + 1
+  }
+  
+  df_final <- df[,keeps]
+  names(df_final) <- c('time','x1','x2','x3','error','group')
+  
+  print("Saving merge dataframe into data.Rdata file...")
+  save(df_final, file = 'data.Rdata')
+  return(df_final)
+}
+
+
+# Study of target values ------------------------------------
+
+# smoothing
+smoothing.study <- function(){
+  # save the complete dataset
+  #read_files("./data/raw/csv")
+  # load a small dataset to play
+  #df <- read_files("./data/raw/csv_small")
+  #df <- read_files("./data/new1")
+  load(file = 'data.Rdata')
+  df <- df_final
+  head(df)
+  
+  nrow(df)
+  max(df$x3)
+  summary(df)
+  plot.basic(df, title="Original data 0.278ms/sample ")
+  
+  # smoothing error tests first 10000 data points
+  n <- nrow(df)
+  #n <- 60000
+  df2 <- df[1:n,]
+  
+  
+  par(mfrow=c(1,1))
+  plot(df2$error, main="smoothing window=10 points ")
+  
+  w<-10
+  coefs <- exponential.decay.coefs(w,i=0.7)
+  df2$y2 <- smoothing(df2$error, w, coefs)
+  points(df2$y2, col="blue")
+  
+  df2$y <- smoothing(df2$error, w)
+  points(df2$y, col="red")
+  legend(100,90000, legend=c("original","MA", "Weighted MA"),
+         col=c("black","red", "blue"), pch=c(1,1,1), cex=0.8)  
+  
+  plot.basic(df2, title="Original data 0.278ms/sample ")
+  df2$error <- df2$y
+  plot.basic(df2, title=paste("Smoothed error w=",w,sep=""))
+  
+  # verifications, mean the same, median the same, std lower, max, min smaller
+  summary(df)
+  summary(df2)  
+
+  
+  # w=100
+  df2 <- df[1:n,]
+  par(mfrow=c(1,1))
+  plot(df2$error, main="smoothing window=100 points ")
+  
+  # weighted MA
+  w<-100
+  coefs <- exponential.decay.coefs(w,i=0.7)
+  df2$y2 <- smoothing(df2$error, w, coefs)
+  points(df2$y2, col="blue")
+  
+  # MA
+  df2$y <- smoothing(df2$error, w)
+  points(df2$y, col="red")
+  legend(100,90000, legend=c("original","MA", "Weighted MA"),
+         col=c("black","red", "blue"), pch=c(1,1,1), cex=0.8)  
+  # comparision
+  plot.basic(df2, title="Original data  ")
+  df2$error <- df2$y
+  plot.basic(df2, title=paste("Smoothed error w=",w,sep=""))
+  
+  # verifications,
+  summary(df)
+  summary(df2)  
+  
+}
+smoothing.study()
+
+
+# new data target noise comparison
+comparison.new.data <- function(){
+  #load(file = 'data.Rdata')
+  #df <- df_final
+  df.orig <- read_files("./data/raw/csv_small")
+  summary(df.orig)
+  
+  df1 <- read_files2("./data/new1",theskip=21, keeps=c("X_Value", "s1",	"s2",	"s3", "n_err","group"))
+  summary(df1)
+  df2 <- read_files2("./data/new2",theskip=21, keeps=c("X_Value", "s1",	"s2",	"s3", "n_err","group"))
+  summary(df2)
+  df3 <- read_files2("./data/new3",theskip=21, keeps=c("X_Value", "s1",	"s2",	"s3", "n_err","group"))
+  summary(df3)
+  df4 <- read_files2("./data/new4",theskip=21, keeps=c("X_Value", "s1",	"s2",	"s3", "n_err","group"))
+  summary(df4)
+  df5 <- read_files2("./data/new5",theskip=21, keeps=c("X_Value", "s1",	"s2",	"s3", "n_err","group"))
+  summary(df5)
+  sd(df.orig$error)
+  sd(df1$error)
+  sd(df2$error)
+  sd(df3$error)
+  sd(df4$error)
+  sd(df5$error)
+  # > sd(df.orig$error)
+  # [1] 2465.224
+  # > sd(df1$error)
+  # [1] 2120.768
+  # > sd(df2$error)
+  # [1] 1394.844
+  # > sd(df3$error)
+  # [1] 484.4986
+  # > sd(df4$error)
+  # [1] 166.4815
+  # > sd(df5$error)
+  # [1] 71.26421
+  
+  stds <- c(  sd(df.orig$error),
+              sd(df1$error),
+              sd(df2$error),
+              sd(df3$error),
+              sd(df4$error),
+              sd(df5$error))
+  stds <- round(stds,2)
+  
+  par(mfrow=c(1,1))
+  plot(df.orig$error[1:20000], ylim=c(100,90000), main="Error values and std", xlab="t", ylab="error")
+  points(df1$error, col="blue")
+  points(df2$error, col="red")
+  points(df3$error, col="green")
+  points(df4$error, col="orange")
+  points(df5$error, col="cyan")
+  legend(13000,50000, legend=paste(c("orig",rep("new",5)),c(0:5),rep(" std: ",6),stds),
+         col=c("black","blue","red","green","orange","cyan"), pch=c(1,1,1,1,1,1), cex=0.8)  
+  
+  
+  
+}
+
+
+comparison.new.data.normalized <- function(){
+  #load(file = 'data.Rdata')
+  #df <- df_final
+  df.orig <- read_files("./data/raw/csv_small")
+  summary(df.orig)
+  
+  df1 <- read_files2("./data/new1",theskip=21, keeps=c("X_Value", "s1",	"s2",	"s3", "n_err","group"))
+  summary(df1)
+  df2 <- read_files2("./data/new2",theskip=21, keeps=c("X_Value", "s1",	"s2",	"s3", "n_err","group"))
+  summary(df2)
+  df3 <- read_files2("./data/new3",theskip=21, keeps=c("X_Value", "s1",	"s2",	"s3", "n_err","group"))
+  summary(df3)
+  df4 <- read_files2("./data/new4",theskip=21, keeps=c("X_Value", "s1",	"s2",	"s3", "n_err","group"))
+  summary(df4)
+  df5 <- read_files2("./data/new5",theskip=21, keeps=c("X_Value", "s1",	"s2",	"s3", "n_err","group"))
+  summary(df5)
+  
+  # scale everything
+  df.orig$error <- scale(df.orig$error)
+  summary(df.orig$error)
+  df1$error <- scale(df1$error)
+  summary(df1$error)
+  df2$error <- scale(df2$error)
+  summary(df2$error)
+  df3$error <- scale(df3$error)
+  summary(df3$error)
+  df4$error <- scale(df4$error)
+  summary(df4$error)
+  df5$error <- scale(df5$error)
+  summary(df5$error)
+  
+
+  
+  stds <- c(  sd(df.orig$error),
+              sd(df1$error),
+              sd(df2$error),
+              sd(df3$error),
+              sd(df4$error),
+              sd(df5$error))
+  stds <- round(stds,2)
+  
+  par(mfrow=c(1,1))
+  plot(df.orig$error[1:20000], ylim=c(-2,2), main="Error values and std", xlab="t", ylab="error")
+  points(df1$error, col="blue")
+  points(df2$error, col="red")
+  points(df3$error, col="green")
+  points(df4$error, col="orange")
+  points(df5$error, col="cyan")
+  legend(13000,0, legend=paste(c("orig",rep("new",5)),c(0:5),rep(" std: ",6),stds),
+         col=c("black","blue","red","green","orange","cyan"), pch=c(1,1,1,1,1,1), cex=0.8)  
+  
+  
+  
+}
 
 # Usage example ----------------------------------------------------
 
@@ -46,14 +261,23 @@ usage <- function(){
   #read_files("./data/raw/csv")
   # load a small dataset to play
   #df <- read_files("./data/raw/csv_small")
-  df <- read_files("./data/new1")
-  #load(file = 'data.Rdata')
+  #df <- read_files("./data/new1")
+  load(file = 'data.Rdata')
+  df <- df_final
   head(df)
 
   nrow(df)
   max(df$x3)
   summary(df)
   plot.basic(df, title="Original data 0.278ms/sample ")
+  
+  # smoothing error tests
+  df2 <- df[1:10000,]
+  
+  par(mfrow=c(3,3))
+  df2$y <- smoothing(df2$error, w=10, coefs=c() )
+  plot(df2$error, main="smoothing window=10 points ")
+  points(df2$y, col="red")
   
   # thougful downsample
   # 3600 samples per second
