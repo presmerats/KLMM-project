@@ -134,15 +134,4 @@ usage <- function(){
 }
 
 
-#usage()
-
-
-# tasks
-# 0) y -> remove noise with a moving average
-# 1) x: construct feature space (possibly using ts() then -> matrix of values)
-# 2) y() as a value or as an increment on the interval?
-# 3) determine if the errors (y target) are actually independent
-# 4) train RVM 
-#     - different kernels
-#     - different loss functions
-#     - different time window -> number of features
+# usage()

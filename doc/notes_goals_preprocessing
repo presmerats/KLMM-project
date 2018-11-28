@@ -7,6 +7,7 @@ data raw:
 	there is a preprocessing (folder seleccio) where only experiment where there is a fluctuation are selected
 
 	1/3600 frequency -> 227 microseconds between each measure
+		-aggregation of 33?
 
 	preprocessing:
 		- extract desired columns? v2 (time), v3(x1),v4(x2),v5(x3),h(error)
