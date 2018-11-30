@@ -38,6 +38,7 @@ features.prediction <- function(df, d=2){
   # names = c('time','x1','x2','x3','error','group')
   i = d
   # construct a col vector with all y from future d positions
+
   futurey <- rep(0,nrow(df)-d)
   for (k in 1:(nrow(df)-d)){
     futurey[k] <- df$y[k+d]
@@ -51,6 +52,7 @@ features.prediction <- function(df, d=2){
 
 
 data.preparation <- function( dirpath, w, d, dsw, maw){
+  
   
   df <- read_files(dirpath)
   print(dim(df))
@@ -67,6 +69,8 @@ data.preparation <- function( dirpath, w, d, dsw, maw){
   df.downsampled <- features.time.window(df.downsampled,w)  
   
   # apply d future pred -> new column future.y
+  
+  if (d>nrow(df.downsampled)-1) return
   df.downsampled <- features.prediction(df.downsampled,d)
   print(dim(df.downsampled))
   df.downsampled$futurey
@@ -77,9 +81,8 @@ data.preparation <- function( dirpath, w, d, dsw, maw){
   filenamer <- paste(filename,".Rdata",sep="")
   save(df.downsampled, file = filenamer)
   
-  filenamecsv <- paste(filename,".csv",sep="")
-  write.csv(df.downsampled, file = filenamecsv)
-  
+  #filenamecsv <- paste(filename,".csv",sep="")
+  #write.csv(df.downsampled, file = filenamecsv)
   
   
 }
