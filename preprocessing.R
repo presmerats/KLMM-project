@@ -359,3 +359,38 @@ usage <- function(){
 
 
 # usage()
+
+preprocessing.final <- function(){
+  
+  start_time <- Sys.time()
+  #data.preparation(dirpath,w,d,downsampling_w, ma_w)
+  for (downsampling in c(4,33,100,330,1000)){
+    for (ma.window in c(50,100,200)){
+      for(w in c(10,20,50,100,500,1000)){
+        for (d in c(10,20,50,100,500,1000)){
+          data.preparation("./data/raw/csv_small",w,d,downsampling,ma.window)
+        }
+      }
+    }
+  }
+  end_time <- Sys.time()
+  total.time = end_time - start_time
+  print(total.time)
+  
+  start_time <- Sys.time()
+  #data.preparation(dirpath,w,d,downsampling_w, ma_w)
+  for (downsampling in c(4,33,100,330,1000)){
+    for (ma.window in c(50,100,200)){
+      for(w in c(10,20,50,100,500,1000)){
+        for (d in c(10,20,50,100,500,1000)){
+          data.preparation("./data/raw/csv",w,d,downsampling,ma.window)
+        }
+      }
+    }
+  }
+  end_time <- Sys.time()
+  total.time = end_time - start_time
+  print(total.time)
+  
+  
+}
