@@ -301,7 +301,13 @@ usage <- function(){
 
 # usage()
 
-preprocessing.final <- function(){
+preprocessing.small <- function(){
+  
+  library(parallel)
+  numCores <- detectCores()
+  numCores
+  library(foreach)
+  library(doParallel)
   
   start_time <- Sys.time()
   #data.preparation(dirpath,w,d,downsampling_w, ma_w)
@@ -309,23 +315,45 @@ preprocessing.final <- function(){
   #   for (ma.window in c(50,100,200)){
   #     for(w in c(10,20,50,100,500,1000)){
   #       for (d in c(10,20,50,100,500,1000)){
+  
+  experiments <- data.frame()
+  data.preparation.prev("./data/raw/csv_small","csv_small")
+  #for (downsampling in c(100,330)){
   for (downsampling in c(33,100,330)){
     for (ma.window in c(100)){
       for(w in c(50,100,500)){
         for (d in c(20,100,1000)){
-          
-          data.preparation("./data/raw/csv_small",w,d,downsampling,ma.window)
-          
+        #for (d in c(1000)){
+          # prepare parallel foreach
+          # print(downsampling)
+          # print(ma.window)
+          # print(w)
+          # print(d)
+          experiments <- rbind(experiments, data.frame(downsampling=downsampling, ma.window=ma.window, w=w, d=d))
+          #try(data.preparation("csv_small",w,d,downsampling,ma.window))
         }
       }
     }
   }
+  registerDoParallel(numCores-1)
+  foreach (i=1:nrow(experiments)) %dopar% {
+    w = experiments$w[i]
+    d = experiments$d[i]
+    downsampling = experiments$downsampling[i]
+    ma.window = experiments$ma.window[i]
+    try(data.preparation("csv_small",w,d,downsampling,ma.window)  )
+  }
+  
   end_time <- Sys.time()
   total.time = end_time - start_time
   print("total time")
   print(total.time)
+
   
-  start_time <- Sys.time()
+
+  start_time <- Sys.time()  
+  data.preparation.prev("./data/raw/csv","csv_all")
+  experiments <- data.frame()
   #data.preparation(dirpath,w,d,downsampling_w, ma_w)
   for (downsampling in c(33,100,330)){
     for (ma.window in c(100)){
@@ -334,24 +362,74 @@ preprocessing.final <- function(){
           if (d==1000 && w==1000 & ma.window==200){
             start_time2 <- Sys.time()
           }
-          data.preparation("./data/raw/csv",w,d,downsampling,ma.window)
-          if (d==1000 && w==1000 & ma.window==200){
-            end_time2 <- Sys.time()
-            total.time2 = end_time2 - start_time2
-            print(total.time2)
-          }
+          experiments <- rbind(experiments, data.frame(downsampling=downsampling, ma.window=ma.window, w=w, d=d))
         }
       }
     }
   }
+  registerDoParallel(numCores-1)
+  foreach (i=1:nrow(experiments)) %dopar% {
+    w = experiments$w[i]
+    d = experiments$d[i]
+    downsampling = experiments$downsampling[i]
+    ma.window = experiments$ma.window[i]
+    try(data.preparation("csv_small",w,d,downsampling,ma.window)  )
+  }
+  
   end_time <- Sys.time()
   total.time = end_time - start_time
+  print("total time")
   print(total.time)
+  
   
   
 }
 
-preprocessing.final()
+
+preprocessing.all <- function(){
+  
+  library(parallel)
+  numCores <- detectCores()
+  numCores
+  library(foreach)
+  library(doParallel)
+  
+  start_time <- Sys.time()  
+  data.preparation.prev("./data/raw/csv","csv_all")
+  experiments <- data.frame()
+  #data.preparation(dirpath,w,d,downsampling_w, ma_w)
+  for (downsampling in c(33,100,330)){
+    for (ma.window in c(100)){
+      for(w in c(50,100,500)){
+        for (d in c(20,100,1000)){
+          if (d==1000 && w==1000 & ma.window==200){
+            start_time2 <- Sys.time()
+          }
+          experiments <- rbind(experiments, data.frame(downsampling=downsampling, ma.window=ma.window, w=w, d=d))
+        }
+      }
+    }
+  }
+  registerDoParallel(numCores-1)
+  foreach (i=1:nrow(experiments)) %dopar% {
+    w = experiments$w[i]
+    d = experiments$d[i]
+    downsampling = experiments$downsampling[i]
+    ma.window = experiments$ma.window[i]
+    try(data.preparation("csv_all",w,d,downsampling,ma.window)  )
+  }
+  
+  end_time <- Sys.time()
+  total.time = end_time - start_time
+  print("total time")
+  print(total.time)
+  
+  
+  
+}
+
+preprocessing.small()
+preprocessing.all()
 
 
 

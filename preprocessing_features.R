@@ -51,17 +51,24 @@ features.prediction <- function(df, d=2){
 }
 
 
-data.preparation <- function( dirpath, w, d, dsw, maw){
-  
-  
+data.preparation.prev <- function(dirpath, filenameprefix){
   df <- read_files(dirpath)
-  print(dim(df))
+  filename <- paste(filenameprefix,"raw",sep="_")
+  filenamer <- paste(filename,".Rdata",sep="")
+  save(df, file = filenamer)
+}
+
+data.preparation <- function( filenameprefix, w, d, dsw, maw){
+  
+  
+  filename = paste(filenameprefix,"raw",sep="_")
+  filename = paste("./",filename,".Rdata",sep="")
+  load(file = filename) # loads a df named df
   
 
   # downsampling
   df.downsampled <- down.sample.avg(df,dsw)
 
-  
   # ma on error 
   df.downsampled$y <- smoothing(df.downsampled$error, w=maw )
   
@@ -70,14 +77,17 @@ data.preparation <- function( dirpath, w, d, dsw, maw){
   
   # apply d future pred -> new column future.y
   
-  if (d>nrow(df.downsampled)-1) return
+  print(d)
+  print(nrow(df.downsampled)-1)
+  if (d>nrow(df.downsampled)-1) return(NULL)
+  
   df.downsampled <- features.prediction(df.downsampled,d)
   print(dim(df.downsampled))
   df.downsampled$futurey
   
   
   # save data
-  filename <- paste("csv_small",w,d,dsw,maw,sep="_")
+  filename <- paste(filenameprefix,w,d,dsw,maw,sep="_")
   filenamer <- paste(filename,".Rdata",sep="")
   save(df.downsampled, file = filenamer)
   
