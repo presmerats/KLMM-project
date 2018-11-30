@@ -4,66 +4,7 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 source("preprocessing_downsampling.R")
 source("preprocessing_plot.R")
 source("preprocessing_features.R")
-
-# Dataframe construction---------------------------------------------------
-# Reading all .csv files in a given path and returning the merge dataframe
-# parameters: path (str)
-read_files <- function(path,theskip=0, keeps=c("V1","V2","V3","V4","V6",'group')) {
-  files <- list.files(path = path)
-  total_size <- length(files) - 2
-  df <- data.frame()
-  group_number <- 1
-  for(f in files) {
-    #skipping sampleMaxError.csv and sampleMinError.csv
-    if(nchar(f) < 10) {
-      file_path <- paste(path, f, sep = '/')
-      print(paste("Reading:", file_path, total_size - group_number, "files left", sep = ' '))
-      
-      df_temp <- read.csv(file = file_path, header = TRUE, sep=",")
-      #df_temp <- read.csv(file = file_path, header = TRUE, sep="\t",skip=theskip)
-      df_temp['group'] <- group_number
-      
-      df <- rbind(df, df_temp)
-      group_number <- group_number + 1
-    }
-  }
-  
-  keeps <- c("V1","V2","V3","V4","V6",'group')
-  df_final <- df[keeps]
-  names(df_final) <- c('time','x1','x2','x3','error','group')
-  
-  print("Saving merge dataframe into data.Rdata file...")
-  save(df_final, file = 'data.Rdata')
-  return(df_final)
-}
-
-
-read_files2 <- function(path,theskip=0, keeps=c("V1","V2","V3","V4","V6",'group')) {
-  files <- list.files(path = path)
-  total_size <- length(files) - 2
-  df <- data.frame()
-  group_number <- 1
-  for(f in files) {
-    #skipping sampleMaxError.csv and sampleMinError.csv
-      file_path <- paste(path, f, sep = '/')
-      print(paste("Reading:", file_path, total_size - group_number, "files left", sep = ' '))
-      
-      #df_temp <- read.csv(file = file_path, header = TRUE, sep=",")
-      df_temp <- read.csv(file = file_path, header = TRUE, sep="\t",skip=theskip)
-      df_temp['group'] <- group_number
-      
-      df <- rbind(df, df_temp)
-      group_number <- group_number + 1
-  }
-  
-  df_final <- df[,keeps]
-  names(df_final) <- c('time','x1','x2','x3','error','group')
-  
-  print("Saving merge dataframe into data.Rdata file...")
-  save(df_final, file = 'data.Rdata')
-  return(df_final)
-}
-
+source("preprocessing_readcsv.R")
 
 # Study of target values ------------------------------------
 
@@ -137,7 +78,7 @@ smoothing.study <- function(){
   summary(df2)  
   
 }
-smoothing.study()
+#smoothing.study()
 
 
 # new data target noise comparison
@@ -364,26 +305,41 @@ preprocessing.final <- function(){
   
   start_time <- Sys.time()
   #data.preparation(dirpath,w,d,downsampling_w, ma_w)
-  for (downsampling in c(4,33,100,330,1000)){
-    for (ma.window in c(50,100,200)){
-      for(w in c(10,20,50,100,500,1000)){
-        for (d in c(10,20,50,100,500,1000)){
+  # for (downsampling in c(4,33,100,330,1000)){
+  #   for (ma.window in c(50,100,200)){
+  #     for(w in c(10,20,50,100,500,1000)){
+  #       for (d in c(10,20,50,100,500,1000)){
+  for (downsampling in c(33,100,330)){
+    for (ma.window in c(100)){
+      for(w in c(50,100,500)){
+        for (d in c(20,100,1000)){
+          
           data.preparation("./data/raw/csv_small",w,d,downsampling,ma.window)
+          
         }
       }
     }
   }
   end_time <- Sys.time()
   total.time = end_time - start_time
+  print("total time")
   print(total.time)
   
   start_time <- Sys.time()
   #data.preparation(dirpath,w,d,downsampling_w, ma_w)
-  for (downsampling in c(4,33,100,330,1000)){
-    for (ma.window in c(50,100,200)){
-      for(w in c(10,20,50,100,500,1000)){
-        for (d in c(10,20,50,100,500,1000)){
+  for (downsampling in c(33,100,330)){
+    for (ma.window in c(100)){
+      for(w in c(50,100,500)){
+        for (d in c(20,100,1000)){
+          if (d==1000 && w==1000 & ma.window==200){
+            start_time2 <- Sys.time()
+          }
           data.preparation("./data/raw/csv",w,d,downsampling,ma.window)
+          if (d==1000 && w==1000 & ma.window==200){
+            end_time2 <- Sys.time()
+            total.time2 = end_time2 - start_time2
+            print(total.time2)
+          }
         }
       }
     }
@@ -394,3 +350,5 @@ preprocessing.final <- function(){
   
   
 }
+
+preprocessing.final()
