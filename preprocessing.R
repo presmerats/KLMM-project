@@ -394,3 +394,78 @@ preprocessing.final <- function(){
   
   
 }
+
+
+
+
+
+train.test <- function(fileprefix,w,d,dsw,maw){
+  
+  fileprefix="csv_small"
+  w=500
+  d=100
+  dsw=100
+  maw=100
+  
+  
+  filename = paste(fileprefix,w,d,dsw,maw,sep="_")
+  filename = paste("./",filename,".Rdata",sep="")
+  load(file = filename)
+  df <- df.downsampled
+  
+  # Input shape-----------------------------
+  # input sops + error
+  # target future error
+  colnames(df)[1200:length(colnames(df))]
+  colnames(df)[1:10]
+  # input selected cols 2:806, 808
+  # target selected cols 809
+  
+  # remove group, df.time, y 
+  remove.cols <- c(1, grep("^group$", colnames(df)),grep("^y$", colnames(df)),grep("^futurey$", colnames(df)))
+  X <- df[,-remove.cols]
+  Y <- df[,grep("^futurey$", colnames(df))]
+  dim(X)
+  length(Y)
+  Y
+  
+  # sample: train dataset, validation dataset, testing dataset
+  all <- c(1:length(Y))
+  train <- sample(all, length(Y)*0.6)
+  validation <- sample(all[-train], length(all[-train])*0.5)
+  test <- sample(all[-c(train,validation)], length(all[-c(train,validation)]))
+  
+  # training
+  library(kernlab)
+  
+  xtrain <- as.matrix(X[train,])
+  ytrain <- as.matrix(Y[train])
+  head(xtrain)
+  dim(xtrain)
+  length(ytrain)
+
+  model <- rvm(xtrain,ytrain)
+  #print relevance vectors
+  alpha(model)
+  RVindex(model)
+  
+  #predict and plot
+  xvalidation <- as.matrix(X[validation,])
+  yvalidation <- Y[validation]
+  
+  
+  yvalidation.pred <- predict(model, xvalidation)
+  ytest.pred <- predict(model,xtest)
+  # plot predict vs ground-truth
+  par(mfrow=c(1,1))
+  plot(yvalidation,type="l", main="RVM: predicted error vs real error with 4 csv files",ylim=c(60000,81000))
+  lines(yvalidation.pred, col="red")
+  
+  # sum of squares error?
+  rmse.validation <- sqrt(sum((yvalidation - yvalidation.pred)^2)/nrow(xvalidation))
+  rmse.validation    
+  
+  
+  
+    
+}
