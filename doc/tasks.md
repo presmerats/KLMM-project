@@ -26,6 +26,7 @@
   prepare both:
   * for different intervals 10ms 20ms 50ms 100ms 500ms 1000ms
   * with t-w and t+d but for each t
+  * ok-- with y(t+d)
 
 ###  3. x: construct feature space (possibly using ts() then -> matrix of values)
   * option 1: window w. for different w intervals 10ms, 20ms, 50ms, 100ms, 500ms, 1000ms
@@ -33,9 +34,17 @@
   * option 3: dilated decreaseing window: like every 5, every 10, every 20, 40, 80, 160,..
 
 ### 3b. save training data versions x+y for the different combinations
-  1. x+y w=10,20,50,100,500,1000ms and d=10,20,50,100,500,1000ms
+done
+  
+
+  
+pending
+  0. fix preprocessing -> by each group trim beginning and end 
+  1. test all preprocessings on a small/mid dataset (10 experiments)
+  1. x+future_y for w=50,100,500  d=20,100,1000 dsw=33,100,330 maw=100
+  1. x+y+future_y w=10,20,50,100,500,1000ms and d=10,20,50,100,500,1000ms
   2. x_dilated window+y  for n=10,100 w=10,20,.1000 d=10,20,..1000
-  3. x+y_ini-last for n=.. w=.. d=..
+  3. x+y_ini-present-futurey for n=.. w=.. d=..
   4. x_dilated_window+y_ini-last for n=.. w=.. d=..
 
 

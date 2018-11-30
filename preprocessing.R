@@ -437,11 +437,8 @@ preprocessing.all()
 
 train.test <- function(fileprefix,w,d,dsw,maw){
   
-  fileprefix="csv_small"
-  w=500
-  d=100
-  dsw=100
-  maw=100
+  start_time <- Sys.time()
+  
   
   
   filename = paste(fileprefix,w,d,dsw,maw,sep="_")
@@ -452,8 +449,8 @@ train.test <- function(fileprefix,w,d,dsw,maw){
   # Input shape-----------------------------
   # input sops + error
   # target future error
-  colnames(df)[1200:length(colnames(df))]
-  colnames(df)[1:10]
+  #colnames(df)[1200:length(colnames(df))]
+  #colnames(df)[1:10]
   # input selected cols 2:806, 808
   # target selected cols 809
   
@@ -461,15 +458,15 @@ train.test <- function(fileprefix,w,d,dsw,maw){
   remove.cols <- c(1, grep("^group$", colnames(df)),grep("^y$", colnames(df)),grep("^futurey$", colnames(df)))
   X <- df[,-remove.cols]
   Y <- df[,grep("^futurey$", colnames(df))]
-  dim(X)
-  length(Y)
+  print(dim(X))
+  print(length(Y))
   Y
   
   # sample: train dataset, validation dataset, testing dataset
   all <- c(1:length(Y))
-  train <- sample(all, length(Y)*0.6)
-  validation <- sample(all[-train], length(all[-train])*0.5)
-  test <- sample(all[-c(train,validation)], length(all[-c(train,validation)]))
+  train <- sample(all, length(Y)*0.05)
+  validation <- sample(all[-train], length(all[-train])*0.1)
+  test <- sample(all[-c(train,validation)], length(all[-c(train,validation)])*0.1)
   
   # training
   library(kernlab)
@@ -481,6 +478,9 @@ train.test <- function(fileprefix,w,d,dsw,maw){
   length(ytrain)
 
   model <- rvm(xtrain,ytrain)
+  filename = paste(fileprefix,w,d,dsw,maw,sep="_")
+  filename = paste("./",filename,"_model.rda",sep="")
+  save(mod, file = filename) 
   #print relevance vectors
   alpha(model)
   RVindex(model)
@@ -499,10 +499,23 @@ train.test <- function(fileprefix,w,d,dsw,maw){
   
   # sum of squares error?
   rmse.validation <- sqrt(sum((yvalidation - yvalidation.pred)^2)/nrow(xvalidation))
-  rmse.validation    
+  print(rmse.validation)
   
   
+  end_time <- Sys.time()
+  total.time = end_time - start_time
+  print("total time training")
+  print(total.time)
   
+  
+
     
 }
 
+fileprefix="csv_all"
+w=100
+d=100
+dsw=33
+maw=100
+
+train.test(fileprefix, w,d,dsw,maw)
