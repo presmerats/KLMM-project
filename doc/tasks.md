@@ -1,5 +1,16 @@
 # Planning
 
+## Quicktasks
+
+* finish preprocessings -> Rdata/csv, not all...
+* lagged y
+* training function:
+  * select columns of df according to model (sop, sop+error, error)
+  * split train, val, test
+  * train
+  * rmse val + plot val
+  * save rmse val to file results?
+
 ## Tasks
 
 ### 0. determine if new Y samples have less noise -> decide if changing dataset or applying mov.avg
@@ -16,10 +27,10 @@
   * for different intervals 10ms 20ms 50ms 100ms 500ms 1000ms
   * with t-w and t+d but for each t
 
-
 ###  3. x: construct feature space (possibly using ts() then -> matrix of values)
   * option 1: window w. for different w intervals 10ms, 20ms, 50ms, 100ms, 500ms, 1000ms
   * option 2: dilated window n*w? only taking value every n values? 
+  * option 3: dilated decreaseing window: like every 5, every 10, every 20, 40, 80, 160,..
 
 ### 3b. save training data versions x+y for the different combinations
   1. x+y w=10,20,50,100,500,1000ms and d=10,20,50,100,500,1000ms
@@ -80,7 +91,7 @@
 
 Initial hyper params list yields around 12 "factors", simplify to 2 values each -> 2^12 ...
 Tentative 1:
-  * downsampling: 4,33,100,330,1000
+  * downsampling: 4,33,100,330,1000 + ma for error
   * w: 10, 100, 1000
   * d: 10, 100, 1000
   * linear kernel a:  0.01 0.1 1 10 100
@@ -102,7 +113,7 @@ Tentative 2.1:
   * linear kernel a?  1
   * linear kernel c?  1
   * RBF kernel sigma? 1
-  * input type: sops, error, sops+error, sops+initial_error
+  * input type: sops, error, sops+error, sops+initial_error (model input will select them)
 Tentative 2.2:
   * w: 10
   * d: 10
