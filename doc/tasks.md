@@ -2,6 +2,8 @@
 
 ## Quicktasks
 
+done:
+
 * finish preprocessings -> Rdata/csv, not all...
 * lagged y
 * training function:
@@ -10,6 +12,36 @@
   * train
   * rmse val + plot val
   * save rmse val to file results?
+* improve results.txt -> add total time of training, make oneliner, model_params
+* find a good seeting of rvm on a small and working sample -> rbf!
+* fix preprocessing -> by each group trim beginning and end  -> verify
+    * any value of group n does not have values of previous group m  
+* save plot to disk
+  
+* translate w,d from ms to time points
+    dsw=n, 1 point = 0.25ms (4sec/16000=0.00025)
+    w=100ms -> w'*n*0.25=w -> w'=w/0.25/n 
+    d=50ms  -> d'=d*4/n
+    data.preparation -> computation with w' and d'
+    ->plot, write, print, change w,d to ms
+
+  
+pending:
+  
+  * use rbf working kernel -> increase data size until it stops working or takes too long training
+    - prepare sizes 5,50,75,100,150,200,
+    - could also play with the downsampling...
+  
+  
+  * x+future_y          for w=50,100,500  d=20,100,1000 dsw=33,100,330 maw=100
+  * x+y+future_y        for w=10,20,50,100,500,1000ms and d=10,20,50,100,500,1000ms
+  * x_dilated window+y  for n=10,100 w=10,20,.1000 d=10,20,..1000
+  * x+y_ini-present-futurey for n=.. w=.. d=..
+  * x_dilated_window+y_ini-last for n=.. w=.. d=..
+
+  * discretize y values (using the paper q value)
+  * train svm's on small sizes
+  * decide RVM or svm?
 
 ## Tasks
 
@@ -33,26 +65,13 @@
   * option 2: dilated window n*w? only taking value every n values? 
   * option 3: dilated decreaseing window: like every 5, every 10, every 20, 40, 80, 160,..
 
-### 3b. save training data versions x+y for the different combinations
-done
-  
-
-  
-pending
-  0. fix preprocessing -> by each group trim beginning and end 
-  1. test all preprocessings on a small/mid dataset (10 experiments)
-  1. x+future_y for w=50,100,500  d=20,100,1000 dsw=33,100,330 maw=100
-  1. x+y+future_y w=10,20,50,100,500,1000ms and d=10,20,50,100,500,1000ms
-  2. x_dilated window+y  for n=10,100 w=10,20,.1000 d=10,20,..1000
-  3. x+y_ini-present-futurey for n=.. w=.. d=..
-  4. x_dilated_window+y_ini-last for n=.. w=.. d=..
 
 
 ### 4. sample dataset: train, validation & test
 
 ### 5. error/accuracy measure: 
   *      RMSE?, 
-  *      accuracy on error up/down class given dt,
+  *      accuracy on error up/down class given dt, 
   *      accuracy = 1 - predicted_error/error_budget(mean error)  
 
 ### 6. experiment design: 

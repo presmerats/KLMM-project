@@ -6,302 +6,7 @@ source("preprocessing_plot.R")
 source("preprocessing_features.R")
 source("preprocessing_readcsv.R")
 
-# Study of target values ------------------------------------
-
-# smoothing
-smoothing.study <- function(){
-  # save the complete dataset
-  #read_files("./data/raw/csv")
-  # load a small dataset to play
-  #df <- read_files("./data/raw/csv_small")
-  #df <- read_files("./data/new1")
-  load(file = 'data.Rdata')
-  df <- df_final
-  head(df)
-  
-  nrow(df)
-  max(df$x3)
-  summary(df)
-  plot.basic(df, title="Original data 0.278ms/sample ")
-  
-  # smoothing error tests first 10000 data points
-  n <- nrow(df)
-  #n <- 60000
-  df2 <- df[1:n,]
-  
-  
-  par(mfrow=c(1,1))
-  plot(df2$error, main="smoothing window=10 points ")
-  
-  w<-10
-  coefs <- exponential.decay.coefs(w,i=0.7)
-  df2$y2 <- smoothing(df2$error, w, coefs)
-  points(df2$y2, col="blue")
-  
-  df2$y <- smoothing(df2$error, w)
-  points(df2$y, col="red")
-  legend(100,90000, legend=c("original","MA", "Weighted MA"),
-         col=c("black","red", "blue"), pch=c(1,1,1), cex=0.8)  
-  
-  plot.basic(df2, title="Original data 0.278ms/sample ")
-  df2$error <- df2$y
-  plot.basic(df2, title=paste("Smoothed error w=",w,sep=""))
-  
-  # verifications, mean the same, median the same, std lower, max, min smaller
-  summary(df)
-  summary(df2)  
-
-  
-  # w=100
-  df2 <- df[1:n,]
-  par(mfrow=c(1,1))
-  plot(df2$error, main="smoothing window=100 points ")
-  
-  # weighted MA
-  w<-100
-  coefs <- exponential.decay.coefs(w,i=0.7)
-  df2$y2 <- smoothing(df2$error, w, coefs)
-  points(df2$y2, col="blue")
-  
-  # MA
-  df2$y <- smoothing(df2$error, w)
-  points(df2$y, col="red")
-  legend(100,90000, legend=c("original","MA", "Weighted MA"),
-         col=c("black","red", "blue"), pch=c(1,1,1), cex=0.8)  
-  # comparision
-  plot.basic(df2, title="Original data  ")
-  df2$error <- df2$y
-  plot.basic(df2, title=paste("Smoothed error w=",w,sep=""))
-  
-  # verifications,
-  summary(df)
-  summary(df2)  
-  
-}
-#smoothing.study()
-
-
-# new data target noise comparison
-comparison.new.data <- function(){
-  #load(file = 'data.Rdata')
-  #df <- df_final
-  df.orig <- read_files("./data/raw/csv_small")
-  summary(df.orig)
-  
-  df1 <- read_files2("./data/new1",theskip=21, keeps=c("X_Value", "s1",	"s2",	"s3", "n_err","group"))
-  summary(df1)
-  df2 <- read_files2("./data/new2",theskip=21, keeps=c("X_Value", "s1",	"s2",	"s3", "n_err","group"))
-  summary(df2)
-  df3 <- read_files2("./data/new3",theskip=21, keeps=c("X_Value", "s1",	"s2",	"s3", "n_err","group"))
-  summary(df3)
-  df4 <- read_files2("./data/new4",theskip=21, keeps=c("X_Value", "s1",	"s2",	"s3", "n_err","group"))
-  summary(df4)
-  df5 <- read_files2("./data/new5",theskip=21, keeps=c("X_Value", "s1",	"s2",	"s3", "n_err","group"))
-  summary(df5)
-  sd(df.orig$error)
-  sd(df1$error)
-  sd(df2$error)
-  sd(df3$error)
-  sd(df4$error)
-  sd(df5$error)
-  # > sd(df.orig$error)
-  # [1] 2465.224
-  # > sd(df1$error)
-  # [1] 2120.768
-  # > sd(df2$error)
-  # [1] 1394.844
-  # > sd(df3$error)
-  # [1] 484.4986
-  # > sd(df4$error)
-  # [1] 166.4815
-  # > sd(df5$error)
-  # [1] 71.26421
-  
-  stds <- c(  sd(df.orig$error),
-              sd(df1$error),
-              sd(df2$error),
-              sd(df3$error),
-              sd(df4$error),
-              sd(df5$error))
-  stds <- round(stds,2)
-  
-  par(mfrow=c(1,1))
-  plot(df.orig$error[1:20000], ylim=c(100,90000), main="Error values and std", xlab="t", ylab="error")
-  points(df1$error, col="blue")
-  points(df2$error, col="red")
-  points(df3$error, col="green")
-  points(df4$error, col="orange")
-  points(df5$error, col="cyan")
-  legend(13000,50000, legend=paste(c("orig",rep("new",5)),c(0:5),rep(" std: ",6),stds),
-         col=c("black","blue","red","green","orange","cyan"), pch=c(1,1,1,1,1,1), cex=0.8)  
-  
-  
-  
-}
-
-
-comparison.new.data.normalized <- function(){
-  #load(file = 'data.Rdata')
-  #df <- df_final
-  df.orig <- read_files("./data/raw/csv_small")
-  summary(df.orig)
-  
-  df1 <- read_files2("./data/new1",theskip=21, keeps=c("X_Value", "s1",	"s2",	"s3", "n_err","group"))
-  summary(df1)
-  df2 <- read_files2("./data/new2",theskip=21, keeps=c("X_Value", "s1",	"s2",	"s3", "n_err","group"))
-  summary(df2)
-  df3 <- read_files2("./data/new3",theskip=21, keeps=c("X_Value", "s1",	"s2",	"s3", "n_err","group"))
-  summary(df3)
-  df4 <- read_files2("./data/new4",theskip=21, keeps=c("X_Value", "s1",	"s2",	"s3", "n_err","group"))
-  summary(df4)
-  df5 <- read_files2("./data/new5",theskip=21, keeps=c("X_Value", "s1",	"s2",	"s3", "n_err","group"))
-  summary(df5)
-  
-  # scale everything
-  df.orig$error <- scale(df.orig$error)
-  summary(df.orig$error)
-  df1$error <- scale(df1$error)
-  summary(df1$error)
-  df2$error <- scale(df2$error)
-  summary(df2$error)
-  df3$error <- scale(df3$error)
-  summary(df3$error)
-  df4$error <- scale(df4$error)
-  summary(df4$error)
-  df5$error <- scale(df5$error)
-  summary(df5$error)
-  
-
-  
-  stds <- c(  sd(df.orig$error),
-              sd(df1$error),
-              sd(df2$error),
-              sd(df3$error),
-              sd(df4$error),
-              sd(df5$error))
-  stds <- round(stds,2)
-  
-  par(mfrow=c(1,1))
-  plot(df.orig$error[1:20000], ylim=c(-2,2), main="Error values and std", xlab="t", ylab="error")
-  points(df1$error, col="blue")
-  points(df2$error, col="red")
-  points(df3$error, col="green")
-  points(df4$error, col="orange")
-  points(df5$error, col="cyan")
-  legend(13000,0, legend=paste(c("orig",rep("new",5)),c(0:5),rep(" std: ",6),stds),
-         col=c("black","blue","red","green","orange","cyan"), pch=c(1,1,1,1,1,1), cex=0.8)  
-  
-  
-  
-}
-
-# Usage example ----------------------------------------------------
-
-usage <- function(){
-  # save the complete dataset
-  #read_files("./data/raw/csv")
-  # load a small dataset to play
-  #df <- read_files("./data/raw/csv_small")
-  #df <- read_files("./data/new1")
-  load(file = 'data.Rdata')
-  df <- df_final
-  head(df)
-
-  nrow(df)
-  max(df$x3)
-  summary(df)
-  plot.basic(df, title="Original data 0.278ms/sample ")
-  
-  # smoothing error tests
-  df2 <- df[1:10000,]
-  
-  par(mfrow=c(3,3))
-  df2$y <- smoothing(df2$error, w=10, coefs=c() )
-  plot(df2$error, main="smoothing window=10 points ")
-  points(df2$y, col="red")
-  
-  # thougful downsample
-  # 3600 samples per second
-  # 0.000278 seconds per sample
-  # 278 microseconds per sample
-  # -> to ms  h = 4 almost
-  dsdf <- down.sample.avg(df,4)
-  nrow(dsdf)
-  plot.basic(dsdf, title="Avg Downsampled to ~ 1ms")
-  # -> to 10ms h=40?
-  dsdf <- down.sample.avg(df,40)
-  nrow(dsdf)
-  plot.basic(dsdf, title="Avg Downsampled to ~ 10ms")
-  # -> to 100ms h=400?
-  dsdf <- down.sample.avg(df,400)
-  nrow(dsdf)
-  plot.basic(dsdf, title="Avg Downsampled to ~ 100ms")
-
-  dsdf <- down.sample(df,4)
-  nrow(dsdf)
-  plot.basic(dsdf, title="Downsampled to ~ 1ms")
-  # -> to 10ms h=40?
-  dsdf <- down.sample(df,40)
-  nrow(dsdf)
-  plot.basic(dsdf, title="Downsampled to ~ 10ms")
-  # -> to 100ms h=400?
-  dsdf <- down.sample(df,400)
-  nrow(dsdf)
-  plot.basic(dsdf, title="Downsampled to ~ 100ms")
-  
-  # lagged series
-  df2 <- features.time.window(dsdf,100)
-  head(df2)
-  plot.lagged(df2, limx=200)
-  head(df2)
-  
-  # RVM
-  library(kernlab)
-  df2 <- features.time.window(dsdf,4)
-  nrow(df2)
-  ncol(df2)
-  x <- as.matrix(df2[,2:(ncol(df2)-2)])
-  ytrain <- df2[,ncol(df2)-1]
-  head(x)
-  length(x)
-  nrow(x)
-  length(ytrain)
-  
-  model <- rvm(x),y=ytrain)
-  # print relevance vectors
-  alpha(model)
-  RVindex(model)
-  
-  #predict and plot
-  dftest <- read_files("./data/raw/csv_small2")
-  dsdf2 <- down.sample(dftest,40)
-  nrow(dsdf2)
-  
-  xtest <- as.matrix(dsdf2[,2:(ncol(dsdf2)-2)])
-  nrow(xtest)
-  head(xtest[,2])
-  summary(xtest)
-  
-  ytest.gt <- dsdf2[,ncol(dsdf2)-1]
-  summary(ytest.gt)
-  
-  ytest <- predict(model, xtest)
-  summary(ytest)
-  
-  # plot predict vs ground-truth
-  par(mfrow=c(1,1))
-  plot(ytest,type="l", main="RVM: predicted error vs real error with 4 csv files")
-  lines(ytest.gt, col="red")
-  
-  # sum of squares error?
-  rmse <- sqrt(sum((ytest - ytest.gt)^2)/nrow(xtest))
-  rmse    
-}
-
-
-# usage()
-
-preprocessing.small <- function(){
+preprocessing.final <- function(prefix){
   
   library(parallel)
   numCores <- detectCores()
@@ -317,205 +22,66 @@ preprocessing.small <- function(){
   #       for (d in c(10,20,50,100,500,1000)){
   
   experiments <- data.frame()
-  data.preparation.prev("./data/raw/csv_small","csv_small")
-  #for (downsampling in c(100,330)){
-  for (downsampling in c(33,100,330)){
+  #for (downsampling in c(33,100,330)){
+  for (downsampling in c(33,100)){
     for (ma.window in c(100)){
       for(w in c(50,100,500)){
-        for (d in c(20,100,1000)){
-        #for (d in c(1000)){
-          # prepare parallel foreach
-          # print(downsampling)
-          # print(ma.window)
-          # print(w)
-          # print(d)
+        for (d in c(50,100)){
           experiments <- rbind(experiments, data.frame(downsampling=downsampling, ma.window=ma.window, w=w, d=d))
-          #try(data.preparation("csv_small",w,d,downsampling,ma.window))
-        }
-      }
-    }
-  }
-  registerDoParallel(numCores-1)
+        }}}}
+  registerDoParallel(numCores-3)
   foreach (i=1:nrow(experiments)) %dopar% {
     w = experiments$w[i]
     d = experiments$d[i]
     downsampling = experiments$downsampling[i]
     ma.window = experiments$ma.window[i]
-    try(data.preparation("csv_small",w,d,downsampling,ma.window)  )
+    try(data.preparation(prefix,w,d,downsampling,ma.window)  )
   }
   
   end_time <- Sys.time()
   total.time = end_time - start_time
-  print("total time")
+  print(paste("total time ",prefix))
   print(total.time)
-
-  
-
-  start_time <- Sys.time()  
-  data.preparation.prev("./data/raw/csv","csv_all")
-  experiments <- data.frame()
-  #data.preparation(dirpath,w,d,downsampling_w, ma_w)
-  for (downsampling in c(33,100,330)){
-    for (ma.window in c(100)){
-      for(w in c(50,100,500)){
-        for (d in c(20,100,1000)){
-          if (d==1000 && w==1000 & ma.window==200){
-            start_time2 <- Sys.time()
-          }
-          experiments <- rbind(experiments, data.frame(downsampling=downsampling, ma.window=ma.window, w=w, d=d))
-        }
-      }
-    }
-  }
-  registerDoParallel(numCores-1)
-  foreach (i=1:nrow(experiments)) %dopar% {
-    w = experiments$w[i]
-    d = experiments$d[i]
-    downsampling = experiments$downsampling[i]
-    ma.window = experiments$ma.window[i]
-    try(data.preparation("csv_small",w,d,downsampling,ma.window)  )
-  }
-  
-  end_time <- Sys.time()
-  total.time = end_time - start_time
-  print("total time")
-  print(total.time)
-  
-  
   
 }
 
-
-preprocessing.all <- function(){
+verification <- function(){
+  # load file
+  load(file = "csv_small_50_20_100_100.Rdata")
+  df <- df3
   
-  library(parallel)
-  numCores <- detectCores()
-  numCores
-  library(foreach)
-  library(doParallel)
+  df$group
+  length(unique(df$group))
   
-  start_time <- Sys.time()  
-  data.preparation.prev("./data/raw/csv","csv_all")
-  experiments <- data.frame()
-  #data.preparation(dirpath,w,d,downsampling_w, ma_w)
-  for (downsampling in c(33,100,330)){
-    for (ma.window in c(100)){
-      for(w in c(50,100,500)){
-        for (d in c(20,100,1000)){
-          if (d==1000 && w==1000 & ma.window==200){
-            start_time2 <- Sys.time()
-          }
-          experiments <- rbind(experiments, data.frame(downsampling=downsampling, ma.window=ma.window, w=w, d=d))
-        }
-      }
-    }
-  }
-  registerDoParallel(numCores-1)
-  foreach (i=1:nrow(experiments)) %dopar% {
-    w = experiments$w[i]
-    d = experiments$d[i]
-    downsampling = experiments$downsampling[i]
-    ma.window = experiments$ma.window[i]
-    try(data.preparation("csv_all",w,d,downsampling,ma.window)  )
-  }
-  
-  end_time <- Sys.time()
-  total.time = end_time - start_time
-  print("total time")
-  print(total.time)
-  
-  
-  
+  nrow(df[df$group=="2",])
+  nrow(df)
+  ncol(df)
+  df[89:91,c(2,3,49,50,51,206)]    # we observe that the "lagging" of values from x1_i to x1_j stops from row 90 to 91
+  # -> ok , as the group changes the values shhould no longer be "lagged"
 }
 
-preprocessing.small()
-preprocessing.all()
+#data.preparation.prev("./data/raw/csv_small2","csv_small2")
+data.preparation.prev("./data/raw/csv_small5","./data/preprocessed/csv_small5")
+data.preparation.prev("./data/raw/csv_small50","./data/preprocessed/csv_small50")
+data.preparation.prev("./data/raw/csv_small75","./data/preprocessed/csv_small75")
+data.preparation.prev("./data/raw/csv_small100","./data/preprocessed/csv_small100")
+data.preparation.prev("./data/raw/csv_small150","./data/preprocessed/csv_small150")
+data.preparation.prev("./data/raw/csv_small200","./data/preprocessed/csv_small200")
+
+#preprocessing.final("csv_small2")
+prefix = "csv_small"
+w=50
+d=20
+downsampling=100
+ma.window=100
+data.preparation(prefix,w,d,downsampling,ma.window)
+
+# already executed
+#data.preparation.prev("./data/raw/csv","csv_all")
+# pending
+#preprocessing.all()
 
 
 
 
 
-train.test <- function(fileprefix,w,d,dsw,maw){
-  
-  start_time <- Sys.time()
-  
-  
-  
-  filename = paste(fileprefix,w,d,dsw,maw,sep="_")
-  filename = paste("./",filename,".Rdata",sep="")
-  load(file = filename)
-  df <- df.downsampled
-  
-  # Input shape-----------------------------
-  # input sops + error
-  # target future error
-  #colnames(df)[1200:length(colnames(df))]
-  #colnames(df)[1:10]
-  # input selected cols 2:806, 808
-  # target selected cols 809
-  
-  # remove group, df.time, y 
-  remove.cols <- c(1, grep("^group$", colnames(df)),grep("^y$", colnames(df)),grep("^futurey$", colnames(df)))
-  X <- df[,-remove.cols]
-  Y <- df[,grep("^futurey$", colnames(df))]
-  print(dim(X))
-  print(length(Y))
-  Y
-  
-  # sample: train dataset, validation dataset, testing dataset
-  all <- c(1:length(Y))
-  train <- sample(all, length(Y)*0.05)
-  validation <- sample(all[-train], length(all[-train])*0.1)
-  test <- sample(all[-c(train,validation)], length(all[-c(train,validation)])*0.1)
-  
-  # training
-  library(kernlab)
-  
-  xtrain <- as.matrix(X[train,])
-  ytrain <- as.matrix(Y[train])
-  head(xtrain)
-  dim(xtrain)
-  length(ytrain)
-
-  model <- rvm(xtrain,ytrain)
-  filename = paste(fileprefix,w,d,dsw,maw,sep="_")
-  filename = paste("./",filename,"_model.rda",sep="")
-  save(mod, file = filename) 
-  #print relevance vectors
-  alpha(model)
-  RVindex(model)
-  
-  #predict and plot
-  xvalidation <- as.matrix(X[validation,])
-  yvalidation <- Y[validation]
-  
-  
-  yvalidation.pred <- predict(model, xvalidation)
-  ytest.pred <- predict(model,xtest)
-  # plot predict vs ground-truth
-  par(mfrow=c(1,1))
-  plot(yvalidation,type="l", main="RVM: predicted error vs real error with 4 csv files",ylim=c(60000,81000))
-  lines(yvalidation.pred, col="red")
-  
-  # sum of squares error?
-  rmse.validation <- sqrt(sum((yvalidation - yvalidation.pred)^2)/nrow(xvalidation))
-  print(rmse.validation)
-  
-  
-  end_time <- Sys.time()
-  total.time = end_time - start_time
-  print("total time training")
-  print(total.time)
-  
-  
-
-    
-}
-
-fileprefix="csv_all"
-w=100
-d=100
-dsw=33
-maw=100
-
-train.test(fileprefix, w,d,dsw,maw)
