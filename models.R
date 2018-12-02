@@ -5,7 +5,7 @@ train.test.pre <- train.test.lin <- function(fileprefix,w,d,dsw,maw){
   
   
   # load file
-  filename = paste(fileprefix,paste(w,"ms",sep=""),paste(d,"ms",sep=""),wp,dp,dsw,maw,sep="_")
+  filename = paste(fileprefix,paste("w",w,"ms",sep=""),paste("d",d,"ms",sep=""),paste("wp",wp,sep=""),paste("dp",dp,sep=""),paste("dsw",dsw,sep=""),paste("maw",maw,sep=""),sep="_")
   filename = paste("./data/preprocessed/",filename,".Rdata",sep="")
   load(file = filename)
   df <- df3
@@ -122,11 +122,12 @@ train.test.vanilladot <- function(fileprefix,w,d,dsw,maw){
   filename = paste("./models/",filename,"vanilladot", "_model.rda",sep="")
   save(filename, file = filename) 
   # prepare outputs
-  output.kv = c("Model:vanilladot",paste(" w:",w,"ms ",sep=""),paste("d:",d,"ms",sep="")," wp:",wp," dp:",dp," dsw:",dsw," ma:",maw,
+  modelstring = "Model:vanilladot"
+  output.kv = c(modelstring,paste(fileprefix," w:",w,"ms ",sep=""),paste("d:",d,"ms",sep="")," wp:",wp," dp:",dp," dsw:",dsw," ma:",maw,
                 " dim:",dim(xtrain)[1],",",dim(xtrain)[2],
                 " training:","",
                 " RMSE=","")
-  plot.title = c("RMSE  ",paste(" w:",w,"ms ",sep=""),paste("d:",d,"ms",sep="")," wp:",wp," dp:",dp," dsw:",dsw," ma:",maw)
+  plot.title = c("RMSE  ",paste(modelstring," ",fileprefix," w:",w,"ms ",sep=""),paste("d:",d,"ms",sep="")," wp:",wp," dp:",dp," dsw:",dsw," ma:",maw)
   plot.xlab = c(" dim:",dim(xtrain)[1],",",dim(xtrain)[2],
                 " training:","",
                 " RMSE=","") 
@@ -159,11 +160,12 @@ train.test.auto <- function(fileprefix,w,d,dsw,maw){
   filename = paste("./models/",filename,"auto","_model.rda",sep="")
   save(filename, file = filename) 
   # prepare outputs
-  output.kv = c("Model:","rbfdot_auto",paste(" w:",w,"ms ",sep=""),paste("d:",d,"ms",sep="")," wp:",wp," dp:",dp," dsw:",dsw," ma:",maw,
+  modelstring = "rbfdot_auto"
+  output.kv = c("Model:",modelstring,paste(fileprefix," w:",w,"ms ",sep=""),paste("d:",d,"ms",sep="")," wp:",wp," dp:",dp," dsw:",dsw," ma:",maw,
                 " dim:",dim(xtrain)[1],",",dim(xtrain)[2],
                 " training:","",
                 " RMSE=","")
-  plot.title = c("RMSE  ",paste(" w:",w,"ms ",sep=""),paste("d:",d,"ms",sep="")," wp:",wp," dp:",dp," dsw:",dsw," ma:",maw)
+  plot.title = c("RMSE  ",paste(modelstring," ",fileprefix,," w:",w,"ms ",sep=""),paste("d:",d,"ms",sep="")," wp:",wp," dp:",dp," dsw:",dsw," ma:",maw)
   plot.xlab = c(" dim:",dim(xtrain)[1],",",dim(xtrain)[2],
                 " training:","",
                 " RMSE=","") 
@@ -198,16 +200,17 @@ train.test.rbf <- function(fileprefix,w,d,dsw,maw,
                kpar = list(sigma=sigma),
                verbosity = 2)
   # save model
+  modelstring = "rbf"
   filename = paste(fileprefix,paste(w,"ms",sep=""),paste(d,"ms",sep=""),wp,dp,dsw,maw,sep="_")
   filename = paste("./models/",filename,"_rbf","_sigma_",sigma,"_model.rda",sep="")
   save(filename, file = filename) 
   # prepare outputs
-  output.kv = c("Model:","rbf",paste(" w:",w,"ms ",sep=""),paste("d:",d,"ms",sep="")," wp:",wp," dp:",dp," dsw:",dsw," ma:",maw,
+  output.kv = c("Model:",modelstring,paste(fileprefix," w:",w,"ms ",sep=""),paste("d:",d,"ms",sep="")," wp:",wp," dp:",dp," dsw:",dsw," ma:",maw,
                 " dim:",dim(xtrain)[1],",",dim(xtrain)[2],
                 " params ","sigma:",sigma,
                 " training:","",
                 " RMSE=","")
-  plot.title = c("RMSE  ",paste(" w:",w,"ms ",sep=""),paste("d:",d,"ms",sep="")," wp:",wp," dp:",dp," dsw:",dsw," ma:",maw)
+  plot.title = c("RMSE  ",paste(modelstring," ",fileprefix," sigma:",sigma," w:",w,"ms ",sep=""),paste("d:",d,"ms",sep="")," wp:",wp," dp:",dp," dsw:",dsw," ma:",maw)
   plot.xlab = c(" dim:",dim(xtrain)[1],",",dim(xtrain)[2],
                 " training:","",
                 " RMSE=","") 

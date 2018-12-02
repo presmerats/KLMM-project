@@ -25,24 +25,54 @@ done:
     data.preparation -> computation with w' and d'
     ->plot, write, print, change w,d to ms
 
-  
+  * study the ma values vs downsampling  -> not too smooth!
+    ok- ideally: w=500-100ms, d=50-200ms, dsw=1-10ms, ma=10ms? -> see suspected noise frequency
+    ok- w=200ms, d=100ms, dsw=40(10ms), ma=100(1s avg! too much)
+    ok-> print comparison original sampled vs downsampled vs downsampled+ma
+      (copy values in the downsampled to have same num of data points)
+    ok-> x-> from data points to ms
+    ok- ma and dsw must be diffrent!
+    ok- some setups put values much  much higher! investigate why
+    ok- dwsampled corresponds to last setup?
+    ok- decide the final intervals
+        dws: 10ms
+        ma:  250ms
+
+
+  * w,d
+      w=50,100,200,500, 1000ms
+      d=50,100,200ms
+
+  * write in the report schematically with images and tables
+    - preprocessing steps
+    - selecting downsampling and moving average rates
+    - models 
+    - model selection procedure
+    - comparison with previous work
+    - results
+
+
+  * not necessary! (kernels dont suffer from redundant features I think):
+    * x+future_y          for w=50,100,500  d=20,100,1000 dsw=33,100,330 maw=100
+    * x+y+future_y        for w=10,20,50,100,500,1000ms and d=10,20,50,100,500,1000ms
+    * x_dilated window+y  for n=10,100 w=10,20,.1000 d=10,20,..1000
+    * x+y_ini-present-futurey for n=.. w=.. d=..
+    * x_dilated_window+y_ini-last for n=.. w=.. d=..
+
 pending:
   
   * use rbf working kernel -> increase data size until it stops working or takes too long training
     - prepare sizes 5,50,75,100,150,200,
-    - could also play with the downsampling...
+    - could also play with the downsampling... -> better not!
   
-  
-  * x+future_y          for w=50,100,500  d=20,100,1000 dsw=33,100,330 maw=100
-  * x+y+future_y        for w=10,20,50,100,500,1000ms and d=10,20,50,100,500,1000ms
-  * x_dilated window+y  for n=10,100 w=10,20,.1000 d=10,20,..1000
-  * x+y_ini-present-futurey for n=.. w=.. d=..
-  * x_dilated_window+y_ini-last for n=.. w=.. d=..
 
-  * discretize y values (using the paper q value)
-  * train svm's on small sizes
-  * decide RVM or svm?
+  * try other kernels: polynomial, string, laplace
 
+
+  * comparison with previuos work
+    * discretize y values (using the paper q value) <- and use the same error measure as in the paper
+    * train svm's on small sizes <- RVM works quite well!
+    
 ## Tasks
 
 ### 0. determine if new Y samples have less noise -> decide if changing dataset or applying mov.avg

@@ -127,7 +127,7 @@ data.preparation <- function( filenameprefix, w, d, dsw, maw){
  
   
   # save data
-  filename <- paste(filenameprefix,paste(w,"ms",sep=""),paste(d,"ms",sep=""),wp,dp,dsw,maw,sep="_")
+  filename <- paste(filenameprefix,paste("w",w,"ms",sep=""),paste("d",d,"ms",sep=""),paste("wp",wp,sep=""),paste("dp",dp,sep=""),paste("dsw",dsw,sep=""),paste("maw",maw,sep=""),sep="_")
   filenamer <- paste("./data/preprocessed/",filename,".Rdata",sep="")
   save(df3, file = filenamer)
   
@@ -138,3 +138,21 @@ data.preparation <- function( filenameprefix, w, d, dsw, maw){
 }
 
 
+
+
+
+
+verification <- function(){
+  # load file
+  load(file = "csv_small_50_20_100_100.Rdata")
+  df <- df3
+  
+  df$group
+  length(unique(df$group))
+  
+  nrow(df[df$group=="2",])
+  nrow(df)
+  ncol(df)
+  df[89:91,c(2,3,49,50,51,206)]    # we observe that the "lagging" of values from x1_i to x1_j stops from row 90 to 91
+  # -> ok , as the group changes the values shhould no longer be "lagged"
+}

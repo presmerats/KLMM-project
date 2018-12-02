@@ -33,3 +33,7 @@ Model:rbf w:120 d:120 dsw:40 ma:100 dim:480,484 params sigma:1e-11 training:2.59
 Model:rbf w:130 d:130 dsw:30 ma:100 dim:819,524 params sigma:1e-11 training:12.29 secs RMSE=692.094
 Model:rbf w:110ms d:110ms wp:8.8 dp:8.8 dsw:50 ma:100 dim:300,444 params sigma:1e-11 training:0.67 secs RMSE=136.437
 Model:rbf w:110ms d:110ms wp:9 dp:9 dsw:50 ma:100 dim:300,444 params sigma:1e-11 training:0.66 secs RMSE=123.28
+Model:rbf csv_small5 w:500ms d:100ms wp:200 dp:40 dsw:10 ma:250 dim:3000,2004 params sigma:1e-11 training:14.87 mins RMSE=133.311
+Model:rbf csv_small5 w:1000ms d:100ms wp:400 dp:40 dsw:10 ma:250 dim:1500,4004 params sigma:1e-11 training:2.05 mins RMSE=115.263
+Model:rbfcsv_small5 w:1000ms d:100ms wp:400 dp:40 dsw:10 ma:250 dim:1500,4004 params sigma:1e-11 training:2.15 mins RMSE=112.245
+Model:rbfcsv_small5 w:1000ms d:100ms wp:400 dp:40 dsw:10 ma:250 dim:1500,4004 params sigma:1e-11 training:2.12 mins RMSE=103.385
