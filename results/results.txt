@@ -37,3 +37,15 @@ Model:rbf csv_small5 w:500ms d:100ms wp:200 dp:40 dsw:10 ma:250 dim:3000,2004 pa
 Model:rbf csv_small5 w:1000ms d:100ms wp:400 dp:40 dsw:10 ma:250 dim:1500,4004 params sigma:1e-11 training:2.05 mins RMSE=115.263
 Model:rbfcsv_small5 w:1000ms d:100ms wp:400 dp:40 dsw:10 ma:250 dim:1500,4004 params sigma:1e-11 training:2.15 mins RMSE=112.245
 Model:rbfcsv_small5 w:1000ms d:100ms wp:400 dp:40 dsw:10 ma:250 dim:1500,4004 params sigma:1e-11 training:2.12 mins RMSE=103.385
+Model:rbfcsv_small5 w:1000ms d:100ms wp:400 dp:40 dsw:10 ma:250 dim:1500,4004 params sigma:1e-11 training:2.09 mins RMSE=98.664
+Model:rbfcsv_small50 w:1000ms d:100ms wp:400 dp:40 dsw:10 ma:250 dim:900,4004 params sigma:1e-11 training:22.09 secs RMSE=753.575
+Model:rbfcsv_small50 w:1000ms d:100ms wp:400 dp:40 dsw:10 ma:250 dim:1800,4004 params sigma:1e-11 training:2.81 mins RMSE=555.657
+Model:rbfcsv_small50 w:1000ms d:100ms wp:400 dp:40 dsw:10 ma:250 dim:2400,4004 params sigma:1e-11 training:6.75 mins RMSE=537.27
+Model:rbfcsv_small50 w:1000ms d:100ms wp:400 dp:40 dsw:10 ma:250 dim:2700,4004 params sigma:1e-11 training:9.43 mins RMSE=483.117
+Model:rbfcsv_small50 w:1000ms d:100ms wp:400 dp:40 dsw:10 ma:250 dim:3000,4004 params sigma:1e-11 training:13.02 mins RMSE=511.139
+Model:rbfcsv_small50 w:1000ms d:100ms wp:400 dp:40 dsw:10 ma:250 dim:1080,4004 params sigma:1e-11 training:37.26 secs RMSE=708.942
+Model:rbfcsv_small50 w:1000ms d:100ms wp:400 dp:40 dsw:10 ma:250 dim:1200,4004 params sigma:1e-11 training:51.37 secs RMSE=730.85
+Model:rbfcsv_small50 w:1000ms d:100ms wp:400 dp:40 dsw:10 ma:250 dim:1320,4004 params sigma:1e-11 training:1.15 mins RMSE=623.691
+Model:rbfcsv_small50 w:1000ms d:100ms wp:400 dp:40 dsw:10 ma:250 dim:1500,4004 params sigma:1e-11 training:1.62 mins RMSE=598.051
+Model:rbfcsv_small50 w:1000ms d:100ms wp:400 dp:40 dsw:10 ma:250 dim:1500,4004 params sigma:1e-11 training:1.65 mins RMSE=622.412
+Model:rbfcsv_small50 w:1000ms d:100ms wp:400 dp:40 dsw:10 ma:250 dim:3600,4004 params sigma:1e-11 training:23.34 mins RMSE=451.358

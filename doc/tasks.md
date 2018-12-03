@@ -59,8 +59,21 @@ done:
     * x+y_ini-present-futurey for n=.. w=.. d=..
     * x_dilated_window+y_ini-last for n=.. w=.. d=..
 
+  ok- plot model results (make a func to plot from a data on directory)
+      ok- test.model()
+      - save model name and plots with dim of the data input
+
 pending:
+
+  * pred -> needs same data size!!!
+
+  * noise vs precision experiment (remove downsampling & ma and train rbf with sigma=1e-3)
   
+  * cross-validation implement
+      - normal cross-validation
+      - cross-validation adapted to train j times each model for the same training data 
+      - cross-validation adapted to have mode validation size than train size
+
   * use rbf working kernel -> increase data size until it stops working or takes too long training
     - prepare sizes 5,50,75,100,150,200,
     - could also play with the downsampling... -> better not!

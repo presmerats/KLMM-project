@@ -1,4 +1,4 @@
-train.test.pre <- train.test.lin <- function(fileprefix,w,d,dsw,maw){
+train.test.pre <- function(fileprefix,w,d,dsw,maw, n){
   
   wp=round(w/0.25/dsw,0)
   dp=round(d/0.25/dsw,0)
@@ -8,7 +8,8 @@ train.test.pre <- train.test.lin <- function(fileprefix,w,d,dsw,maw){
   filename = paste(fileprefix,paste("w",w,"ms",sep=""),paste("d",d,"ms",sep=""),paste("wp",wp,sep=""),paste("dp",dp,sep=""),paste("dsw",dsw,sep=""),paste("maw",maw,sep=""),sep="_")
   filename = paste("./data/preprocessed/",filename,".Rdata",sep="")
   load(file = filename)
-  df <- df3
+  subselect <- sample(1:nrow(df3),n)
+  df <- df3[subselect,]
   # prepare X,Y 
   remove.cols <- c(1, grep("^group$", colnames(df)),grep("^y$", colnames(df)),grep("^futurey$", colnames(df)))
   X <- df[,-remove.cols]
@@ -33,10 +34,55 @@ train.test.pre <- train.test.lin <- function(fileprefix,w,d,dsw,maw){
 }
 
 
-train.test.post <- train.test.lin <- function(model, 
-                                              xvalidation, yvalidation, 
-                                              output.kv, plot.title, plot.xlab,
-                                              start_time){
+
+
+test.model <- function(modelfilename, datafilename, subselect, xlab){
+  
+  # modelfilename = "csv_small5_1000ms_100ms_400_40_10_250_rbf_sigma_1e-11_model.rda"
+  # datafilename = "csv_small75_w100ms_d100ms_wp40_dp40_dsw10_maw250.Rdata"
+  # subselect = 1500
+  # xlab = "t in 10ms"
+  
+  # ,xtest, ytest
+  load(file = paste("./data/preprocessed/",datafilename,sep="") ) # output is df3
+  subselect <- sample(1:nrow(df3),subselect)
+  df <- df3[subselect,]
+  remove.cols <- c(1, grep("^group$", colnames(df)),grep("^y$", colnames(df)),grep("^futurey$", colnames(df)))
+  xtest <- df[,-remove.cols]
+  ytest <- df[,grep("^futurey$", colnames(df))]
+  
+  # load model
+  load(file = paste("./models/",modelfilename,sep="")) # output to "model" object
+  #predict
+  ytest.pred <- predict(model, xtest)
+  # sum of squares error?
+  rmse.test = sqrt(sum((ytest - ytest.pred)^2)/nrow(xtest))
+  
+  # output
+  rmse.plot = round(rmse.test,3)
+  
+  
+  
+  # plot
+  par(mfrow=c(1,1))
+  ylimmax = max(max(ytest),max(ytest.pred))
+  ylimmin = min(min(ytest),min(ytest.pred))
+  plotname= paste("./plots/","test",modelfilename,datafilename,paste("RMSE",rmse.plot,sep=""), sep="_" )
+  jpeg(plotname)
+  plot(
+    ytest,type="l", 
+    main=paste(plotname,sep="",collapse=""),
+    xlab=paste(xlab,sep="",collapse=""),
+    ylim=c(ylimmin,ylimmax))
+  lines(ytest.pred, col="red")
+  dev.off()
+  
+}
+
+train.test.post <- function(model, 
+                            xvalidation, yvalidation, 
+                            output.kv, plot.title, plot.xlab,
+                            start_time){
   #predict
   yvalidation.pred <- predict(model, xvalidation)
   # sum of squares error?
@@ -120,7 +166,7 @@ train.test.vanilladot <- function(fileprefix,w,d,dsw,maw){
   # save model
   filename = paste(fileprefix,paste(w,"ms",sep=""),paste(d,"ms",sep=""),wp,dp,dsw,maw,sep="_")
   filename = paste("./models/",filename,"vanilladot", "_model.rda",sep="")
-  save(filename, file = filename) 
+  save(model, file = filename) 
   # prepare outputs
   modelstring = "Model:vanilladot"
   output.kv = c(modelstring,paste(fileprefix," w:",w,"ms ",sep=""),paste("d:",d,"ms",sep="")," wp:",wp," dp:",dp," dsw:",dsw," ma:",maw,
@@ -158,7 +204,7 @@ train.test.auto <- function(fileprefix,w,d,dsw,maw){
   # save model
   filename = paste(fileprefix,"auto",paste(w,"ms",sep=""),paste(d,"ms",sep=""),wp,dp,dsw,maw,sep="_")
   filename = paste("./models/",filename,"auto","_model.rda",sep="")
-  save(filename, file = filename) 
+  save(model, file = filename) 
   # prepare outputs
   modelstring = "rbfdot_auto"
   output.kv = c("Model:",modelstring,paste(fileprefix," w:",w,"ms ",sep=""),paste("d:",d,"ms",sep="")," wp:",wp," dp:",dp," dsw:",dsw," ma:",maw,
@@ -175,7 +221,7 @@ train.test.auto <- function(fileprefix,w,d,dsw,maw){
 }
 
 train.test.rbf <- function(fileprefix,w,d,dsw,maw,
-                           sigma=1){
+                           sigma=1,n){
   
   wp=round(w/0.25/dsw,0)
   dp=round(d/0.25/dsw,0)
@@ -183,7 +229,7 @@ train.test.rbf <- function(fileprefix,w,d,dsw,maw,
   
   
   #return(list(xtrain, ytrain, xvalidation, yvalidation, xtest, ytest))
-  pre <- train.test.pre(fileprefix, w,d,dsw,maw)
+  pre <- train.test.pre(fileprefix, w,d,dsw,maw,n)
   xtrain <- pre[[1]]
   ytrain <- pre[[2]]
   xvalidation <- pre[[3]]
@@ -203,7 +249,7 @@ train.test.rbf <- function(fileprefix,w,d,dsw,maw,
   modelstring = "rbf"
   filename = paste(fileprefix,paste(w,"ms",sep=""),paste(d,"ms",sep=""),wp,dp,dsw,maw,sep="_")
   filename = paste("./models/",filename,"_rbf","_sigma_",sigma,"_model.rda",sep="")
-  save(filename, file = filename) 
+  save(model, file = filename) 
   # prepare outputs
   output.kv = c("Model:",modelstring,paste(fileprefix," w:",w,"ms ",sep=""),paste("d:",d,"ms",sep="")," wp:",wp," dp:",dp," dsw:",dsw," ma:",maw,
                 " dim:",dim(xtrain)[1],",",dim(xtrain)[2],

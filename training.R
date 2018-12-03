@@ -34,6 +34,26 @@ w=500;d=100;
 train.test.rbf("csv_small5", w,d,dsw,maw,sigma=1e-11)  # 15min
 w=1000;d=100;
 train.test.rbf("csv_small5", w,d,dsw,maw,sigma=1e-11)  # 2min training
+# new tests
+train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,n=1500) # 
+train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,n=3000) # 
+train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,n=4000) # 
+train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,n=4500) # 
+train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,n=5000) # 
+train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,n=100) # 
+train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,n=1800) # 
+train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,n=2000) # 
+train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,n=2200) # 
+train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,n=2500) #  1.6min RMSE 5.98
+train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,n=2500) #  1.6min RMSE 622 
+train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,n=6000) # 23min
+train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,n=10000) #  MUCH MORE -> discard
+
+
+test.model("csv_small5_1000ms_100ms_400_40_10_250_rbf_sigma_1e-11_model.rda", "csv_small50_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata", 1500, "t in 10ms")
+
+
+
 train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11) # 
 train.test.rbf("csv_small75", w,d,dsw,maw,sigma=1e-11)
 
