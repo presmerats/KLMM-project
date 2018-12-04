@@ -91,7 +91,11 @@ train.model("csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata",
             params=list(w=1000,d=100,dsw=10,maw=250,n=1500,sigma=1e-11))
 
 # fix this
+source("models.R")
 test.model("svm.rbf__n_1500_sigma_1e-06_e_0.1_C_100_dim__1500___4004_csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250._1000ms_100ms_400_40_10ms_250ms.model", "csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata", 1500, "t in 10ms")
 test.model("svm.rbf__n_1500_sigma_1e-06_e_0.1_C_100_dim__1500___4004_csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250._1000ms_100ms_400_40_10ms_250ms.model", "csv_small50_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata", 1500, "t in 10ms")
 test.model("rvm.rbf__n_1500_sigma_1e-11_dim__1500___4004_csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250._1000ms_100ms_400_40_10ms_250ms.rda", "csv_small50_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata", 1500, "t in 10ms")
+test.model("rvm.rbf__n_1500_sigma_1e-11_dim__1500___4004_csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250._1000ms_100ms_400_40_10ms_250ms.rda", "csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata", 1500, "t in 10ms")
 
+#
+modelfilename <- "svm.rbf__n_1500_sigma_1e-06_e_0.1_C_100_dim__1500___4004_csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250._1000ms_100ms_400_40_10ms_250ms.model"; datafilename <-  "csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata"; subsel <- 1500; xlab <-  "t in 10ms";

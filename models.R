@@ -138,7 +138,6 @@ plot.and.save.results <- function(xtrain, ytrain, xvalidation, yvalidation,yvali
 }
 
 
-model.functions <- list("rvm.rbf" = rvm.rbf, "svm.rbf" = svm.rbf)
 
 train.model <- function(datafile, model.func.string, params){
   ## datafile is a preprocessed dataset in Rdata format
@@ -213,7 +212,7 @@ train.model <- function(datafile, model.func.string, params){
 }
 
 
-test.model <- function(modelfilename, datafilename, subselect, xlab){
+test.model <- function(modelfilename, datafilename, subsel, xlab){
   
   # modelfilename = "csv_small5_1000ms_100ms_400_40_10_250_rbf_sigma_1e-11_model.rda"
   # datafilename = "csv_small75_w100ms_d100ms_wp40_dp40_dsw10_maw250.Rdata"
@@ -222,12 +221,12 @@ test.model <- function(modelfilename, datafilename, subselect, xlab){
   
   # ,xtest, ytest
   load(file = paste("./data/preprocessed/",datafilename,sep="") ) # output is df3
-  subselect <- sample(1:nrow(df3),subselect)
-  df3 <- df3[100,]
-  # if nrow(df3)<subselect -> pad with same data
+  subselect <- sample(1:nrow(df3),subsel)
+  #df3 <- df3[1,]
+  # if nrow(df3)<subselect -> pad with same data -> don't need to pad, it's only the columns that should match
   df <- df3[1,]
-  if (nrow(df3) < subselect){  
-  for (i in 2:subselect){
+  if (nrow(df3) < subsel){
+  for (i in 2:subsel){
       df <- rbind(df,df3[i,])
     }
   } else df <- df3[subselect,]
@@ -238,6 +237,37 @@ test.model <- function(modelfilename, datafilename, subselect, xlab){
   
   # load model
   load(file = paste("./models/",modelfilename,sep="")) # output to "model" object
+  
+  # dim verification
+  # extract dim from model name
+  i1 = regexpr('_dim__',modelfilename)
+  i2 = regexpr('_csv',modelfilename)
+  if (i1>0 && i2>0){
+    
+    
+    dims = substr(modelfilename,i1+7,i2-1)
+    i3 = regexpr('_',dims)
+    dim1 = as.numeric(substr(dims,1,i3-1))
+    dim2 = as.numeric(substr(dims,i3+3,nchar(dims)))
+    
+    #print(dim2)
+    #print(dim(xtest)[2])
+    if(dim2!=dim(xtest)[2]){
+      print(paste("incompatible column dimensions",dim2,dim(xtest)[2],sep=" "))
+      return(NULL)
+    }
+    
+    
+    
+  }
+  
+  
+  # timetext = substr(timetext,i2,nchar(timetext))
+  # plotnamevec[length(plotnamevec)-2] = paste(timenum,timetext,sep="",collapse="")
+  # plotname = paste(c('./plots/',plotnamevec,'.jpeg'),sep="",collapse="")
+  # plotname = gsub(":","_",plotname)
+  
+  
   #predict
   if (class(model)[1] == "ksvm"){
     library(kernlab)
@@ -314,4 +344,6 @@ svm.rbf <- function(xtrain, ytrain, params){
   } else return(NULL)
   
 }
+
+model.functions <- list("rvm.rbf" = rvm.rbf, "svm.rbf" = svm.rbf)
 
