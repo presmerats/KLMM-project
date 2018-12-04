@@ -71,11 +71,15 @@ save.model <- function(model, modelfunc, datafile, params, xtrain, ytrain){
   #modelstring = get.func.name(modelfunc) # not working
   modelstring = modelfunc
   paramstring = get.string.params(params)
-  datafile2 = substr(datafile,1,nchar(datafile)-6+1)
+  print(paste("paramstrings",paramstring,sep=" "))
+  datafile2 = substr(datafile,1,nchar(datafile)-6)
+  #print(datafile2)
   
   filename_sub = paste(modelstring,paramstring,"dim_",dim(xtrain)[1],"_",dim(xtrain)[2],
-                   datafile2,paste(w,"ms",sep=""),paste(d,"ms",sep=""),
-                   wp,dp,paste(dsw,"ms",sep=""),paste(maw,"ms",sep=""),
+                   datafile2,
+                   # instead do a verification that w,d,dsw,maw are the same as in the datafile name
+                   #,paste(w,"ms",sep=""),paste(d,"ms",sep=""),
+                   # wp,dp,paste(dsw,"ms",sep=""),paste(maw,"ms",sep=""),
                    sep="_")
   filename = paste("./models/",filename_sub,".model",sep="")
   print("saving to ")
@@ -102,7 +106,7 @@ plot.and.save.results <- function(xtrain, ytrain, xvalidation, yvalidation,yvali
   i1 = regexpr('\\.',timetext)
   i2 = regexpr('\ ',timetext)
   timenum = round(as.numeric(substr(timetext,1,i2-1)),2)
-  timetext = substr(timetext,i2,nchar(timetext))
+  timetext = substr(timetext,i2+1,nchar(timetext))
   final.time.text = paste(timenum,timetext,sep="",collapse="")
   
   model.result <- paste(modelstring,final.time.text,"rmse",rmse,sep="_",collapse="")
@@ -138,6 +142,48 @@ plot.and.save.results <- function(xtrain, ytrain, xvalidation, yvalidation,yvali
 }
 
 
+verify.dataset <- function(datafile, w,d,dsw,maw,wp,dp){
+  
+
+  # extract w,d,dsw,maw,wp,dp from name
+  i1 = regexpr('_',datafile)
+  aux = substr(datafile,i1+1,nchar(datafile))
+  i2 = regexpr('_',aux)
+  aux = substr(aux,i2+1,nchar(aux))
+  i3 = regexpr('_',aux)
+  aux = substr(aux,i3+1,nchar(aux))
+  i4 = regexpr('_',aux)
+  aux = substr(aux,i4+1,nchar(aux))
+  i5 = regexpr('_',aux)
+  aux = substr(aux,i5+1,nchar(aux))
+  i6 = regexpr('_',aux)
+  aux = substr(aux,i6+1,nchar(aux))
+  i7 = regexpr('_',aux)
+  aux = substr(aux,i7+1,nchar(aux))
+  i8 = regexpr('\\.',aux)
+  aux = substr(aux,i8+1,nchar(aux))
+  
+  w2 = as.numeric(substring(datafile,i1+i2+2,i1+i2+i3-3))
+  d2 = as.numeric(substring(datafile,i1+i2+i3+2,i1+i2+i3+i4-3))
+  wp2 = as.numeric(substring(datafile,i1+i2+i3+i4+3,i1+i2+i3+i4+i5-1))
+  dp2 = as.numeric(substring(datafile,i1+i2+i3+i4+i5+3,i1+i2+i3+i4+i5+i6-1))
+  dsw2 = as.numeric(substring(datafile,i1+i2+i3+i4+i5+i6+4,i1+i2+i3+i4+i5+i6+i7-1))
+  maw2 = as.numeric(substring(datafile,i1+i2+i3+i4+i5+i6+i7+4,i1+i2+i3+i4+i5+i6+i7+i8-1))
+  print(w2)
+  print(d2)
+  print(wp2)
+  print(dp2)
+  print(dsw2)
+  print(maw2)
+  
+  
+  # compare to w,d,dsw,maw,wp,dp
+  if (w!=w2 || d!=d2 || wp!=wp2 || dp!=dp2  || dsw!=dsw2 || maw!=maw2){
+    print("uncompatible parameters for dataset")
+    return(FALSE)
+  } else return(TRUE)
+  
+}
 
 train.model <- function(datafile, model.func.string, params){
   ## datafile is a preprocessed dataset in Rdata format
@@ -172,7 +218,11 @@ train.model <- function(datafile, model.func.string, params){
   # load data file
   print("loading data file into df")
   df <- my.load.file(datafile, params)
-
+  
+  #verify params compatible with dataset
+  compatible <- verify.dataset(datafile, w,d,dsw,maw,wp,dp)
+  if (compatible == FALSE) return(NULL)
+  
   # prepare X,Y 
   print("subseting X,Y into train,val, test")
   subsets <- prepare.XY.data(df, params)
