@@ -50,8 +50,6 @@ train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,n=6000) # 23min
 train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,n=10000) #  MUCH MORE -> discard
 
 
-test.model("csv_small5_1000ms_100ms_400_40_10_250_rbf_sigma_1e-11_model.rda", "csv_small50_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata", 1500, "t in 10ms")
-
 
 
 train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11) # 
@@ -70,5 +68,15 @@ preprocessing.final("csv_small200")
 train.test.rbf("csv_small200", w,d,dsw,maw,sigma=1e-11)
 
 
+# 20181203----------------------------------------
+source("models.R")
+train.model("csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata",
+            "rvm.rbf",
+            params=list(w=1000,d=100,dsw=10,maw=250,n=1500,sigma=1e-11))
+train.model("csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata",
+            "svm.rbf",
+            params=list(w=1000,d=100,dsw=10,maw=250,n=1500,sigma=1e-11, e=c(0,1,0.1), C=c(1,9)))
 
+# fix this
+#test.model("csv_small5_1000ms_100ms_400_40_10_250_rbf_sigma_1e-11_model.rda", "csv_small50_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata", 1500, "t in 10ms")
 
