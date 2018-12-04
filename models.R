@@ -52,7 +52,8 @@ get.string.params <- function(params) {
   paramstring <- ""
   for(i in names(params)){
     if (i %ni% c("w","d","dsw","maw")) {
-      paramstring <- paste(paramstring,i,params[i][[1]],sep="_")
+      
+      paramstring <- paste(paramstring,i,as.character(params[i][[1]]),sep="_", collapse="")
     }
   }
   return(paramstring)
@@ -76,7 +77,9 @@ save.model <- function(model, modelfunc, datafile, params, xtrain, ytrain){
                    datafile2,paste(w,"ms",sep=""),paste(d,"ms",sep=""),
                    wp,dp,paste(dsw,"ms",sep=""),paste(maw,"ms",sep=""),
                    sep="_")
-  filename = paste("./models/",filename_sub,".rda",sep="")
+  filename = paste("./models/",filename_sub,".model",sep="")
+  print("saving to ")
+  print(filename)
   save(model, file = filename) 
   return(filename_sub)
 }
@@ -286,17 +289,18 @@ svm.rbf.1 <- function(xtrain, ytrain, params){
 }
 
 svm.rbf <- function(xtrain, ytrain, params){
-  print("calling svm.rbf")
+  print("calling svm.rbf ")
   
   if ("sigma" %in% names(params) && "C" %in% names(params) && "e" %in% names(params) ){
-    library(e1071)
+    library(kernlab)
     
     e = params["e"][[1]]
     C = params["C"][[1]]
     sigma = params["sigma"][[1]]
     model <- ksvm(xtrain, ytrain,kernel="rbfdot" , C=C[1], epsilon=e[1], type="eps-svr",  kpar=list(sigma=sigma) )
-    #tuneResult <- tune(svm, Y ~ X,  data = data,
-    #                   ranges = list(epsilon = seq(e[1],e[2],e[3]), cost = 2^(C[1]:C[2])))
+    #print(model)
+    #print(class(model))
+    save(model, file="ksvm.model")
     return(model)
   } else return(NULL)
   

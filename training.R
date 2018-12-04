@@ -71,11 +71,24 @@ train.test.rbf("csv_small200", w,d,dsw,maw,sigma=1e-11)
 # 20181203----------------------------------------
 source("models.R")
 train.model("csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata",
-            "rvm.rbf",
-            params=list(w=1000,d=100,dsw=10,maw=250,n=1500,sigma=1e-11))
+            "svm.rbf",
+            params=list(w=1000,d=100,dsw=10,maw=250,n=1500,sigma=1e-7, e=.1, C=100)) # RMSE 156 NICE FIT!
 train.model("csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata",
             "svm.rbf",
-            params=list(w=1000,d=100,dsw=10,maw=250,n=1500,sigma=1e-11, e=c(0,1,0.1), C=c(1,9)))
+            params=list(w=1000,d=100,dsw=10,maw=250,n=1500,sigma=1e-7, e=1, C=100)) # RMSE 428
+train.model("csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata",
+            "svm.rbf",
+            params=list(w=1000,d=100,dsw=10,maw=250,n=1500,sigma=1e-9, e=1, C=100)) # fails misearble
+train.model("csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata",
+            "svm.rbf",
+            params=list(w=1000,d=100,dsw=10,maw=250,n=1500,sigma=1e-9, e=.01, C=100)) # bad fit
+train.model("csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata",
+            "svm.rbf",
+            params=list(w=1000,d=100,dsw=10,maw=250,n=1500,sigma=1e-6, e=.1, C=100)) # RMSE 96
+
+train.model("csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata",
+            "rvm.rbf",
+            params=list(w=1000,d=100,dsw=10,maw=250,n=1500,sigma=1e-11))
 
 # fix this
 #test.model("csv_small5_1000ms_100ms_400_40_10_250_rbf_sigma_1e-11_model.rda", "csv_small50_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata", 1500, "t in 10ms")
