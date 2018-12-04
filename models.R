@@ -223,7 +223,15 @@ test.model <- function(modelfilename, datafilename, subselect, xlab){
   # ,xtest, ytest
   load(file = paste("./data/preprocessed/",datafilename,sep="") ) # output is df3
   subselect <- sample(1:nrow(df3),subselect)
-  df <- df3[subselect,]
+  df3 <- df3[100,]
+  # if nrow(df3)<subselect -> pad with same data
+  df <- df3[1,]
+  if (nrow(df3) < subselect){  
+  for (i in 2:subselect){
+      df <- rbind(df,df3[i,])
+    }
+  } else df <- df3[subselect,]
+  
   remove.cols <- c(1, grep("^group$", colnames(df)),grep("^y$", colnames(df)),grep("^futurey$", colnames(df)))
   xtest <- df[,-remove.cols]
   ytest <- df[,grep("^futurey$", colnames(df))]
@@ -231,14 +239,15 @@ test.model <- function(modelfilename, datafilename, subselect, xlab){
   # load model
   load(file = paste("./models/",modelfilename,sep="")) # output to "model" object
   #predict
-  ytest.pred <- predict(model, xtest)
+  if (class(model)[1] == "ksvm"){
+    library(kernlab)
+    ytest.pred <- predict(object = model, newdata = xtest, type="response")
+  } else ytest.pred <- predict(model, xtest)
   # sum of squares error?
   rmse.test = sqrt(sum((ytest - ytest.pred)^2)/nrow(xtest))
   
   # output
   rmse.plot = round(rmse.test,3)
-  
-  
   
   # plot
   par(mfrow=c(1,1))

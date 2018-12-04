@@ -63,16 +63,73 @@ done:
       ok- test.model()
       - save model name and plots with dim of the data input
 
+
+    ok- read Bishop
+        ok- SVM for regression read
+        ok- SVM for regression code
+          https://www.kdnuggets.com/2017/03/building-regression-models-support-vector-regression.html
+        ok- RVM read
+
+    ok- training/testing func skeletonç
+        ok- skeleton pass training func as param
+        ok- adapt current rvm code
+        ok- svm code
+        ok- clean code
+        
 pending:
 
-  * pred -> needs same data size!!!
+   - test.model
+      ok- skeleton
+      ok- rvm prediction  -> needs same data size!!!
+        pad with data from training???
+        pad with repeated data??  -> ask
+      - control column size! extract from model name the dims
+      - plot and save result to txt
 
-  * noise vs precision experiment (remove downsampling & ma and train rbf with sigma=1e-3)
-  
-  * cross-validation implement
+    - fix model name when saving
+      svm.rbf__n_1500_sigma_1e-06_e_0.1_C_100_dim__1500___4004_csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250._1000ms_100ms_400_40_10ms_250ms
+
+    - enhance plot
+      - legend
+      - larger, 
+      - png
+      - plot sops in the top with smaller scale
+      - test.model
+
+  **  - present first working experiments (model, RMSE, 2 plots)
+        - how to predict?
+        - automatic results table in report.tex
+
+*   - cross-validation implement
       - normal cross-validation
       - cross-validation adapted to train j times each model for the same training data 
       - cross-validation adapted to have mode validation size than train size
+
+    - models
+      ok- fix svm 
+      - nu svm
+
+    - goals
+          - how to train,
+          - how to predict
+          - how to cross val (less needed in RVM)
+          - size limitations ?
+
+
+
+
+
+**    - Email prof  
+        - where to focus testing efforts (kernels?, hyperparams) what else?
+            idea e-SVM, nu-SVM, RVM comparison
+        - question about n>d what to do? sampling or selection
+      
+
+
+  * noise vs precision experiment (remove downsampling & ma and train rbf with sigma=1e-3)
+  
+
+
 
   * use rbf working kernel -> increase data size until it stops working or takes too long training
     - prepare sizes 5,50,75,100,150,200,
