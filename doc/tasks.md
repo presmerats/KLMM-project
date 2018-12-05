@@ -113,15 +113,29 @@ pending:
           ok-5)plot?....maybe not
       ok- train again model on all training dataset and return that model!
 
-
-**  - present first working experiments (model, RMSE, 2 plots)
-        - automatic results table in report.tex
-        - fix sop plot...
-
 **  - Email prof  
         - where to focus testing efforts (kernels?, hyperparams) what else?
             idea e-SVM, nu-SVM, RVM comparison
         - question about n>d what to do? sampling or selection
+
+
+    - verify the dim verificatino
+
+**  - present first working experiments (model, RMSE, 2 plots)
+        ok- initial explanation
+        ok- explain trainin with cross-validation procedure
+        ok- train 2 svm model with 2 dif values of sigma, + 2 rvm models
+        - fix sop plot!
+
+        - automate results gathering  
+          - table with RMSE
+              num model, model_type, w,d,dsq,maw,  kernel, params, RMSE
+          - for each model
+              - plot for first fold validation
+              - plot of sop + predictiontest data (in a small range to be able to see it)
+          
+
+
 
     - write down code explanation
       

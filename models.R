@@ -237,7 +237,7 @@ verify.dataset <- function(datafile, w,d,dsw,maw,wp,dp){
   
 }
 
-model.fitting <- function(modelfunc,params, X,Y,train.list, validation.list, test.list){
+model.fitting <- function(model.func.string,params, X,Y,train.list, validation.list, test.list){
   modelfunc <- model.functions[model.func.string][[1]]
   
   k <- length(train.list)
@@ -277,7 +277,7 @@ model.fitting <- function(modelfunc,params, X,Y,train.list, validation.list, tes
   model <- modelfunc(xtotaltrain,ytotaltrain, params)
   
 
-  return(list(model, dim(X[train.list[[1]]]), rmse.avg, total.time))
+  return(list(model, dim(X[train.list[[1]],]), rmse.avg, total.time))
 }
   
 
@@ -330,7 +330,7 @@ train.model <- function(datafile, model.func.string, params,k=3){
   
   # train model with cross-validation
   print("training model")
-  fitting.results <- model.fitting(modelfunc,params, X,Y,train.list, validation.list, test.list)
+  fitting.results <- model.fitting(model.func.string,params, X,Y,train.list, validation.list, test.list)
   model <- fitting.results[[1]]
   dimensions <- fitting.results[[2]]
   rmse.avg <- fitting.results[[3]]

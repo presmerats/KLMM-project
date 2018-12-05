@@ -1,0 +1,272 @@
+SVM for regression (Bishop chap7 p340)
+========================================
+
+7.1.4 SVMs for regression
+-------------------------
+
+regularized linear regression
+	error func = 1/2SUM{n=1,N}(yn - tn)^2 + lamb/2||w||^2
+
+e-insensitive function (Vapnik 95) -> instead of quadratic error func
+
+	Ee(y(x)-t)= 0    			if |y(x) - t| < e
+	            |y(x) -t|-e     otherwise
+
+new regularized error func is:
+
+	C*SUM{n=1,N}Ee(y(xn)-t)+1/2||w||^2   
+
+	now C is the inverse regularization parameter and appear infron of the error term
+
+slack vars E and ^E
+	E>=0  s.t. tn > y(Xn)+e
+   ^E>=0  s.t. tn < y(Xn)-e
+
+for a point to lie inside the e-tube
+	yn-e <= tn <= yn + e
+	yn=y(Xn)
+
+this allows points to lie outside the tube provided the slack vars are nonzero
+	tn <= y(xN)+e+En
+	tn >= y(Xn)-e-^En
+
+
+error func for support vector regression
+
+	minimize:
+	C*SUM{n=1,N}(En+^En)+1/2||w||^2
+
+	s.t. 
+		En>=0
+		^En>=0
+		tn <= y(xN)+e+En
+		tn >= y(Xn)-e-^En
+
+optimized by lagrangian
+	L = C*SUM{n=1,N}(En+^En)+1/2||w||^2 - SUM{n=1,N}(mun*En+m^u^En)
+	    -SUM{n=1,N}an(e + En + yn - tn)
+	    -SUM{n=1,N}^an(e + ^En - yn +tn)
+
+	substitute y(xn)= W^T·phi(Xn)+b
+
+	DUAL..
+	max_an_ân:
+	~L(a,â) = -1/2 SUM{n=1,N}SUM{n=1,N}(an -ân)(am-âm)k(Xn,Xm)
+	          -eSUM{n=1,N}(an+ân)+SUM{n=1,N}(an-ân)tn
+
+
+	new predictions 
+	y(x) = SUM{n=1,N}(an -ân)k(x,xn)+b
+
+
+	KKT conditions
+		an(e + En + yn - tn) = 0
+		ân(e + ^En - yn + tn)= 0
+		(C - an)En  = 0
+		(C - ân)^En = 0
+
+		-> an can only be zero if e + En + yn - tn = 0
+		-> for each data point xn, an or ân or both must be zero
+		-> support vefctors are those data points that contribute to predictions given by y(x) = SUM{n=1,N}(an -ân)k(x,xn)+b
+			those with either an!=0 or ân!=0. 
+			points that line on the boundary of the e-tube or outside the tube
+
+		-> all points within the e-tube have an=ân=0 (sparsity)
+
+
+		->how to find b
+			0<an<C -> En=0 -> e+yn-tn=0 
+					b = tn -e -w^T·phi(xN)
+					b = tn -e -SUM{m=1,N}(am-âm)k(xn,xm)
+
+			in practice average over all estimates of b
+
+-> C and e must be chosen by cross-validation
+
+alternative formulation nu-SVM for regression
+	e = the with of the insensitive region
+	nu =  the fraction of points lying outside the tube
+
+	Formulation
+		L(a,â)=..
+		0 <= an <= C/N
+		0 <= ân <= C/N
+		SUM{n=1,N}(an + ân)=0
+		SUM{n=1,N}(an + ân)<=nu·C
+
+	-> at most nu*N poitns falling outside the tube
+	-> at least nu*N data points are support vector and so lie either on the tube or outside it
+
+
+-> C and nu must be chosen by cross-validation
+
+7.1.5 Computational learning theory
+-----------------------------------
+
+computational learning theory
+statistical learaning theory
+probably approximately correct (PAC)
+
+	-> how large a data set needs to be in order to give good generalizatsion?
+	-> give bounds for the computations cost of learning(not seen here)
+
+
+PAC uses VC dimension
+	-> measure of complexity of a space of functions
+
+PAC bounds are worst case 
+	too conservative, no good application
+
+
+r-SVM code
+----------
+
+## Fit SVR model and visualize using scatter plot
+
+#Install Package
+install.packages("e1071")
+
+#Load Library
+library(e1071)
+ 
+#Scatter Plot
+plot(data)
+
+#Regression with SVM
+modelsvm = svm(Y~X,data)
+
+#Predict using SVM regression
+predYsvm = predict(modelsvm, data)
+
+#Overlay SVM Predictions on Scatter Plot
+points(data$X, predYsvm, col = "red", pch=16)
+
+##Calculate parameters of the SVR model-------
+
+#Find value of W
+W = t(modelsvm$coefs) %*% modelsvm$SV
+
+#Find value of b
+b = modelsvm$rho
+
+## RMSE for SVR Model-------------------------
+
+#Calculate RMSE 
+RMSEsvm=rmse(predYsvm,data$Y)
+
+
+## Tuning SVR model -----------------------------
+#by varying values of maximum allowable 
+#error and cost parameter
+
+#Tune the SVM model
+OptModelsvm=tune(svm, Y~X, data=data,ranges=list(elsilon=seq(0,1,0.1), cost=1:100))
+
+#Print optimum value of parameters
+print(OptModelsvm)
+
+#Plot the perfrormance of SVM Regression model
+plot(OptModelsvm)
+
+#Find out the best model
+BstModel=OptModelsvm$best.model
+
+#Predict Y using best model
+PredYBst=predict(BstModel,data)
+
+#Calculate RMSE of the best model 
+RMSEBst=rmse(PredYBst,data$Y)
+
+
+
+
+7.2.1 RVM for regression
+-------------------------
+
+SVM for regression downsides:
+	1-nu/e and C must be found by cross-validation
+	2-predictions are rexpressed as linear combinations of kernel functions that are centred on training data points that are required to be positive definite
+
+
+RVM: relevance vector machine
+	Bayesian sparse kernel technique for regression and classificataion that shares   characteristics with SVM while avoiding principal limitations
+
+	and much sparser models than svm for reression
+
+RVM
+	regression linear model with modified prior
+
+	conditional distr. for real-valued target t
+		p(t|x,w,B)=N(t|u(X),B**-1)
+
+	B=sigma^2
+
+	the mean is given by:
+		y(x)=SUM{i=1,M}wiPHIi(X)=w^T·Phi(X)
+
+	RVM is a specific instance of this model.
+	basis functions are given by kernels, with one kernel associated with each of the data points from the training set.
+
+		y(x)=SUM{n=1,N}wn·k(x,xn)+b
+
+		M=N+1 parameters
+		y(xn) same from as SVM model but coeffs an are denoted wn
+
+development
+	N observations
+	likelihood 
+		p(t|X,w,B)=PROD{n=1,N}p(tn|Xn,W,B**-1)
+
+	prior distribution
+		zero-mean Gaussian prior over param vector w with alphi^-1 as a separate hyperparameter for each of the weight parameters wi instead of a single shared hyperparameter.
+
+		p(w|alph)=PROD{i=1,M}N(wi|0,alpi^-1)
+
+	Expect. maximization make a lot of alphi go to infinte so wi go to 0 -> no role for the prediction -> parsity
+
+	posterior
+		p(w|t,X,alph,B)=N(w|m,SIGMA)
+		m = B·SIGMA·PHI^T(t)
+		SIGMA = (A + B·PHI^T·PHI)^-1
+		PHI is the NxM design matrix
+
+	type-2 maximum likelihood (evidence approximation)
+		maximize the marginal likelihood func integrating out the weight parameters -> convolution of 2 Gaussians, 
+		-> log marginal likelihood
+
+	goal: maximi<e lnp(t|X,alph,B)=... wrt hyperparameters alph and B (vectors)
+
+		2 approaches
+
+		1) set required derivatives of the marginal likelihood to zero and obtain the followign re-estimation equations
+			alph_i^new = ...
+			B^new)^-1 = ..
+			gammi = how well the correspoinding parameter wi is determined by the data 
+				gammi=1-alphiSIGMAii
+
+		    so learning proceeds by choosing initial values for alph and B, evaluating the mean and covariance of the posterior and then alternately re-estimating the hyperparameters and posterior mean and covariance -> until a suitable convergence criterion is satisfied
+
+		2) use EM algorithm, (9.3.4) 
+
+		->approach 1) is faster numerically, but both equivalent
+		->a large number of wi are 0 -> no role in making prdictions
+		-> the remaining weights are called relevance vectors
+
+
+	evaluating the predictive distribution (once alph* and B* are found)
+		p(t|x,X,t,alph*,B*) = integral.. = N(t|m^T·phi(x),s^2(x))
+
+		-> localized basis functions-> predictive variance is small in regions of input space where there are no basis fuhnctions -> basis funcs centered on datap points -> model increasingly certain of its prediction when extrapolating outside the domain of the data -> UNDESIRABLE
+		-> desirable basis functions that are not localize (like gaussian)
+
+	-> RVM an order of magnitude more compact (less params) than SVM , so faster on processing data
+	-> no reduction of generalization error
+	-> disadvantage: training RVM involves optimizing a nonconvex func -> training time are longer 
+		for M basis funcs, RVM requires inver MxM matrix, O(M^3)
+		SVM M= N+1 and techniques with quasi quadratic cost exist
+
+		-> use less basis functions for RVM..
+
+	-> advantage the params governing copmlexity and noise variance are dtermined automatically  from a single training run (in SVM you do cross-val)
+
+7.2.2 Analysis of sparsitu
