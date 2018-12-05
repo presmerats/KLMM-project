@@ -78,32 +78,71 @@ done:
         
 pending:
 
-   - test.model
-      ok- skeleton
-      ok- rvm prediction  -> needs same data size!!!
-        pad with data from training???
-        pad with repeated data??  -> ask
-      - control column size! extract from model name the dims
-      - plot and save result to txt
-
-    - fix model name when saving
+    ok- fix model name when saving
       svm.rbf__n_1500_sigma_1e-06_e_0.1_C_100_dim__1500___4004_csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250._1000ms_100ms_400_40_10ms_250ms
 
-    - enhance plot
-      - legend
-      - larger, 
-      - png
-      - plot sops in the top with smaller scale
-      - test.model
+    ok- verification of w,d,dsw,maw versus datafile name
 
-  **  - present first working experiments (model, RMSE, 2 plots)
-        - how to predict?
+    ok- training plot -> save name
+
+   ok- test.model
+      ok- skeleton
+      ok- rvm prediction  -> needs same data size!!!
+        ok-pad with data from training???
+        ok-pad with repeated data??  -> NOT NECESSARY
+        ok-test without padding but colum dim ok
+      ok- control column size! extract from model name the dims
+      ok- plot and save result to txt
+
+   ok- cross-validation implement
+      ok- normal cross-validation
+        current scheme
+          train(xtain,ytrain)
+          predict(xval, yval)
+
+        cross-validation
+          ok-1)compute indices xtrains,ytrains,xvals,yvals,xtest,ytest
+              ok-> take into account the features length? like nrow(xtest) =ncol(xtest)*0.8
+              ok-> test
+         ok- 2)foreach j i 1:k
+            train(xtrain_j,ytrain_j)
+            predict(xval_j, yval_j)
+            save(RMSE_j)
+          ok-3)mean(RMSE)
+          ok-4)save model hyperparams(and datafile and w,d,dsw,maw)
+          ok-5)plot?....maybe not
+      ok- train again model on all training dataset and return that model!
+
+
+**  - present first working experiments (model, RMSE, 2 plots)
         - automatic results table in report.tex
+        - fix sop plot...
 
-*   - cross-validation implement
-      - normal cross-validation
-      - cross-validation adapted to train j times each model for the same training data 
-      - cross-validation adapted to have mode validation size than train size
+**  - Email prof  
+        - where to focus testing efforts (kernels?, hyperparams) what else?
+            idea e-SVM, nu-SVM, RVM comparison
+        - question about n>d what to do? sampling or selection
+
+    - write down code explanation
+      
+    - enhance plot
+      ok- test.model
+      ok- larger, 
+      ko- png
+      ok- legend
+      ok- make doulbe plot write to disk
+      - sops plot -> select sop by name not num position (will change with other model)
+*     - sops plot -> plot the complete time series for one value and position
+          in one sample there's the full plot! 
+          or use values of a csv in order instead of sampling 
+            -> ok but then initial values are cropped bcs of w window (1000ms it's one full second)
+          combine both approaches
+            -> csv in order
+            -> for first sample of a different group(file) plot the complete time series without prediction
+      - sops plot -> in the top with smaller scale
+      - verify with plot sops that data experiments are concatenated correctly?
+      
+
 
     - models
       ok- fix svm 
@@ -119,11 +158,7 @@ pending:
 
 
 
-**    - Email prof  
-        - where to focus testing efforts (kernels?, hyperparams) what else?
-            idea e-SVM, nu-SVM, RVM comparison
-        - question about n>d what to do? sampling or selection
-      
+
 
 
   * noise vs precision experiment (remove downsampling & ma and train rbf with sigma=1e-3)

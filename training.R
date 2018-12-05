@@ -72,10 +72,11 @@ train.test.rbf("csv_small200", w,d,dsw,maw,sigma=1e-11)
 source("models.R")
 train.model("csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata",
             "svm.rbf",
-            params=list(w=1000,d=100,dsw=10,maw=250,n=1500,sigma=1e-7, e=.1, C=100)) # RMSE 156 NICE FIT!
+            params=list(w=1000,d=100,dsw=10,maw=250,n=1500,sigma=1e-7, e=.1, C=100),
+            k=3) # RMSE 233 NICE FIT!
 train.model("csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata",
             "svm.rbf",
-            params=list(w=1000,d=100,dsw=10,maw=250,n=1500,sigma=1e-7, e=1, C=100)) # RMSE 428
+            params=list(w=1000,d=100,dsw=10,maw=250,n=1500,sigma=1e-7, e=1, C=100)) # RMSE 644
 train.model("csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata",
             "svm.rbf",
             params=list(w=1000,d=100,dsw=10,maw=250,n=1500,sigma=1e-9, e=1, C=100)) # fails misearble
@@ -92,10 +93,14 @@ train.model("csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata",
 
 # fix this
 source("models.R")
-test.model("svm.rbf__n_1500_sigma_1e-06_e_0.1_C_100_dim__1500___4004_csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250._1000ms_100ms_400_40_10ms_250ms.model", "csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata", 1500, "t in 10ms")
+test.model("svm.rbf__n_1500_sigma_1e-07_e_0.1_C_100_dim__1500___4004_csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.model", "csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata", 1500, "t in 10ms", test.type="graphical")
 test.model("svm.rbf__n_1500_sigma_1e-06_e_0.1_C_100_dim__1500___4004_csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250._1000ms_100ms_400_40_10ms_250ms.model", "csv_small50_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata", 1500, "t in 10ms")
 test.model("rvm.rbf__n_1500_sigma_1e-11_dim__1500___4004_csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250._1000ms_100ms_400_40_10ms_250ms.rda", "csv_small50_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata", 1500, "t in 10ms")
 test.model("rvm.rbf__n_1500_sigma_1e-11_dim__1500___4004_csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250._1000ms_100ms_400_40_10ms_250ms.rda", "csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata", 1500, "t in 10ms")
 
-#
+# internal testing
+datafile <- "csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata"
+model.func.string <- "svm.rbf"
+params=list(w=1000,d=100,dsw=10,maw=250,n=1500,sigma=1e-7, e=.1, C=100)
+
 modelfilename <- "svm.rbf__n_1500_sigma_1e-06_e_0.1_C_100_dim__1500___4004_csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250._1000ms_100ms_400_40_10ms_250ms.model"; datafilename <-  "csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata"; subsel <- 1500; xlab <-  "t in 10ms";
