@@ -76,7 +76,7 @@ done:
         ok- svm code
         ok- clean code
         
-pending:
+
 
     ok- fix model name when saving
       svm.rbf__n_1500_sigma_1e-06_e_0.1_C_100_dim__1500___4004_csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250._1000ms_100ms_400_40_10ms_250ms
@@ -113,49 +113,140 @@ pending:
           ok-5)plot?....maybe not
       ok- train again model on all training dataset and return that model!
 
-**  - Email prof  
+    ok- Email prof  
         - where to focus testing efforts (kernels?, hyperparams) what else?
             idea e-SVM, nu-SVM, RVM comparison
         - question about n>d what to do? sampling or selection
 
-
-    - verify the dim verificatino
-
-**  - present first working experiments (model, RMSE, 2 plots)
+    ok- present first working experiments (model, RMSE, 2 plots)
         ok- initial explanation
         ok- explain trainin with cross-validation procedure
         ok- train 2 svm model with 2 dif values of sigma, + 2 rvm models
-        - fix sop plot!
 
-        - automate results gathering  
-          - table with RMSE
-              num model, model_type, w,d,dsq,maw,  kernel, params, RMSE
-          - for each model
-              - plot for first fold validation
-              - plot of sop + predictiontest data (in a small range to be able to see it)
-          
-
-
-
-    - write down code explanation
       
-    - enhance plot
+    ok- enhance plot
       ok- test.model
       ok- larger, 
       ko- png
       ok- legend
       ok- make doulbe plot write to disk
-      - sops plot -> select sop by name not num position (will change with other model)
-*     - sops plot -> plot the complete time series for one value and position
-          in one sample there's the full plot! 
+
+  ok- sops plot -> select sop by name not num position (will change with other model)
+
+
+    ok- sop plot -> plot the complete time series for one value and position
+        ok-for first group
+        ok-avoid ylim to take the 0  of ytest.pred into account
+
+        ok-add raw      
+      
+        ok-for all groups
+
+        ok-faster for all groups
+          save indexes and do a rbind at the end
+
+        ok-verification of predicted/smoothed error
+          - xlim of 2 plots the same  
+
+        
+    ok- add previous values of fututey 
+          to be able to plot previous ytest smoothed
+
+          down.sample.avg
+            -> result goes to df
+          smoothing
+            -> result goes to y
+          features.time.window
+            -> must do the processing for error but also for y
+            -> we add here the features time window for the y
+
+          fix the mess with the columns
+
+    ok- add the possibility to train/test with y_raw and y_smooth
+
+    ok- problem test.model -> second experiment ytest is lost!
+        -> problem with rbind ..fixed
+
+    ok- xlab in 2 rows
+
+
+pending:
+
+    - downsampling and smoothing is TOO much -> losing some signal
+        ok-test
+          dsw 10 ma 250  sigma 1e-7
+          dsw 1 ma 50  - sigma 1e-7 e 0.1 C 100
+          dsw 1 ma 10    sigma 1e-9 very bad
+          dsw 1 ma 10    sigma 1e-7 e 0.01 C 100 a bit better
+          dsw 1 ma 10    sigma 1e-7 e 0.1 C 10
+          dsw 1 ma 10    sigma 1e-7 e 0.01 C 10
+        
+        report
+          1) compare for same dataset, same num data points the 2 dsw/models
+            -> conclude about the dsw
+            ko.. not conclusive
+
+          2) redo the initial downsampling plots with just one/two files also
+          ko no change
+
+          3) do a SOP+error with the downsampling to see that 1ms is probably good accurate
+            + add ma in blue
+
+
+
+
+    - create new preprocessed FULL datasets
+      dsw1 ma50
+      dsw1 ma10
+      dsw1 ma5
+
+    - SOP plot sop vars between -2 and 2 ??
+      - redo all plots once this is fixed
+
+    - test normalization also
+
+    
+    
+    
+    - problem when raw=FALSE -> some ytest have jumps...
+        -> verify error on second file (around 2000)
+
+
+    - limits in the beginning and in the end
+          xtests$y_0 must be downsampled also...
+          (removal of future values)
+          features.prediction
+            -> does the removal of last rows
+
+        
+    - in one sample there's the full plot! 
           or use values of a csv in order instead of sampling 
             -> ok but then initial values are cropped bcs of w window (1000ms it's one full second)
           combine both approaches
             -> csv in order
             -> for first sample of a different group(file) plot the complete time series without prediction
-      - sops plot -> in the top with smaller scale
-      - verify with plot sops that data experiments are concatenated correctly?
       
+    - sops plot -> in the top with smaller scale
+
+    - automate results gathering  
+      - table with RMSE
+          num model, model_type, w,d,dsq,maw,  kernel, params, RMSE
+      - for each model
+          - plot for first fold validation
+          - plot of sop + predictiontest data (in a small range to be able to see it)
+      
+
+    - total data transformation (dsw=10, maw=250 and raw)
+    
+    - write down code explanation
+  
+    - more models
+      -> think a way to dsitribute the data for doing cross validation of so many models (easy-> total rows/ row limitation = num of different models that we could fit)
+
+
+    - verify the dim verificatino?
+
+  
 
 
     - models

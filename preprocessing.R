@@ -70,10 +70,6 @@ preprocessing.final("csv_small5")
 preprocessing.final("csv_small50")
 preprocessing.final("csv_small75")
 
-}
-
-
-
 
 data.preparation.prev("./data/raw/csv_small100","./data/preprocessed/csv_small100")
 preprocessing.final("csv_small100")
@@ -89,9 +85,13 @@ preprocessing.final("csv_all")
 
 #preprocessing.final("csv_small5")
 
-for (downsampling in c(10)){
-  for (ma.window in c(250)){
-    for(w in c(500)){
-      for (d in c(100)){
-        data.preparation("csv_small5",w,d,downsampling,ma.window)
-      }}}}
+
+data.preparation("csv_small5",w=500,d=100,10,50)
+
+data.preparation("csv_small5",w=500,d=100,1,10)
+
+
+}
+
+
+

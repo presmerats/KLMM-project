@@ -12,7 +12,9 @@ my.load.file <- function(datafile,params){
 prepare.XY.data <- function(df,params,k="1"){
   
   # select columns
-  remove.cols <- c(1, grep("^group$", colnames(df)),grep("^y$", colnames(df)),grep("^futurey$", colnames(df)))
+  #remove.cols <- c(1, grep("^group$", colnames(df)),grep("^y$", colnames(df)),grep("^futurey$", colnames(df)))
+  remove.cols <- c(1, grep("^group$", colnames(df)),grep("^y$", colnames(df)),grep("^futurey$", colnames(df)), grep("^ys_.*", colnames(df)))
+  
   X <- df[,-remove.cols]
   Y <- df[,grep("^futurey$", colnames(df))]
   
@@ -167,6 +169,7 @@ plot.and.save.results <- function( xvalidation, yvalidation,yvalidation.pred, mo
   write(model.result, 
         file="results/results.txt",append=TRUE)
   # plot predict vs ground-truth
+  print("preparing to write plot to disk")
   par(mfrow=c(1,1))
   ylimmax = max(max(yvalidation),max(yvalidation.pred))
   ylimmin = min(min(yvalidation),min(yvalidation.pred))
@@ -184,6 +187,8 @@ plot.and.save.results <- function( xvalidation, yvalidation,yvalidation.pred, mo
     ylim=c(ylimmin,ylimmax))
   lines(yvalidation.pred, col="red")
   dev.off()
+  
+  print("plot written to disk!")
   
   plot(
     yvalidation,type="l", 
@@ -352,10 +357,10 @@ train.model <- function(datafile, model.func.string, params,k=3){
   plot.and.save.results(xvalidation, yvalidation, yvalidation.pred, modelstring, total.time, rmse.avg)
   
   # testing cv -> RMSE
-  predict.result <- test.model.internal(model, X[test.list[[1]],], Y[test.list[[1]]])
-  rmse <- predict.result["rmse"][[1]]
-  yvalidation.pred <- predict.result["pred"][[1]]
-  print(paste("test rmse",rmse))
+  #predict.result <- test.model.internal(model, X[test.list[[1]],], Y[test.list[[1]]])
+  #rmse <- predict.result["rmse"][[1]]
+  #yvalidation.pred <- predict.result["pred"][[1]]
+  #print(paste("test rmse",rmse))
   
 }
 
@@ -442,7 +447,7 @@ sop.plot.prepare <- function(xtest,ytest, ytest.pred, raw=FALSE){
       
       #  add previous group values to result dataframe
       if (last.group.index>0){
-        print(paste("addind",i-last.group.index+1 ))
+        print(paste("adding",i-last.group.index+1 ))
         xtest.result <- rbind(xtest.result,xtest[last.group.index:i,])
         
         # smooothed or raw error version
@@ -472,7 +477,6 @@ sop.plot.prepare <- function(xtest,ytest, ytest.pred, raw=FALSE){
       ys.w = rev(as.numeric(xtest[i,(index.smoothed.error+1):index.last.smoothed.error]))
       
       
-      print(sample(ys.w,3))
       #print(ys.w)
       
       # print("sop.plot.prepare verification")
@@ -539,6 +543,7 @@ sop.plot.prepare <- function(xtest,ytest, ytest.pred, raw=FALSE){
         ytest.pred.result <- c(rep(0,w-1),ytest.pred[i])
       }
       
+      print(paste("new dim xtest",dim(xtest.result)[1],dim(xtest.result)[2]," new dim ytest",length(ytest.result)))
       
       # if (i<3000){
       #   par(mfrow=c(3,2))
@@ -556,10 +561,14 @@ sop.plot.prepare <- function(xtest,ytest, ytest.pred, raw=FALSE){
   print(paste("addind",i-last.group.index+1 ))
   xtest.result <- rbind(xtest.result,xtest[last.group.index:i,])
   # smoothed error version
-  ytest.result <- c(ytest.result,ytest[last.group.index:i])
+  
   # raw error version
-  ytest.result <- c(ytest.result,xtest$y_0[last.group.index:i])
+  if (raw==TRUE)   ytest.result <- c(ytest.result,xtest$y_0[last.group.index:i])
+  else ytest.result <- c(ytest.result,ytest[last.group.index:i])
+  
   ytest.pred.result <- c(ytest.pred.result,ytest.pred[last.group.index:i])
+  
+  print(paste("new dim xtest",dim(xtest.result)[1],dim(xtest.result)[2]," new dim ytest",length(ytest.result)))
   
   
   xtest <- xtest.result
@@ -567,8 +576,6 @@ sop.plot.prepare <- function(xtest,ytest, ytest.pred, raw=FALSE){
   ytest.pred <- ytest.pred.result
   
   
-  print("verification")
-  print(ytest[1995:2005])
   
   return(list(xtest, ytest,ytest.pred))
 }
@@ -619,7 +626,10 @@ sop.plot <- function(xtest, ytest,ytest.pred,modelfilename,datafilename,rmse.plo
   ylimmin = min(min(ytest),min(ytest.pred.margins))
   # plot to disk
   plotname= paste("./plots/","test_sop_",modelfilename,paste("RMSE",rmse.plot,sep="_"), sep="_" )
-  #jpeg(plotname, width = 768, height = 768, units = "px")
+  
+  modelfilename.multiline = c(substr(modelfilename,1,nchar(modelfilename)/2),substr(modelfilename,nchar(modelfilename)/2,nchar(modelfilename)))
+  plotname.multiline = paste("./plots/","test_sop_",modelfilename.multiline,paste("RMSE",rmse.plot,sep="_"), sep="_" )
+  jpeg(plotname, width = 768, height = 768, units = "px")
   par(mfrow=c(2,1))
   plot(
     xtest[,index.sop1],type="l", col="pink",
@@ -633,7 +643,7 @@ sop.plot <- function(xtest, ytest,ytest.pred,modelfilename,datafilename,rmse.plo
   plot(
     ytest,type="l", 
     main=paste("Test result",sep="",collapse=""),
-    xlab=paste(plotname,sep="",collapse=""),
+    xlab=paste(plotname.multiline,sep=""),
     ylab="BER",
     ylim=c(ylimmin,ylimmax),
     xlim=c(1,nrow(xtest))
@@ -642,7 +652,30 @@ sop.plot <- function(xtest, ytest,ytest.pred,modelfilename,datafilename,rmse.plo
   w = index.sop2- index.sop2 +1
   legend(length(ytest.pred)-10*w, ylimmin+2, legend=c("Real Error", "Predicted Error"),
          col=c("black", "red"), lty=1:1, cex=0.8)
-  #dev.off()
+  dev.off()
+  
+  par(mfrow=c(2,1))
+  plot(
+    xtest[,index.sop1],type="l", col="pink",
+    main=paste("Test result",sep="",collapse=""),
+    xlab="ms",
+    ylab="SOP"
+    #, xlim=c(450,500)
+  )
+  lines(xtest[,index.sop2], col="yellow")
+  lines(xtest[,index.sop3], col="cyan")
+  plot(
+    ytest,type="l", 
+    main=paste("Test result",sep="",collapse=""),
+    xlab=paste(plotname.multiline,sep=""),
+    ylab="BER",
+    ylim=c(ylimmin,ylimmax),
+    xlim=c(1,nrow(xtest))
+  )
+  lines(ytest.pred, col="red")
+  w = index.sop2- index.sop2 +1
+  legend(length(ytest.pred)-10*w, ylimmin+2, legend=c("Real Error", "Predicted Error"),
+         col=c("black", "red"), lty=1:1, cex=0.8)
   
 
 }
@@ -680,10 +713,12 @@ test.model <- function(modelfilename, datafilename, subsel, xlab, test.type="num
   } else df <- df3[subselect,]
   
   
-  print(colnames(df)[2004:ncol(df)])
+  print(paste("nrow(df)",nrow(df)))
+  
+  #print(colnames(df)[2004:ncol(df)])
   remove.cols <- c(1, grep("^group$", colnames(df)),grep("^y$", colnames(df)),grep("^futurey$", colnames(df)), grep("^ys_.*", colnames(df)))
   xtest <- df[,-remove.cols]
-  print(remove.cols)
+  #print(remove.cols)
   #print(colnames(xtest)[2006:length(colnames(xtest))])
   remove.cols <- c(1, grep("^y$", colnames(df)),grep("^futurey$", colnames(df)))
   xplot <- df[,-remove.cols]

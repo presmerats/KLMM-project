@@ -316,8 +316,8 @@ study.ma.value <- function(w,d,dsw,maw){
   maxy = max(max(df2$error),max(df.downsampled$error),max(df.downsampled$y))
   miny = min(min(df2$error),min(df.downsampled$error),min(df.downsampled$y))
   #print(c(maxy,miny))
-  xmin=2000
-  xmax=6000
+  xmin=10
+  xmax=1000
   x.ms <- x.ms[xmin:xmax]
   #print(x.ms[c(1,2,length(x.ms)-1,length(x.ms))])
   plot1 <- df2$error[c(xmin:xmax)]
@@ -351,8 +351,15 @@ study.ma.values <- function(){
   for (w in c(100)){  
     for (d in c(50)){ 
       # 1, 4, 10
+      for (dsw in c(1)){ # downsample to 1 value each 10ms   
+        for (maw in c(1,5,10,100,250)){  
+          print(study.ma.value(w,d,dsw,maw))
+        }}}}
+  for (w in c(100)){  
+    for (d in c(50)){ 
+      # 1, 4, 10
       for (dsw in c(10)){ # downsample to 1 value each 10ms   
-        for (maw in c(20,50,100,150,200,250)){  
+        for (maw in c(50,100,250)){  
           print(study.ma.value(w,d,dsw,maw))
         }}}}
 }
