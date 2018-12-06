@@ -29,6 +29,7 @@ preprocessing.final <- function(prefix){
         for (d in c(50,100,200)){
           experiments <- rbind(experiments, data.frame(downsampling=downsampling, ma.window=ma.window, w=w, d=d))
         }}}}
+
   registerDoParallel(numCores-3)
   foreach (i=1:nrow(experiments)) %dopar% {
     w = experiments$w[i]
@@ -84,4 +85,13 @@ data.preparation.prev("./data/raw/csv_small200","./data/preprocessed/csv_small20
 preprocessing.final("csv_small200")
 
 
+preprocessing.final("csv_all")
 
+#preprocessing.final("csv_small5")
+
+for (downsampling in c(10)){
+  for (ma.window in c(250)){
+    for(w in c(500)){
+      for (d in c(100)){
+        data.preparation("csv_small5",w,d,downsampling,ma.window)
+      }}}}

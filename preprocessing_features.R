@@ -7,7 +7,8 @@ features.time.window <- function(df, w=2){
   
   i = w
   dff <-  data.frame(df$time)
-  #head(dff)
+  #print(head(dff))
+  # added the y
   for (k in 2:(ncol(df)-2) ) {
     #x <- zoo(df[,k])
     #class(x)
@@ -29,7 +30,21 @@ features.time.window <- function(df, w=2){
 
     dff <- cbind(dff,dfnew)
   }  
-  dff <- cbind(dff,df[,(ncol(df)-1):ncol(df)])
+  # perform the same for the smoothed y 
+  k = ncol(df)
+  x <- df[,k]
+  dfnew <- data.frame(y=df[,k])
+  for (j in 1:i){
+    lagtest <- mylag(x, j)
+    dfnew <- cbind(dfnew,lagtest )
+  }
+  
+  dff <- cbind(dff,dfnew)
+  
+  # add last column "group"  to the new dataframe
+  #dff <- cbind(dff,df[,ncol(df)-1])
+  
+  #print(head(dff))
   return(dff[(w+1):nrow(dff),])
 }
 
@@ -93,7 +108,7 @@ data.preparation <- function( filenameprefix, w, d, dsw, maw){
     # apply d future pred -> new column future.y
     if (d>nrow(df.downsampled)-1) {print(paste("Error cannot prepare dataset with d=",d," n=",(nrow(df.downsampled)-1),sep="",collapse=""));return(NULL)}
     df.downsampled <- features.prediction(df.downsampled,d)
-    #print(dim(df.downsampled))
+    #print(colnames(df.downsampled)[1500:2504])
     df.downsampled$futurey
     
     # group 
@@ -101,14 +116,16 @@ data.preparation <- function( filenameprefix, w, d, dsw, maw){
     #print(groups[i])
     
     # colnames
-    colprefixes=c("x1","x2","x3","y")
+    colprefixes=c("x1","x2","x3","y","ys")
     ini.pos.var = 0
     currentvar = 0
     oldcolnames=colnames(df.downsampled)
     newcolnames=colnames(df.downsampled)
+    print(length(oldcolnames))
     for (j in 1:length(oldcolnames)){
-      if(oldcolnames[j]=="df...k.") {
+      if(oldcolnames[j]=="df...k." || oldcolnames[j]=="y") {
         currentvar = currentvar + 1
+        print(paste(" using colprefix ",colprefixes[currentvar]))
         ini.pos.var = j
         newcolnames[j] = paste(colprefixes[currentvar],(j-ini.pos.var),sep="_")
       }
@@ -136,6 +153,7 @@ data.preparation <- function( filenameprefix, w, d, dsw, maw){
   
   return(TRUE)
 }
+
 
 
 
