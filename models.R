@@ -1,5 +1,3 @@
-
-
 rvm.rbf <- function(xtrain, ytrain, params){
   print("calling rvm.rbf")
   

@@ -9,7 +9,7 @@ my.load.file <- function(datafile,params){
   df <- df3[subselect,]
 }
 
-prepare.XY.data <- function(df,params,k="1"){
+prepare.XY.data <- function(df,params,k=1){
   
   # select columns
   #remove.cols <- c(1, grep("^group$", colnames(df)),grep("^y$", colnames(df)),grep("^futurey$", colnames(df)))
@@ -241,6 +241,67 @@ verify.dataset <- function(datafile, w,d,dsw,maw,wp,dp){
   
 }
 
+cross_validate <- function(model.func.string, train.list, validation.list, X, Y) {
+  modelfunc <- model.functions[model.func.string][[1]]
+  
+  sigmas = 10^seq(5,-5, by=-0.5)
+  costs = 10^seq(0,5, by=0.5)
+  epsilons = 10^seq(-6,0)
+  k <- length(validation.list)
+  
+  # best model optimized with hyperparameters
+  best_model <- NULL
+  best_rmse <- NULL
+  all_variables <- expand.grid(sigmas, costs, epsilons)
+  cv_results <- matrix(nrow = nrow(all_variables), ncol = 2)
+  colnames(cv_results) <- c("sigma_C_eps","RMSE")
+  
+  for(i in 1:nrow(all_variables)) {
+    params = list(sigma=all_variables[i,1], C=all_variables[i,2],e=all_variables[i,3])
+    print(paste(k,"-fold CV for: sigma=",params$sigma, " C=",params$C, " eps=", params$e, " ",(nrow(all_variables) - i)," left", sep=""))
+    
+    total_k_rmse <- 0
+    for(j in 1:k) {
+      xtrain <- as.matrix(X[train.list[[i]],])
+      ytrain <- as.matrix(Y[train.list[[i]]])
+      xvalidation <- as.matrix(X[validation.list[[i]],])
+      yvalidation <- as.matrix(Y[validation.list[[i]]])
+      
+      model_cv <- modelfunc(xtrain, ytrain, params)
+      if(!is.null(model_cv)) {
+        # compute rmse
+        res <- test.model.internal(model_cv, xvalidation, yvalidation, loss="rmse")
+        rmse <- res[[2]]
+        
+        total_k_rmse <- total_k_rmse + rmse
+      }
+      
+    }
+    
+    ave_k_rmse <- total_k_rmse/k
+    
+    if(is.null(best_rmse) || is.null(best_model)) {
+      best_rmse <- ave_k_rmse
+      best_model <- model_cv
+    } 
+    
+    if(ave_k_rmse < best_rmse) {
+      best_rmse <- ave_k_rmse
+      best_model <- model_cv
+    }
+    
+    key <- paste(params$sigma,params$C,params$e,sep="_")
+    cv_results[i,1] <- key
+    cv_results[i,2] <- ave_k_rmse
+    print("KEY RMSE")
+    print(cv_results[i,])
+    
+  }
+  
+  return(list(cv_results=cv_results, best_model=best_model))
+}
+
+
 model.fitting <- function(model.func.string,params, X,Y,train.list, validation.list, test.list){
   modelfunc <- model.functions[model.func.string][[1]]
   
@@ -261,6 +322,7 @@ model.fitting <- function(model.func.string,params, X,Y,train.list, validation.l
     
     # compute rmse
     res <- test.model.internal(model, xvalidation, yvalidation, loss="rmse")
+    
     rmse <- res[[2]]
     ypred <- res[[1]]
     rmse.avg <- rmse.avg + rmse
@@ -283,22 +345,6 @@ model.fitting <- function(model.func.string,params, X,Y,train.list, validation.l
   
   
   return(list(model, dim(X[train.list[[1]],]), rmse.avg, total.time))
-}
-
-## Method to perform cross validation on hyper parameters
-rvm.rbf.1.cv <- function(xtrain, ytrain) {
-  print("calling rvm.rbf.1.cv")
-  
-  gammas = 10^seq(-3,3, by=0.5)
-  costs = 10^seq(0,5, by=0.5)
-  epsilons = 10^seq(-6,0)
-  
-  library(e1071)
-  tuned.svm <- tune(svm, ytrain ~ xtrain, 
-                    ranges = list(gamma = gammas, cost = costs, epsilon = epsilons))
-  
-  plot(tuned.svm)
-  return(tuned.svm)
 }
 
 train.model <- function(datafile, model.func.string, params,k=3){
@@ -348,17 +394,11 @@ train.model <- function(datafile, model.func.string, params,k=3){
   X <- subsets[[4]]
   Y <- subsets[[5]]
   
-  xtrain <- NULL
-  ytrain <- NULL
-  print("Merging training data")
-  for(i in 1:length(train.list)){
-    xtrain_temp <- as.matrix(X[train.list[[i]],])
-    ytrain_temp <- as.matrix(Y[train.list[[i]]])
-    xtrain <- rbind(xtrain, xtrain_temp)
-    ytrain <- rbind(ytrain, ytrain_temp)
-  }
+  #Cross-validate the model
+  cv_results <- cross_validate(model.func.string, train.list, validation.list, X, Y)
   
-  tuned.rvm <- rvm.rbf.1.cv(xtrain,ytrain)
+  #Saving CV results
+  save(cv_results, file = paste('results/cv/CV_',datafile,sep = ""))
   
   # train model with cross-validation
   print("training model")
