@@ -262,10 +262,10 @@ cross_validate <- function(model.func.string, train.list, validation.list, X, Y)
     
     total_k_rmse <- 0
     for(j in 1:k) {
-      xtrain <- as.matrix(X[train.list[[i]],])
-      ytrain <- as.matrix(Y[train.list[[i]]])
-      xvalidation <- as.matrix(X[validation.list[[i]],])
-      yvalidation <- as.matrix(Y[validation.list[[i]]])
+      xtrain <- as.matrix(X[train.list[[j]],])
+      ytrain <- as.matrix(Y[train.list[[j]]])
+      xvalidation <- as.matrix(X[validation.list[[j]],])
+      yvalidation <- as.matrix(Y[validation.list[[j]]])
       
       model_cv <- modelfunc(xtrain, ytrain, params)
       if(!is.null(model_cv)) {
