@@ -21,7 +21,6 @@ train.test.rbf(fileprefix, w=50,d=100,dsw=100,maw=100,sigma=1e-14) # fails
 train.test.rbf(fileprefix, w=50,d=100,dsw=100,maw=100,sigma=1e-11) # good
 train.test.rbf(fileprefix, w=50,d=50,dsw=100,maw=100,sigma=1e-11) # good
 
-
 # fixed downsampling and moving average
 dsw=10;maw=250
 
@@ -51,8 +50,6 @@ train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,n=6000) # 23min
 train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,n=10000) #  MUCH MORE -> discard
 
 
-
-
 train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11) # 
 train.test.rbf("csv_small75", w,d,dsw,maw,sigma=1e-11)
 
@@ -71,6 +68,7 @@ train.test.rbf("csv_small200", w,d,dsw,maw,sigma=1e-11)
 
 # 20181203----------------------------------------
 source("models.R")
+source("training.R")
 train.model("csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata",
             "svm.rbf",
             params=list(w=1000,d=100,dsw=10,maw=250,n=1500,sigma=1e-7, e=.1, C=100),
@@ -83,8 +81,6 @@ train.model("csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata",
 train.model("csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata",
             "rvm.rbf",
             params=list(w=1000,d=100,dsw=10,maw=250,n=1500,sigma=1e-11))
-
-
 
 
 train.model("csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata",

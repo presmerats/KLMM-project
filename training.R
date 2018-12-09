@@ -245,6 +245,7 @@ model.fitting <- function(model.func.string,params, X,Y,train.list, validation.l
   modelfunc <- model.functions[model.func.string][[1]]
   
   k <- length(train.list)
+  
   rmse.avg <- 0
   total.time.avg <- 0
   for (i in 1:k){
@@ -284,6 +285,21 @@ model.fitting <- function(model.func.string,params, X,Y,train.list, validation.l
   return(list(model, dim(X[train.list[[1]],]), rmse.avg, total.time))
 }
 
+## Method to perform cross validation on hyper parameters
+rvm.rbf.1.cv <- function(xtrain, ytrain) {
+  print("calling rvm.rbf.1.cv")
+  
+  gammas = 10^seq(-3,3, by=0.5)
+  costs = 10^seq(0,5, by=0.5)
+  epsilons = 10^seq(-6,0)
+  
+  library(e1071)
+  tuned.svm <- tune(svm, ytrain ~ xtrain, 
+                    ranges = list(gamma = gammas, cost = costs, epsilon = epsilons))
+  
+  plot(tuned.svm)
+  return(tuned.svm)
+}
 
 train.model <- function(datafile, model.func.string, params,k=3){
   ## datafile is a preprocessed dataset in Rdata format
@@ -327,10 +343,22 @@ train.model <- function(datafile, model.func.string, params,k=3){
   print("subseting X,Y into train,val, test")
   subsets <- prepare.XY.data(df, params,k)
   train.list <- subsets[[1]]
-  validation.list <- subsets[[2]];
+  validation.list <- subsets[[2]]
   test.list <- subsets[[3]]
   X <- subsets[[4]]
   Y <- subsets[[5]]
+  
+  xtrain <- NULL
+  ytrain <- NULL
+  print("Merging training data")
+  for(i in 1:length(train.list)){
+    xtrain_temp <- as.matrix(X[train.list[[i]],])
+    ytrain_temp <- as.matrix(Y[train.list[[i]]])
+    xtrain <- rbind(xtrain, xtrain_temp)
+    ytrain <- rbind(ytrain, ytrain_temp)
+  }
+  
+  tuned.rvm <- rvm.rbf.1.cv(xtrain,ytrain)
   
   # train model with cross-validation
   print("training model")

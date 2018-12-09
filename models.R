@@ -19,7 +19,7 @@ svm.rbf.1 <- function(xtrain, ytrain, params){
   print("calling svm.rbf")
   
   if ("sigma" %in% names(params) && "C" %in% names(params) && "e" %in% names(params) ){
-    library(e1071)
+    
       
     e = params["e"][[1]]
     C = params["C"][[1]]
