@@ -81,10 +81,10 @@ data.preparation <- function( filenameprefix, w, d, dsw, maw){
   #  each experiments takes 4 secs and has 16000 datapoints -> 1 data point = 0.25 ms
   #  1 downsampled datapoints takes = 0.25*dsw ms
   #  w=100ms -> wp*dsw*0.25 = 100ms -> wp =100/0.25/dsw
-  
-  wp=round(w/0.25/dsw,0)
-  dp=round(d/0.25/dsw,0)
-  
+  dswp = dsw/0.25
+  map = maw/0.25/dswp
+  wp=round(w/0.25/dswp,0)
+  dp=round(d/0.25/dswp,0)
   
   filename = paste(filenameprefix,"raw",sep="_")
   filename = paste("./data/preprocessed/",filename,".Rdata",sep="")
@@ -100,11 +100,13 @@ data.preparation <- function( filenameprefix, w, d, dsw, maw){
     dfsubset <- df[df$group==groups[i],]
     
     # downsampling
-    df.downsampled <- down.sample.avg(dfsubset,dsw)
+    df.downsampled <- down.sample.avg(dfsubset,dswp)
+    
     # ma on error 
     df.downsampled$y <- smoothing(df.downsampled$error, w=maw )
     # apply w window
-    df.downsampled <- features.time.window(df.downsampled,w)  
+    df.downsampled <- features.time.window(df.downsampled,wp)  
+    
     # apply d future pred -> new column future.y
     if (d>nrow(df.downsampled)-1) {print(paste("Error cannot prepare dataset with d=",d," n=",(nrow(df.downsampled)-1),sep="",collapse=""));return(NULL)}
     df.downsampled <- features.prediction(df.downsampled,d)

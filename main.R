@@ -7,6 +7,9 @@ source("preprocessing_features.R")
 source("preprocessing_readcsv.R")
 source("models.R")
 source("training.R")
+source("plot.R")
+source("testing.R")
+
 
 
 # looking for a valid rbf kernel--------------------------------------------
@@ -269,17 +272,50 @@ test.model("svm.rbf__n_1500_sigma_1e-05_e_0.1_C_1000_dim__1704___2004_csv_small5
 
 
 # prepare datasets -----------------------------------
+source("preprocessing_downsampling.R")
+source("preprocessing_plot.R")
+source("preprocessing_features.R")
+source("preprocessing_readcsv.R")
+source("models.R")
+source("training.R")
+source("plot.R")
+source("testing.R")
 data.preparation("csv_small5",w=1000,d=100,10,250)
+data.preparation("csv_small5",w=500,d=100,1,10)
 data.preparation("csv_small5",w=500,d=100,1,5)
 data.preparation("csv_small5",w=500,d=100,1,1)
+
+
+
 # downsampling study
 study.ma.values()
 
+
+
+# 20181210 prepare datasets -----------------------------------
+source("preprocessing_downsampling.R")
+source("preprocessing_plot.R")
+source("preprocessing_features.R")
+source("preprocessing_readcsv.R")
+source("models.R")
+source("training.R")
+source("plot.R")
+source("testing.R")
+data.preparation("csv_small5",w=1000,d=100,10,250)
+data.preparation("csv_small5",w=500,d=100,1,10)
+data.preparation("csv_small5",w=500,d=100,1,5)
+data.preparation("csv_small5",w=500,d=100,1,1)
+train.model("csv_small5_w500ms_d100ms_wp500_dp100_dsw1_maw10.Rdata",
+            "svm.rbf",
+            params=list(w=500,d=100,dsw=1,maw=10,n=1500,sigma=1e-6, e=.1, C=1000),
+            k=3) 
+test.model("svm.rbf__n_1500_sigma_1e-06_e_0.1_C_1000_dim__1704___2004_csv_small5_w500ms_d100ms_wp2000_dp400_dsw1_maw10.model",
+           "csv_small5_w500ms_d100ms_wp2000_dp400_dsw1_maw10.Rdata",
+           100, "t in 10ms", test.type="graphical", error_data_raw=TRUE) # same as before but with noise target(no downsampling)
+
+
+# fix data.preparation
 data.preparation("csv_all",w=500,d=100,1,1)
 data.preparation("csv_all",w=500,d=100,1,5)
 data.preparation("csv_all",w=500,d=100,1,10)
 data.preparation("csv_all",w=500,d=100,1,50)
-
-# compare different models fitted with different ma
-
-# 
