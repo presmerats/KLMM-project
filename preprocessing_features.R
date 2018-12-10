@@ -101,6 +101,7 @@ data.preparation <- function( filenameprefix, w, d, dsw, maw){
     
     # downsampling
     df.downsampled <- down.sample.avg(dfsubset,dsw)
+    rm("dfsubset")
     # ma on error 
     df.downsampled$y <- smoothing(df.downsampled$error, w=maw )
     # apply w window
@@ -136,7 +137,7 @@ data.preparation <- function( filenameprefix, w, d, dsw, maw){
     colnames(df.downsampled) <- newcolnames
     
     df3 <- rbind(df3,df.downsampled)
-    rm("df.downsampled","dfsubset")
+    rm("df.downsampled")
     
     
   }

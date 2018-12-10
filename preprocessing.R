@@ -49,7 +49,7 @@ preprocessing.final <- function(prefix){
 done <- function(){
 
 #data.preparation.prev("./data/raw/csv_small2","csv_small2")
-data.preparation.prev("./data/raw/csv_small5","./data/preprocessed/csv_small5")
+data.preparation.prev("./data/raw/csv_small5","./data/preprocessed/csv_small5_test")
 data.preparation.prev("./data/raw/csv_small50","./data/preprocessed/csv_small50")
 data.preparation.prev("./data/raw/csv_small75","./data/preprocessed/csv_small75")
 
