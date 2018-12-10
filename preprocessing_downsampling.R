@@ -20,13 +20,13 @@ down.sample.avg <- function(x,h=4){
       for (j in 0:(h-1) ){
         #print(paste("setting  ",i-j))
         sum <- sum + x[i-j,]  
-        printvarr <- c(printvarr,paste( "j in 0:(",h,"-1)"," x[",i,"-",j,"]",x[i-j,2]," sum=",sum[2]))
-        if (sum[2] > 4){
-          print(printvarr)
-          print("                                    <-------------------------------")
-          for (l in 0:(h-1)) print(paste(x[i-l,]))
-          print(sum[2]/h)
-        }
+        # printvarr <- c(printvarr,paste( "j in 0:(",h,"-1)"," x[",i,"-",j,"]",x[i-j,2]," sum=",sum[2]))
+        # if (sum[2] > 4){
+        #   print(printvarr)
+        #   print("                                    <-------------------------------")
+        #   for (l in 0:(h-1)) print(paste(x[i-l,]))
+        #   print(sum[2]/h)
+        # }
       }
       sum <- sum/h
       ma[i/h,] = sum
