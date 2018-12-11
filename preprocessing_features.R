@@ -27,7 +27,7 @@ features.time.window <- function(df, w=2){
     # improve with x"k"l"j
     #thenames <- c(1:i)
     #colnames(dfnew) <- c(colnames(dfnew),thenames)
-
+    
     dff <- cbind(dff,dfnew)
   }  
   # perform the same for the smoothed y 
@@ -53,7 +53,7 @@ features.prediction <- function(df, d=2){
   # names = c('time','x1','x2','x3','error','group')
   i = d
   # construct a col vector with all y from future d positions
-
+  
   futurey <- rep(0,nrow(df)-d)
   for (k in 1:(nrow(df)-d)){
     futurey[k] <- df$y[k+d]
@@ -81,15 +81,17 @@ data.preparation <- function( filenameprefix, w, d, dsw, maw){
   #  each experiments takes 4 secs and has 16000 datapoints -> 1 data point = 0.25 ms
   #  1 downsampled datapoints takes = 0.25*dsw ms
   #  w=100ms -> wp*dsw*0.25 = 100ms -> wp =100/0.25/dsw
-  
-  wp=round(w/0.25/dsw,0)
-  dp=round(d/0.25/dsw,0)
-  
+  dswp = dsw/0.25
+  map = maw/0.25/dswp
+  wp=round(w/0.25/dswp,0)
+  dp=round(d/0.25/dswp,0)
   
   filename = paste(filenameprefix,"raw",sep="_")
   filename = paste("./data/preprocessed/",filename,".Rdata",sep="")
   load(file = filename) # loads a df named df
   
+  
+  #group.row.verification(df)
   
   # all those steps separated by group
   groups <- unique(df$group)
@@ -100,17 +102,27 @@ data.preparation <- function( filenameprefix, w, d, dsw, maw){
     dfsubset <- df[df$group==groups[i],]
     
     # downsampling
-    df.downsampled <- down.sample.avg(dfsubset,dsw)
-    rm("dfsubset")
+    df.downsampled <- down.sample.avg(dfsubset,dswp)
+    
+    #print(paste("new downsampled group nrows:",nrow(df.downsampled)))
+    
+    
     # ma on error 
     df.downsampled$y <- smoothing(df.downsampled$error, w=maw )
     # apply w window
-    df.downsampled <- features.time.window(df.downsampled,w)  
+    df.downsampled <- features.time.window(df.downsampled,wp)  
+    
+    #print(paste("after time window downsampled group nrows:",nrow(df.downsampled)))
+    
+    
     # apply d future pred -> new column future.y
-    if (d>nrow(df.downsampled)-1) {print(paste("Error cannot prepare dataset with d=",d," n=",(nrow(df.downsampled)-1),sep="",collapse=""));return(NULL)}
-    df.downsampled <- features.prediction(df.downsampled,d)
+    if (dp>nrow(df.downsampled)-1) {print(paste("Error cannot prepare dataset with dp=",dp," n=",(nrow(df.downsampled)-1),sep="",collapse=""));return(NULL)}
+    df.downsampled <- features.prediction(df.downsampled,dp)
     #print(colnames(df.downsampled)[1500:2504])
-    df.downsampled$futurey
+    #df.downsampled$futurey
+    
+    #print(paste("after feature prediction  nrows:",nrow(df.downsampled)))
+    
     
     # group 
     df.downsampled$group <- rep(groups[i],nrow(df.downsampled))
@@ -126,7 +138,7 @@ data.preparation <- function( filenameprefix, w, d, dsw, maw){
     for (j in 1:length(oldcolnames)){
       if(oldcolnames[j]=="df...k." || oldcolnames[j]=="y") {
         currentvar = currentvar + 1
-        print(paste(" using colprefix ",colprefixes[currentvar]))
+        #print(paste(" using colprefix ",colprefixes[currentvar]))
         ini.pos.var = j
         newcolnames[j] = paste(colprefixes[currentvar],(j-ini.pos.var),sep="_")
       }
@@ -136,13 +148,18 @@ data.preparation <- function( filenameprefix, w, d, dsw, maw){
     }
     colnames(df.downsampled) <- newcolnames
     
+    #print(paste("before rbind nrows(df3):",nrow(df3),"nrows(df.downsampled):",nrow(df.downsampled)))
+    
     df3 <- rbind(df3,df.downsampled)
-    rm("df.downsampled")
+    rm("df.downsampled","dfsubset")
+    
+    #print(paste("additive nrows:",nrow(df3)))
     
     
   }
   
- 
+  group.row.verification(df3)
+  
   
   # save data
   filename <- paste(filenameprefix,paste("w",w,"ms",sep=""),paste("d",d,"ms",sep=""),paste("wp",wp,sep=""),paste("dp",dp,sep=""),paste("dsw",dsw,sep=""),paste("maw",maw,sep=""),sep="_")

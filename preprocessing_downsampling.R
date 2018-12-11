@@ -12,14 +12,28 @@ down.sample.avg <- function(x,h=4){
     #print(paste("i: ",i, " i %% h == ",i %% h))
     if (i %% h == 0  && i>0){
       
+      #for (j in 0:(h-1) ) print(paste("j in 0:(",h,"-1)"," x[",i,"-",j,"]",x[i-j,2]," sum=",sum))
+      
       #print(paste("i: ",i," h:",h))
-      sum <- x[i,]
+      sum <- 0
+      printvarr <- ""
       for (j in 0:(h-1) ){
         #print(paste("setting  ",i-j))
         sum <- sum + x[i-j,]  
+        # printvarr <- c(printvarr,paste( "j in 0:(",h,"-1)"," x[",i,"-",j,"]",x[i-j,2]," sum=",sum[2]))
+        # if (sum[2] > 4){
+        #   print(printvarr)
+        #   print("                                    <-------------------------------")
+        #   for (l in 0:(h-1)) print(paste(x[i-l,]))
+        #   print(sum[2]/h)
+        # }
       }
       sum <- sum/h
       ma[i/h,] = sum
+      # if (sum[2]>1.1 || sum[2] < -1.1){
+      #   for (j in 0:(h-1) ) print(paste("j in 0:(",h,"-1)"," x[",i,"-",j,"]"))
+      #   print(paste(" down.sample.avg=",sum))
+      # }
     }
   }
   return(ma)
