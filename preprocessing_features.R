@@ -112,7 +112,7 @@ data.preparation <- function( filenameprefix, w, d, dsw, maw){
     # apply w window
     df.downsampled <- features.time.window(df.downsampled,wp)  
     
-    #print(paste("after time window downsampled group nrows:",nrow(df.downsampled)))
+    print(paste("after time window downsampled group nrows:",nrow(df.downsampled)))
     
     
     # apply d future pred -> new column future.y
@@ -121,7 +121,7 @@ data.preparation <- function( filenameprefix, w, d, dsw, maw){
     #print(colnames(df.downsampled)[1500:2504])
     #df.downsampled$futurey
     
-    #print(paste("after feature prediction  nrows:",nrow(df.downsampled)))
+    print(paste("after feature prediction  nrows:",nrow(df.downsampled)))
     
     
     # group 
@@ -148,12 +148,12 @@ data.preparation <- function( filenameprefix, w, d, dsw, maw){
     }
     colnames(df.downsampled) <- newcolnames
     
-    #print(paste("before rbind nrows(df3):",nrow(df3),"nrows(df.downsampled):",nrow(df.downsampled)))
+    print(paste("before rbind nrows(df3):",nrow(df3),"nrows(df.downsampled):",nrow(df.downsampled)))
     
     df3 <- rbind(df3,df.downsampled)
     rm("df.downsampled","dfsubset")
     
-    #print(paste("additive nrows:",nrow(df3)))
+    print(paste("additive nrows:",nrow(df3)))
     
     
   }

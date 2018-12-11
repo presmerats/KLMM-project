@@ -139,7 +139,7 @@ sop.plot.prepare <- function(xtest,ytest, ytest.pred, raw=FALSE, dp){
         if (raw==TRUE) ytest.result <- c(ytest.result,xtest$y_0[last.group.index:i])
         else ytest.result <- c(ytest.result,ytest[last.group.index:i])
         
-        ytest.pred.result <- c(ytest.pred.result,rep(0,dp),ytest.pred[last.group.index:(i-dp)])
+        ytest.pred.result <- c(ytest.pred.result,rep(0,dp-1),ytest.pred[last.group.index:(i-dp+1)])
         
       } 
       last.group.index <- i

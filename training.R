@@ -6,8 +6,8 @@ source("plot.R")
 my.load.file <- function(datafile,params){
   filename = paste("./data/preprocessed/",datafile,sep="")
   load(file = filename)
-  if ("n" %in% params){
-    n = params["n"][[1]]
+  if ("max_num_rows" %in% params){
+    n = params["max_num_rows"][[1]]
   } else n = nrow(df3)
   subselect <- sample(1:nrow(df3),n)
   df <- df3[subselect,]

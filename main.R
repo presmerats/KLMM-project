@@ -38,19 +38,19 @@ train.test.rbf("csv_small5", w,d,dsw,maw,sigma=1e-11)  # 15min
 w=1000;d=100;
 train.test.rbf("csv_small5", w,d,dsw,maw,sigma=1e-11)  # 2min training
 # new tests
-train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,n=1500) # 
-train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,n=3000) # 
-train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,n=4000) # 
-train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,n=4500) # 
-train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,n=5000) # 
-train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,n=100) # 
-train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,n=1800) # 
-train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,n=2000) # 
-train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,n=2200) # 
-train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,n=2500) #  1.6min RMSE 5.98
-train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,n=2500) #  1.6min RMSE 622 
-train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,n=6000) # 23min
-train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,n=10000) #  MUCH MORE -> discard
+train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,max_num_rows=1500) # 
+train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,max_num_rows=3000) # 
+train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,max_num_rows=4000) # 
+train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,max_num_rows=4500) # 
+train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,max_num_rows=5000) # 
+train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,max_num_rows=100) # 
+train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,max_num_rows=1800) # 
+train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,max_num_rows=2000) # 
+train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,max_num_rows=2200) # 
+train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,max_num_rows=2500) #  1.6min RMSE 5.98
+train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,max_num_rows=2500) #  1.6min RMSE 622 
+train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,max_num_rows=6000) # 23min
+train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11,max_num_rows=10000) #  MUCH MORE -> discard
 
 
 train.test.rbf("csv_small50", w,d,dsw,maw,sigma=1e-11) # 
@@ -74,39 +74,39 @@ source("models.R")
 source("training.R")
 train.model("csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata",
             "svm.rbf",
-            params=list(w=1000,d=100,dsw=10,maw=250,n=1500,sigma=1e-7, e=.1, C=100),
+            params=list(w=1000,d=100,dsw=10,maw=250,max_num_rows=1500,sigma=1e-7, e=.1, C=100),
             k=3) # RMSE 233
 train.model("csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata",
             "svm.rbf",
-            params=list(w=1000,d=100,dsw=10,maw=250,n=1500,sigma=1e-6, e=.1, C=100),
+            params=list(w=1000,d=100,dsw=10,maw=250,max_num_rows=1500,sigma=1e-6, e=.1, C=100),
             k=3) # RMSE 96
 
 train.model("csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata",
             "rvm.rbf",
-            params=list(w=1000,d=100,dsw=10,maw=250,n=1500,sigma=1e-11))
+            params=list(w=1000,d=100,dsw=10,maw=250,max_num_rows=1500,sigma=1e-11))
 
 
 train.model("csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata",
             "svm.rbf",
-            params=list(w=1000,d=100,dsw=10,maw=250,n=1500,sigma=1e-7, e=1, C=100)) # RMSE 644
+            params=list(w=1000,d=100,dsw=10,maw=250,max_num_rows=1500,sigma=1e-7, e=1, C=100)) # RMSE 644
 train.model("csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata",
             "svm.rbf",
-            params=list(w=1000,d=100,dsw=10,maw=250,n=1500,sigma=1e-9, e=1, C=100)) # fails misearble
+            params=list(w=1000,d=100,dsw=10,maw=250,max_num_rows=1500,sigma=1e-9, e=1, C=100)) # fails misearble
 train.model("csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata",
             "svm.rbf",
-            params=list(w=1000,d=100,dsw=10,maw=250,n=1500,sigma=1e-9, e=.01, C=100)) # bad fit
+            params=list(w=1000,d=100,dsw=10,maw=250,max_num_rows=1500,sigma=1e-9, e=.01, C=100)) # bad fit
 train.model("csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata",
             "svm.rbf",
-            params=list(w=1000,d=100,dsw=10,maw=250,n=1500,sigma=1e-6, e=.1, C=100)) # RMSE 96
+            params=list(w=1000,d=100,dsw=10,maw=250,max_num_rows=1500,sigma=1e-6, e=.1, C=100)) # RMSE 96
 
 train.model("csv_small50_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata",
             "svm.rbf",
-            params=list(w=1000,d=100,dsw=10,maw=250,n=1500,sigma=1e-6, e=.1, C=100)) 
+            params=list(w=1000,d=100,dsw=10,maw=250,max_num_rows=1500,sigma=1e-6, e=.1, C=100)) 
 
 
 train.model("csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata",
             "rvm.rbf",
-            params=list(w=1000,d=100,dsw=10,maw=250,n=1500,sigma=1e-11))
+            params=list(w=1000,d=100,dsw=10,maw=250,max_num_rows=1500,sigma=1e-11))
 
 # fix this
 source("models.R")
@@ -123,7 +123,7 @@ test.model("rvm.rbf__n_1500_sigma_1e-11_dim__1500___4004_csv_small5_w1000ms_d100
 # internal testing
 datafile <- "csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata"
 model.func.string <- "svm.rbf"
-params=list(w=1000,d=100,dsw=10,maw=250,n=1500,sigma=1e-7, e=.1, C=100)
+params=list(w=1000,d=100,dsw=10,maw=250,max_num_rows=1500,sigma=1e-7, e=.1, C=100)
 
 modelfilename <- "svm.rbf__n_1500_sigma_1e-06_e_0.1_C_100_dim__1500___4004_csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250._1000ms_100ms_400_40_10ms_250ms.model"; datafilename <-  "csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata"; subsel <- 1500; xlab <-  "t in 10ms";
 
@@ -132,24 +132,24 @@ modelfilename <- "svm.rbf__n_1500_sigma_1e-06_e_0.1_C_100_dim__1500___4004_csv_s
 source("models.R")
 train.model("csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata",
             "svm.rbf",
-            params=list(w=1000,d=100,dsw=10,maw=250,n=1500,sigma=1e-7, e=.1, C=100),
+            params=list(w=1000,d=100,dsw=10,maw=250,max_num_rows=1500,sigma=1e-7, e=.1, C=100),
             k=3) # RMSE 233
 train.model("csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata",
             "svm.rbf",
-            params=list(w=1000,d=100,dsw=10,maw=250,n=1500,sigma=1e-6, e=.1, C=100),
+            params=list(w=1000,d=100,dsw=10,maw=250,max_num_rows=1500,sigma=1e-6, e=.1, C=100),
             k=3) # RMSE 96
 test.model("svm.rbf__n_1500_sigma_1e-06_e_0.1_C_100_dim__1168___4004_csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.model", "csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata", 1500, "t in 10ms", test.type="graphical")
 test.model("svm.rbf__n_1500_sigma_1e-06_e_0.1_C_100_dim__1168___4004_csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.model", "csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata", 1500, "t in 10ms", test.type="numerical")
 
 train.model("csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata",
             "rvm.rbf",
-            params=list(w=1000,d=100,dsw=10,maw=250,n=1500,sigma=1e-11),
+            params=list(w=1000,d=100,dsw=10,maw=250,max_num_rows=1500,sigma=1e-11),
             k=3)
 test.model("rvm.rbf__n_1500_sigma_1e-11_dim__1168___4004_csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.model", "csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata", 1500, "t in 10ms", test.type="graphical")
 
 train.model("csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata",
             "rvm.rbf",
-            params=list(w=1000,d=100,dsw=10,maw=250,n=1500,sigma=1e-06),
+            params=list(w=1000,d=100,dsw=10,maw=250,max_num_rows=1500,sigma=1e-06),
             k=3)
 test.model("rvm.rbf__n_1500_sigma_1e-11_dim__1168___4004_csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.model", "csv_small5_w1000ms_d100ms_wp400_dp40_dsw10_maw250.Rdata", 1500, "t in 10ms", test.type="graphical")
 
@@ -160,7 +160,7 @@ source("training.R")
 
 train.model("csv_small5_w500ms_d100ms_wp200_dp40_dsw10_maw250.Rdata",
             "svm.rbf",
-            params=list(w=500,d=100,dsw=10,maw=250,n=1500,sigma=1e-7, e=.1, C=100),
+            params=list(w=500,d=100,dsw=10,maw=250,max_num_rows=1500,sigma=1e-7, e=.1, C=100),
             k=3) # RMSE 233
 test.model("svm.rbf__n_1500_sigma_1e-07_e_0.1_C_100_dim__1704___2004_csv_small5_w500ms_d100ms_wp200_dp40_dsw10_maw250.model", "csv_small5_w500ms_d100ms_wp200_dp40_dsw10_maw250.Rdata", 1000, "t in 10ms", test.type="graphical", error_data_raw=TRUE)
 test.model("svm.rbf__n_1500_sigma_1e-07_e_0.1_C_100_dim__1704___2004_csv_small5_w500ms_d100ms_wp200_dp40_dsw10_maw250.model", "csv_small5_w500ms_d100ms_wp200_dp40_dsw10_maw250.Rdata", 1500, "t in 10ms", test.type="graphical", error_data_raw=TRUE)
@@ -183,7 +183,7 @@ source("training.R")
 #data.preparation("csv_small5",w=500,d=100,10,50)
 train.model("csv_small5_w500ms_d100ms_wp200_dp40_dsw10_maw50.Rdata",
             "svm.rbf",
-            params=list(w=500,d=100,dsw=10,maw=50,n=1500,sigma=1e-7, e=.1, C=100),
+            params=list(w=500,d=100,dsw=10,maw=50,max_num_rows=1500,sigma=1e-7, e=.1, C=100),
             k=3)
 test.model("svm.rbf__n_1500_sigma_1e-07_e_0.1_C_100_dim__1704___2004_csv_small5_w500ms_d100ms_wp200_dp40_dsw10_maw50.model", "csv_small5_w500ms_d100ms_wp200_dp40_dsw10_maw50.Rdata", 3050, "t in 10ms", test.type="graphical", error_data_raw=FALSE) # close to smoothed error
 test.model("svm.rbf__n_1500_sigma_1e-07_e_0.1_C_100_dim__1704___2004_csv_small5_w500ms_d100ms_wp200_dp40_dsw10_maw50.model", "csv_small5_w500ms_d100ms_wp200_dp40_dsw10_maw50.Rdata", 3050, "t in 10ms", test.type="graphical", error_data_raw=TRUE) # sstill far from raw error
@@ -191,7 +191,7 @@ test.model("svm.rbf__n_1500_sigma_1e-07_e_0.1_C_100_dim__1704___2004_csv_small5_
 #data.preparation("csv_small5",w=500,d=100,1,10)
 train.model("csv_small5_w500ms_d100ms_wp2000_dp400_dsw1_maw10.Rdata",
             "svm.rbf",
-            params=list(w=500,d=100,dsw=1,maw=10,n=1500,sigma=1e-7, e=.1, C=100),
+            params=list(w=500,d=100,dsw=1,maw=10,max_num_rows=1500,sigma=1e-7, e=.1, C=100),
             k=3)
 test.model("svm.rbf__n_1500_sigma_1e-07_e_0.1_C_100_dim__1704___2004_csv_small5_w500ms_d100ms_wp2000_dp400_dsw1_maw10.model",
            "csv_small5_w500ms_d100ms_wp2000_dp400_dsw1_maw10.Rdata",
@@ -202,7 +202,7 @@ test.model("svm.rbf__n_1500_sigma_1e-07_e_0.1_C_100_dim__1704___2004_csv_small5_
 
 train.model("csv_small5_w500ms_d100ms_wp2000_dp400_dsw1_maw10.Rdata",
             "svm.rbf",
-            params=list(w=500,d=100,dsw=1,maw=10,n=1500,sigma=1e-9, e=.1, C=100),
+            params=list(w=500,d=100,dsw=1,maw=10,max_num_rows=1500,sigma=1e-9, e=.1, C=100),
             k=3)
 test.model("svm.rbf__n_1500_sigma_1e-09_e_0.1_C_100_dim__1704___2004_csv_small5_w500ms_d100ms_wp2000_dp400_dsw1_maw10.model",
            "csv_small5_w500ms_d100ms_wp2000_dp400_dsw1_maw10.Rdata",
@@ -210,7 +210,7 @@ test.model("svm.rbf__n_1500_sigma_1e-09_e_0.1_C_100_dim__1704___2004_csv_small5_
 
 train.model("csv_small5_w500ms_d100ms_wp2000_dp400_dsw1_maw10.Rdata",
             "svm.rbf",
-            params=list(w=500,d=100,dsw=1,maw=10,n=1500,sigma=1e-7, e=.01, C=100),
+            params=list(w=500,d=100,dsw=1,maw=10,max_num_rows=1500,sigma=1e-7, e=.01, C=100),
             k=3) # rmse 4495
 test.model("svm.rbf__n_1500_sigma_1e-07_e_0.01_C_100_dim__1704___2004_csv_small5_w500ms_d100ms_wp2000_dp400_dsw1_maw10.model",
            "csv_small5_w500ms_d100ms_wp2000_dp400_dsw1_maw10.Rdata",
@@ -219,20 +219,20 @@ test.model("svm.rbf__n_1500_sigma_1e-07_e_0.01_C_100_dim__1704___2004_csv_small5
 
 train.model("csv_small5_w500ms_d100ms_wp2000_dp400_dsw1_maw10.Rdata",
             "svm.rbf",
-            params=list(w=500,d=100,dsw=1,maw=10,n=1500,sigma=1e-7, e=.1, C=10),
+            params=list(w=500,d=100,dsw=1,maw=10,max_num_rows=1500,sigma=1e-7, e=.1, C=10),
             k=3) # C =10 is bad, RMSE 5023
 train.model("csv_small5_w500ms_d100ms_wp2000_dp400_dsw1_maw10.Rdata",
             "svm.rbf",
-            params=list(w=500,d=100,dsw=1,maw=10,n=1500,sigma=1e-6, e=.1, C=100),
+            params=list(w=500,d=100,dsw=1,maw=10,max_num_rows=1500,sigma=1e-6, e=.1, C=100),
             k=3) # 1e-6   RMSE 3931
 train.model("csv_small5_w500ms_d100ms_wp2000_dp400_dsw1_maw10.Rdata",
             "svm.rbf",
-            params=list(w=500,d=100,dsw=1,maw=10,n=1500,sigma=1e-7, e=.01, C=10),
+            params=list(w=500,d=100,dsw=1,maw=10,max_num_rows=1500,sigma=1e-7, e=.01, C=10),
             k=3) # very bad 
 
 train.model("csv_small5_w500ms_d100ms_wp2000_dp400_dsw1_maw10.Rdata",
             "svm.rbf",
-            params=list(w=500,d=100,dsw=1,maw=10,n=1500,sigma=1e-5, e=.1, C=1000),
+            params=list(w=500,d=100,dsw=1,maw=10,max_num_rows=1500,sigma=1e-5, e=.1, C=1000),
             k=3)
 
 ## downsampling comparison -----
@@ -307,7 +307,7 @@ source("testing.R")
 # data.preparation("csv_small5",w=500,d=100,1,1)
 train.model("csv_small5_w500ms_d100ms_wp500_dp100_dsw1_maw10.Rdata",
             "svm.rbf",
-            params=list(w=500,d=100,dsw=1,maw=10,n=1500,sigma=1e-6, e=.1, C=1000),
+            params=list(w=500,d=100,dsw=1,maw=10,max_num_rows=1500,sigma=1e-6, e=.1, C=1000),
             k=3) 
 test.model("svm.rbf__n_1500_sigma_1e-06_e_0.1_C_1000_dim__1704___2004_csv_small5_w500ms_d100ms_wp500_dp100_dsw1_maw10.model",
            "csv_small5_w500ms_d100ms_wp500_dp100_dsw1_maw10.Rdata",
@@ -328,7 +328,7 @@ test.model("svm.rbf__n_1500_sigma_1e-06_e_0.1_C_1000_dim__1704___2004_csv_small5
 # testing sop.plot with x lab in ms instead of datapoints
 train.model("csv_small5_w1000ms_d100ms_wp100_dp10_dsw10_maw250.Rdata",
             "svm.rbf",
-            params=list(w=1000,d=100,dsw=10,maw=250,n=1500,sigma=1e-6, e=.1, C=1000),
+            params=list(w=1000,d=100,dsw=10,maw=250,max_num_rows=1500,sigma=1e-6, e=.1, C=1000),
             k=3) 
 source("plot.R")
 source("testing.R")
@@ -354,7 +354,7 @@ data.preparation("csv_small5",w=1000,d=100,10,250)
 data.preparation("csv_small5",w=1000,d=10,10,250)
 train.model("csv_small5_w1000ms_d10ms_wp100_dp1_dsw10_maw250.Rdata",
             "svm.rbf",
-            params=list(w=1000,d=10,dsw=10,maw=250,n=1500,sigma=1e-6, e=.1, C=1000),
+            params=list(w=1000,d=10,dsw=10,maw=250,sigma=1e-6, e=.1, C=1000),
             k=3) 
 test.model("svm.rbf__n_1500_sigma_1e-06_e_0.1_C_1000_dim__344___404_csv_small5_w1000ms_d10ms_wp100_dp1_dsw10_maw250.model",
            "csv_small5_w1000ms_d10ms_wp100_dp1_dsw10_maw250.Rdata",
@@ -367,8 +367,22 @@ test.model("svm.rbf__n_1500_sigma_1e-06_e_0.1_C_1000_dim__344___404_csv_small5_w
 data.preparation("csv_small5",w=500,d=100,1,10)
 train.model("csv_small5_w500ms_d100ms_wp500_dp100_dsw1_maw10.Rdata",
             "svm.rbf",
-            params=list(w=500,d=100,dsw=1,maw=10,n=1500,sigma=1e-6, e=.1, C=1000),
+            params=list(w=500,d=100,dsw=1,maw=10,sigma=1e-6, e=.1, C=1000),
             k=3) 
+test.model("svm.rbf__n_1500_sigma_1e-06_e_0.1_C_1000_dim__1704___2004_csv_small5_w500ms_d100ms_wp500_dp100_dsw1_maw10.model",
+           "csv_small5_w500ms_d100ms_wp500_dp100_dsw1_maw10.Rdata",
+           8000,  # i ms
+           "t in 10ms", 
+           test.type="graphical", 
+           error_data_raw=TRUE,
+           start.point=1) # in ms 
+
+data.preparation("csv_small50",w=500,d=100,1,10)
+train.model("csv_small50_w500ms_d100ms_wp500_dp100_dsw1_maw10.Rdata",
+            "svm.rbf",
+            params=list(w=500,d=100,dsw=1,maw=10,sigma=1e-6, e=.1, C=1000),
+            k=3) 
+# this model is tested in csv_small5 dataset! not the one where it was trained in 
 test.model("svm.rbf__n_1500_sigma_1e-06_e_0.1_C_1000_dim__1704___2004_csv_small5_w500ms_d100ms_wp500_dp100_dsw1_maw10.model",
            "csv_small5_w500ms_d100ms_wp500_dp100_dsw1_maw10.Rdata",
            8000,  # i ms
