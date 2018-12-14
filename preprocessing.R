@@ -5,6 +5,7 @@ source("preprocessing_downsampling.R")
 source("preprocessing_plot.R")
 source("preprocessing_features.R")
 source("preprocessing_readcsv.R")
+source("preprocessing_previous_work")
 
 preprocessing.final <- function(prefix){
   
@@ -94,4 +95,40 @@ done <- function(){
 }
 
 
+verification <- function(){
+  filename <- paste("./data/preprocessed/",output,".Rdata",sep="")
+  load(file = filename) # loads a df named df
+  
+  nrow(df3)  
+  
+  head(df3)
+  df3[1:11,c(2,5,7,10)]
+  
+  (df3[11,2] - df3[1,2])/ws
+  
+  df3[19990:20000,]
+  df3[19890:19900,]
+  df3[12000,]
+  summary(df3$sx1)
+  }
 
+previous.work <- function(){
+  
+  # read data
+  #data.preparation.prev("./data/raw/csv_small200","./data/preprocessed/csv_small200")
+  
+  # use csv_small from now on
+  
+  # preprocess: add sop trends for different values of w (write to different files)
+  ws = c(10,20,30,40,50,100,150,200)
+  ds = c(10,50,100,200,300)
+  for (w in ws){
+    for (d in ds){
+      data.preparation.previous.work(
+        w,d,input='csv_small5',
+        output=paste('csv_small5',paste("w",w,sep=""),paste("d",d,sep=""),sep="_"))   
+    }
+    
+  }
+  
+}
