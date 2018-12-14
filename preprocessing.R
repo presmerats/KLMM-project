@@ -130,7 +130,10 @@ verification <- function(){
   filename = paste("./data/preprocessed/",filename,".Rdata",sep="")
   load(file = filename) # loads a df named df
   summary(df3)
-  
+  summary(df3$x3)
+  summary(df3$x2)
+  summary(df3$x1)
+
   }
 
 previous.work <- function(){

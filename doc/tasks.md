@@ -170,7 +170,7 @@ done:
     ok- xlab in 2 rows
 
 
-pending:
+
 
     goals: 
       sop plot for error signal vs noise
@@ -291,16 +291,26 @@ pending:
         ok- discretize sop values, sop trends, and ber error
           ok- review sxi values!
           ok- slope xi are quite small -> adapt slope discretization ranges
-          
+  
+pending:        
         - use the seleccio as input data
           ok- first build
-          - review NA's and Other
+          - review NA's on x1
 
         - ask 
-          - only 100 for test and train? or 100 and 100?
+          - only 100 for test and train? or 100 and 100? ~50
           - ask for the slope discretization
+            -> max and min slope given fixed w! -> done  linearly
           - ask for the error discretization (normalization or not?)
-          - how are the experiments mixed?
+          - model2
+              fixed accuracy and increment delta
+          - option ber discr 
+              avg de la key[sop config]
+              key[sop] non observed -> put mean of all BER observed
+          - how are the experiments mixed?  
+              custom
+              70 30 pero mirar que testing siguin similar
+
         
         - renameRanges?  
         - rebuild dataset
