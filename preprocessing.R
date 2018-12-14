@@ -96,8 +96,22 @@ done <- function(){
 
 
 verification <- function(){
-  filename <- paste("./data/preprocessed/",output,".Rdata",sep="")
-  load(file = filename) # loads a df named df
+  
+  
+  df = read.dataset()
+  plot.dataset(df,1,34000)
+  # every 16000 values -> there's a new experiment
+  # we can derive the group by counting 16000 ...
+  
+  df$x1[16000:16005]
+  df$x2[16000:16005]
+  df$x3[16000:16005]
+  
+  df$x1[32000:32005]
+  df$x2[32000:32005]
+  df$x3[32000:32005]
+  
+  
   
   nrow(df3)  
   
@@ -110,6 +124,13 @@ verification <- function(){
   df3[19890:19900,]
   df3[12000,]
   summary(df3$sx1)
+  rm("df3")
+  
+  filename = paste("original_features_w10_d10","",sep="")
+  filename = paste("./data/preprocessed/",filename,".Rdata",sep="")
+  load(file = filename) # loads a df named df
+  summary(df3)
+  
   }
 
 previous.work <- function(){
@@ -125,8 +146,8 @@ previous.work <- function(){
   for (w in ws){
     for (d in ds){
       data.preparation.previous.work(
-        w,d,input='csv_small5',
-        output=paste('csv_small5',paste("w",w,sep=""),paste("d",d,sep=""),sep="_"))   
+        w,d,
+        output=paste('original_features',paste("w",w,sep=""),paste("d",d,sep=""),sep="_"))   
     }
     
   }

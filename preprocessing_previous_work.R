@@ -1,5 +1,33 @@
 source("preprocessing_downsampling.R")
 
+
+
+read.dataset <- function(){
+  
+  df_error <- read.csv(file = "./data/raw/seleccio/Error_150.csv", header = TRUE, sep=",")
+  df_x1 <- read.csv(file = "./data/raw/seleccio/S1_150.csv", header = TRUE, sep=",")
+  df_x2 <- read.csv(file = "./data/raw/seleccio/S2_150.csv", header = TRUE, sep=",")
+  df_x3 <- read.csv(file = "./data/raw/seleccio/S3_150.csv", header = TRUE, sep=",")
+  
+  #add a different group for every 16000 values
+  n <- nrow(df_x1)
+  group <- rep(0,n)
+  for (i in 1:n){
+    group[i] <- floor((i-1)/16000)
+  }
+  return(data.frame(x1=df_x1$x,x2=df_x2$x,x3=df_x3$x,error=df_error$x, group=group))
+}
+
+plot.dataset <- function(df,nmin=1,nmax=1000){
+  par(mfrow=c(2,1))
+  plot(df$x1[nmin:nmax], type="l", col="yellow", ylim=c(-1,1))
+  lines(df$x2[nmin:nmax], type="l", col="blue")
+  lines(df$x3[nmin:nmax], type="l", col="magenta")
+  plot(df$error[nmin:nmax], type="l", col="black")
+  
+}
+
+
 add.slopes <- function(df, w,d){
   n = nrow(df)
   prev.x1 = c(rep(0,w),df$x1[1:(n-w)])
@@ -50,11 +78,10 @@ discretization <- function(df.new, p, q, maxBer){
   return(data.frame(x1=dx1,x2=dx2,x3=dx3,sx1=dsx1,sx2=dsx2,sx3=dsx3,error=dy,futurey=dfuturey))
 }
 
-data.preparation.previous.work <- function(w,d,input, output){
+data.preparation.previous.work <- function(w,d, output){
   
-  filename = paste(input,"raw",sep="_")
-  filename = paste("./data/preprocessed/",filename,".Rdata",sep="")
-  load(file = filename) # loads a df named df
+  df = read.dataset()
+  
   
   # for each group
   maxBer <- max(df$error)

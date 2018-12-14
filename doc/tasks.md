@@ -172,6 +172,169 @@ done:
 
 pending:
 
+    goals: 
+      sop plot for error signal vs noise
+      sop plot for prediction of signal 
+      test models with other data (non cv data)
+      table of best models
+      compute test error also
+
+  ok- KLMM sop plot fix sop range
+    ok-0- verify the SOP vars between -2/2
+    ok-2- start point manually instead and random if none random  
+  ok- KLMM plot x range fix!!
+    ok-subsel corresponds to plot range?
+      due to w and d
+      the plot size is
+        range/4000*w + range + d
+    ok->we could remove the datapoints > range
+  ok- KLMM plot x range in ms instead of data points?
+    dsw=1 and dsw=10 must be almost identical, only predicted error or smoothed error must change
+    
+    ok->xvalues*dsw verify it's correct
+
+    ok-> second plot does not adjust xrange?
+
+    ok->ylim problem...
+
+    ok->with dsw and xvalue the x range changes!
+      dsw=1 -> 1 exp lasts 4000ms
+      dsw=10 ->1 exp lasts 3000ms
+
+      ok the last w or d ms are dropped in dsw=10
+
+      comes like this in sop.plot
+      data.preparation review
+     
+    ok->predict is plotted at the same time? translation of d required
+    
+    
+  ok- KLMM solve the n in train.model
+    ok-> renamed to max_num_rows
+    ok-> test without using it -> automatically corrected
+
+  ok- KLMM test other datasets investigate strange behaviour in test time!
+    -> not a strange behavior
+    -> at least it doesnt seem to be so
+  ------
+  ok- plot of w and d window from previous paper
+  ok- naive bayes results from previous paper
+  
+  ok- plots of SOP and error to understand problem
+
+
+  ok- plots of sop and error pred 
+    for dsw=10 and dsw=1
+    for 2 combs of C,e,sigma
+
+  ok- KLMM plot of error with rectangle where noise and rectangle where signal (dsw=10ms, dsw=1ms, dsw=0)
+    ->plot dsw=10, dsw=1, dsw=0.25 in the same plot?
+
+  ok- table with RMSE
+  
+
+20181213  --------------------------
+
+  - repeat previous work (read paper or ask)
+      discretization
+        p for SOP vars
+        q for BER target
+      input
+        s1.1= s1 at t
+        s1.2= slope from t-w to t ofs1
+        s2.1
+        ...
+      model
+        naive-bayes = table of prob for each "setup"(=input and target case)
+        s1.1s1.1s2.1s2.2s3.1s3.2e1 = counts
+        for each "config" of s1.1s1.2.. we count the num of e1,e2,...eq 
+
+      test setup
+        every experiment:
+          2000 samples before event
+          14000 samples after
+        selection of 100 exp for training
+        selection of 100 exp for testing
+
+      error
+        Relative prediction error (RPE) = accuracy
+        RPE = (predictedBER - realBER)/realBER
+
+        aim
+          predict ber balues hifgher than mean + 3 times sd
+
+          fig3
+            mean RPE
+            max RPE (worst case)
+
+      error2
+        predict threshold violation
+        accuracy:
+        compute mean and sd for all measurements
+        threshold = mean + 6*sd
+
+        first test for w -> best w is 150ms
+        second test for d -> best d is 100ms
+          doubts:
+            1-when w=150ms we get threshold anticipation 45% faster? WHAT DOES THIS MEAN?
+            2-how is the threshold anticipated?
+            3-when d=100ms -> 80ms threshold anticipation? what is this?  
+
+    - next steps
+        ok-ask for p and q values -> p=16 and q=8
+        ok- w,d ranges w in [0,200] d in [50,300]
+
+        ok- compute the slope in t-w,t for each sop var in each sample (for different values of w)
+          w [10,20,30,40,50,100,150,200]
+          d [10,50,100,200,300]
+
+        ok- discretize sop values, sop trends, and ber error
+          ok- review sxi values!
+          ok- slope xi are quite small -> adapt slope discretization ranges
+          
+        - use the seleccio as input data
+          ok- first build
+          - review NA's and Other
+
+        - ask 
+          - only 100 for test and train? or 100 and 100?
+          - ask for the slope discretization
+          - ask for the error discretization (normalization or not?)
+          - how are the experiments mixed?
+        
+        - renameRanges?  
+        - rebuild dataset
+        - build the df for different values of w and d
+
+
+    - naive bayes -> review + train with df of each w-d combination
+    - compute the error as in the paper
+    - comparison
+
+    - svm implementation
+    - svm optimization e,C,sigma other kernels...
+    - svm for regression, + optimize, see how to compare with the results
+    - rvm
+    - play with signal processing
+
+
+
+  ---------------------
+  
+  - KLMM correct small glitch at the beginning of new group
+    forloop that looks for jumps of more than 20,100,200 in the sop vars
+      -> sop.plot
+      -> sop.plot.prepare
+      -> data.preparation
+  
+  - KLMM data.preparation improve memory usage
+  
+
+  ------
+  - KLMM review CV tests
+  ko- KLMM review code
+  ko- KLMM change the model to max in an interval?
+
     - downsampling and smoothing is TOO much -> losing some signal
         ok-test
           dsw 10 ma 250  sigma 1e-7
