@@ -7,10 +7,6 @@ load(file = 'data/preprocessed/disc_original_features_w10_d10.Rdata')
 features <- c("x1","x2","x3","sx1","sx2","sx3")
 
 trainModel <- function(df, features, algorithm) {
-  if(algorithm == "svm") {
-    df <- df[1:20000,]
-  }
-
   library(e1071)
   features <- c(features, "futurey","real.futurey")
   df <- df[features]
