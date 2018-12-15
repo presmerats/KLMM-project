@@ -42,6 +42,18 @@ add.slopes <- function(df, w,d){
   return(cbind(df,slope.x1,slope.x2,slope.x3))
 }
 
+median.labels <- function(ranges, digts =3,maxval){
+  labels = rep("",length(ranges)-1)
+  
+  for (i in 2:length(ranges)){
+    the.median= ranges[i-1]+(ranges[i]-ranges[i-1])/2
+    the.median=min(the.median,maxval)
+    the.median=max(the.median,-maxval)
+    labels[i-1]=round(the.median,digts)
+  }
+  
+  return(labels)
+}
 
 discretization <- function(df.new, p, q, maxBer){
   
@@ -49,9 +61,12 @@ discretization <- function(df.new, p, q, maxBer){
   interval = 1 - (-1)
   interval.length = interval/p
   # discretize xi
-  dx1 <- cut(df.new$x1, breaks = seq(-1.0,1.0,interval.length) ) 
-  dx2 <- cut(df.new$x2, breaks = seq(-1.0,1.0,interval.length) ) 
-  dx3 <- cut(df.new$x3, breaks = seq(-1.0,1.0,interval.length) ) 
+
+  #dx1 <- cut(df.new$x1, breaks = seq(-1.0,1.0,interval.length) , dig.lab=2) 
+  thelabels = median.labels(seq(-1.0,1.0,interval.length),maxval=1)
+  dx1 <- cut(df.new$x1, breaks = seq(-1.0,1.0,interval.length) , labels=thelabels) 
+  dx2 <- cut(df.new$x2, breaks = seq(-1.0,1.0,interval.length) , labels=thelabels) 
+  dx3 <- cut(df.new$x3, breaks = seq(-1.0,1.0,interval.length) , labels=thelabels) 
   # how to discretize trend?? slope can be -inf, inf....
   # approach 1) q-2 between -1000,1000 then 2 other ranges under-1000, above1000
   max.slope=1000
@@ -70,17 +85,18 @@ discretization <- function(df.new, p, q, maxBer){
   interval.length = interval/(q-2)
   the.ranges = c(-.Machine$double.xmax, seq(-max.slope,max.slope,interval.length), .Machine$double.xmax)
 
-  dsx1 <- cut(df.new$slope.x1, breaks = the.ranges)
-  dsx2 <- cut(df.new$slope.x2, breaks = the.ranges)
-  dsx3 <- cut(df.new$slope.x3, breaks = the.ranges)
+  dsx1 <- cut(df.new$slope.x1, breaks = the.ranges, labels=median.labels(the.ranges,maxval=max.slope))
+  dsx1b <- cut(df.new$slope.x1, breaks = the.ranges)
+  dsx2 <- cut(df.new$slope.x2, breaks = the.ranges, labels=median.labels(the.ranges,maxval=max.slope))
+  dsx3 <- cut(df.new$slope.x3, breaks = the.ranges, labels=median.labels(the.ranges,maxval=max.slope))
   
   # q is the number of ranges for BER error (between 0 and ? max(BER) in all dataset)
   interval = maxBer 
   interval.length = interval/q
-  dy <- cut(df.new$error, breaks = seq(0, maxBer, interval.length))
-  dfuturey <- cut(df.new$futurey, breaks = seq(0, maxBer, interval.length))
+  dy <- cut(df.new$error, breaks = seq(0, maxBer, interval.length), labels=median.labels(seq(0, maxBer, interval.length),maxval=maxBer))
+  dfuturey <- cut(df.new$futurey, breaks = seq(0, maxBer, interval.length), labels=median.labels(seq(0, maxBer, interval.length),maxval=maxBer))
   
-  return(data.frame(x1=dx1,x2=dx2,x3=dx3,sx1=dsx1,sx2=dsx2,sx3=dsx3,error=dy,futurey=dfuturey, real.futurey=df.new$futurey))
+  return(data.frame(x1=dx1,x2=dx2,x3=dx3,sx1=dsx1,sx1b=dsx1b,sx2=dsx2,sx3=dsx3,error=dy,futurey=dfuturey, real.futurey=df.new$futurey))
 }
 
 data.preparation.previous.work <- function(w,d, output){
@@ -93,6 +109,7 @@ data.preparation.previous.work <- function(w,d, output){
   groups <- unique(df$group)
   df3 <- data.frame()
   for (i in 1:length(groups)){
+  #for (i in 1:2){
     
     dfsubset <- df[df$group==groups[i],]
     
@@ -101,17 +118,7 @@ data.preparation.previous.work <- function(w,d, output){
     rm("dfsubset")
     n <- nrow(df.downsampled)
     
-    #no NA here
-    # if (i==11){
-    #   print(176169-16000*i)
-    #   a = 176169-16000*i
-    #   print(df.downsampled[a,])
-    #   b = 176172-16000*i
-    #   print(df.downsampled[b,])
-    #   c = 176793-16000*i
-    #   print(df.downsampled[c,])
-    #   print(176169-16000*i)
-    # }
+
     
     # compute the slope and add as a new column for each SOP var
     df.new <- add.slopes(df.downsampled,w,d)
@@ -122,9 +129,9 @@ data.preparation.previous.work <- function(w,d, output){
     df.new <- cbind(df.new, futurey)
     
     # discretize -> convert to p=16 and q=8 ranges
-    if (sum(is.na(df.new$x1))>0) { print("before discretization"); print(df.new$x1[is.na(df.new$x1)]); print(i); print(" which row is NA? ");print(which(is.na(df.new$x1)))  }
+    #if (sum(is.na(df.new$x1))>0) { print("before discretization"); print(df.new$x1[is.na(df.new$x1)]); print(i); print(" which row is NA? ");print(which(is.na(df.new$x1)))  }
     df.new <- discretization(df.new, p=16, q=8,maxBer)
-    if (sum(is.na(df.new$x1))>0) { print("after discretization"); print(df.new$x1[is.na(df.new$x1)]); print(i); print(" which row is NA? ");print(which(is.na(df.new$x1))) }
+    #if (sum(is.na(df.new$x1))>0) { print("after discretization"); print(df.new$x1[is.na(df.new$x1)]); print(i); print(" which row is NA? ");print(which(is.na(df.new$x1))) }
     # group 
     df.new$group <- rep(groups[i],nrow(df.new))
     
