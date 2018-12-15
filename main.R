@@ -377,19 +377,22 @@ test.model("svm.rbf__n_1500_sigma_1e-06_e_0.1_C_1000_dim__1704___2004_csv_small5
            error_data_raw=TRUE,
            start.point=1) # in ms 
 
-data.preparation("csv_small50",w=500,d=100,1,10)
-train.model("csv_small50_w500ms_d100ms_wp500_dp100_dsw1_maw10.Rdata",
+data.preparation.prev("./data/raw/csv_small10","csv_small10")
+data.preparation("csv_small10",w=500,d=100,1,10)
+train.model("csv_small10_w500ms_d100ms_wp500_dp100_dsw1_maw10.Rdata",
             "svm.rbf",
             params=list(w=500,d=100,dsw=1,maw=10,sigma=1e-6, e=.1, C=1000),
             k=3) 
 # this model is tested in csv_small5 dataset! not the one where it was trained in 
-test.model("svm.rbf__n_1500_sigma_1e-06_e_0.1_C_1000_dim__1704___2004_csv_small5_w500ms_d100ms_wp500_dp100_dsw1_maw10.model",
+test.model("svm.rbf__sigma_1e-06_e_0.1_C_1000_dim__1704___2004_csv_small10_w500ms_d100ms_wp500_dp100_dsw1_maw10.model",
            "csv_small5_w500ms_d100ms_wp500_dp100_dsw1_maw10.Rdata",
            8000,  # i ms
            "t in 10ms", 
            test.type="graphical", 
            error_data_raw=TRUE,
-           start.point=1) # in ms 
+           start.point=8000) # in ms 
+
+
 
 #-------------------------------
 test.model("svm.rbf__n_1500_sigma_1e-06_e_0.1_C_1000_dim__1704___2004_csv_small5_w500ms_d100ms_wp500_dp100_dsw1_maw10.model",
