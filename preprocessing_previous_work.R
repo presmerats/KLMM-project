@@ -55,13 +55,13 @@ median.labels <- function(ranges, digts =3,maxval){
   return(labels)
 }
 
-discretization <- function(df.new, p, q, maxBer){
+discretization <- function(df.new, p, q, maxBer, w, d){
   
   # p is the number of ranges for sop vars (between -1 and 1)
   interval = 1 - (-1)
   interval.length = interval/p
   # discretize xi
-
+  
   #dx1 <- cut(df.new$x1, breaks = seq(-1.0,1.0,interval.length) , dig.lab=2) 
   thelabels = median.labels(seq(-1.0,1.0,interval.length),maxval=1)
   dx1 <- cut(df.new$x1, breaks = seq(-1.0,1.0,interval.length) , labels=thelabels) 
@@ -84,7 +84,7 @@ discretization <- function(df.new, p, q, maxBer){
   interval = 2*max.slope
   interval.length = interval/(q-2)
   the.ranges = c(-.Machine$double.xmax, seq(-max.slope,max.slope,interval.length), .Machine$double.xmax)
-
+  
   dsx1 <- cut(df.new$slope.x1, breaks = the.ranges, labels=median.labels(the.ranges,maxval=max.slope))
   #dsx1b <- cut(df.new$slope.x1, breaks = the.ranges)
   dsx2 <- cut(df.new$slope.x2, breaks = the.ranges, labels=median.labels(the.ranges,maxval=max.slope))
@@ -96,13 +96,13 @@ discretization <- function(df.new, p, q, maxBer){
   dy <- cut(df.new$error, breaks = seq(0, maxBer, interval.length), labels=median.labels(seq(0, maxBer, interval.length),maxval=maxBer))
   dfuturey <- cut(df.new$futurey, breaks = seq(0, maxBer, interval.length), labels=median.labels(seq(0, maxBer, interval.length),maxval=maxBer))
   
-
+  
   #return(data.frame(x1=dx1,x2=dx2,x3=dx3,sx1=dsx1,sx2=dsx2,sx3=dsx3,error=dy,futurey=dfuturey, real.futurey=df.new$futurey))
-
+  
   df_disc <- data.frame(x1=dx1,x2=dx2,x3=dx3,sx1=dsx1,sx1b=dsx1b,sx2=dsx2,sx3=dsx3,error=dy,futurey=dfuturey, real.futurey=df.new$futurey)
   df_real <- data.frame(x1=df.new$x1, x2=df.new$x2, x3=df.new$x3, sx1=df.new$slope.x1, sx2=df.new$slope.x2, sx3=df.new$slope.x1, error=dy, futurey=dfuturey, real.futurey=df.new$futurey)
   return(list(df_discrete=df_disc, df_real=df_real))
-
+  
 }
 
 data.preparation.previous.work <- function(w ,d, output){
@@ -118,7 +118,7 @@ data.preparation.previous.work <- function(w ,d, output){
   df_final_real <- data.frame()
   
   for (i in 1:length(groups)){
-  #for (i in 1:2){
+    #for (i in 1:2){
     
     dfsubset <- df[df$group==groups[i],]
     
@@ -126,7 +126,7 @@ data.preparation.previous.work <- function(w ,d, output){
     df.downsampled <- down.sample.avg(dfsubset,4)
     rm("dfsubset")
     n <- nrow(df.downsampled)
-
+    
     
     # compute the slope and add as a new column for each SOP var
     df.new <- add.slopes(df.downsampled,w,d)
@@ -138,7 +138,7 @@ data.preparation.previous.work <- function(w ,d, output){
     
     # discretize -> convert to p=16 and q=8 ranges
     #if (sum(is.na(df.new$x1))>0) { print("before discretization"); print(df.new$x1[is.na(df.new$x1)]); print(i); print(" which row is NA? ");print(which(is.na(df.new$x1)))  }
-    disc <- discretization(df.new, p=16, q=8,maxBer)
+    disc <- discretization(df.new, p=16, q=8,maxBer, w, d)
     df.disc <- disc$df_discrete
     df.real <- disc$df_real
     
@@ -151,6 +151,81 @@ data.preparation.previous.work <- function(w ,d, output){
     df_final_disc <- rbind(df_final_disc, df.disc[(w+1):(n-d),])
     df_real_disc <- rbind(df_real_disc, df.real[(w+1):(n-d),])
     rm("df.new")
+  }
+  
+  # save to disk
+  filename <- paste("./data/preprocessed/disc_",output,".Rdata",sep="")
+  save(df_final_disc, file = filename)
+  
+  # save to disk
+  filename <- paste("./data/preprocessed/real_",output,".Rdata",sep="")
+  save(df_final_real, file = filename)
+}
+
+
+data.preparation.previous.per.group <- function(w,d,df,maxBer,groups,i,df_disc_list, df_final_list){
+  dfsubset <- df[df$group==groups[i],]
+  
+  # downsample to 1ms
+  df.downsampled <- down.sample.avg(dfsubset,4)
+  rm("dfsubset")
+  n <- nrow(df.downsampled)
+  
+  
+  # compute the slope and add as a new column for each SOP var
+  df.new <- add.slopes(df.downsampled,w,d)
+  rm("df.downsampled")
+  
+  # add the future value of ber
+  futurey = c(df.new$error[d:(n-1)],rep(0,d))
+  df.new <- cbind(df.new, futurey)
+  
+  # discretize -> convert to p=16 and q=8 ranges
+  #if (sum(is.na(df.new$x1))>0) { print("before discretization"); print(df.new$x1[is.na(df.new$x1)]); print(i); print(" which row is NA? ");print(which(is.na(df.new$x1)))  }
+  disc <- discretization(df.new, p=16, q=8,maxBer, w, d)
+  df.disc <- disc$df_discrete
+  df.real <- disc$df_real
+  
+  #if (sum(is.na(df.new$x1))>0) { print("after discretization"); print(df.new$x1[is.na(df.new$x1)]); print(i); print(" which row is NA? ");print(which(is.na(df.new$x1))) }
+  # group 
+  df.disc$group <- rep(groups[i],nrow(df.disc))
+  df.real$group <- rep(groups[i],nrow(df.real))
+  
+  df_disc_list[[i]] <- df.disc[(w+1):(n-d),]
+  df_final_list[[i]] <- df.real[(w+1):(n-d),]
+  
+}
+
+
+
+data.preparation.previous.work.parallel <- function(w ,d, output){
+  
+  df = read.dataset()
+  
+  # for each group
+  maxBer <- max(df$error)
+  groups <- unique(df$group)
+  
+  # Resulting dataframes
+  df_final_disc <- data.frame()
+  df_final_real <- data.frame()
+  df_disc_list <- vector("list", length(groups)) 
+  df_final_list <- vector("list",length(groups)) 
+
+  
+  library(parallel)
+  numCores <- detectCores()
+  library(foreach)
+  library(doParallel)
+  registerDoParallel(numCores-3)  
+  foreach (i=1:length(groups) ) %dopar% {
+      try(data.preparation.previous.per.group(w,d,df,maxBer,groups,i,df_disc_list, df_final_list) )
+  }
+  
+  for (i in 1:length(groups)){
+    # bind with result dataset
+    df_final_disc <- rbind(df_final_disc, df_disc_list[[i]])
+    df_final_real <- rbind(df_final_real, df_final_list[[i]])
   }
   
   # save to disk

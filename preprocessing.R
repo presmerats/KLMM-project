@@ -136,7 +136,7 @@ verification <- function(){
 
   }
 
-previous.work <- function(){
+previous.work.parallel2 <- function(){
   
   # read data
   #data.preparation.prev("./data/raw/csv_small200","./data/preprocessed/csv_small200")
@@ -148,7 +148,7 @@ previous.work <- function(){
   ds = c(10,50,100,200,300)
   for (w in ws){
     for (d in ds){
-      data.preparation.previous.work(
+      data.preparation.previous.work.parallel(
         w,d,
         output=paste('original_features',paste("w",w,sep=""),paste("d",d,sep=""),sep="_"))   
     }
