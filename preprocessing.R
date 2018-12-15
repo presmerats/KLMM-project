@@ -156,3 +156,43 @@ previous.work <- function(){
   }
   
 }
+
+previous.work.parallel <- function(prefix){
+  
+  library(parallel)
+  numCores <- detectCores()
+  numCores
+  library(foreach)
+  library(doParallel)
+  
+  start_time <- Sys.time()
+  #data.preparation(dirpath,w,d,downsampling_w, ma_w)
+  # for (downsampling in c(4,33,100,330,1000)){
+  #   for (ma.window in c(50,100,200)){
+  #     for(w in c(10,20,50,100,500,1000)){
+  #       for (d in c(10,20,50,100,500,1000)){
+  
+  experiments <- data.frame()
+  #for (downsampling in c(33,100,330)){
+  ws = c(10,20,30,40,50,100,150,200)
+  ds = c(10,50,100,200,300)
+  for (w in ws){
+    for (d in ds){
+          experiments <- rbind(experiments, data.frame( w=w, d=d))
+        }}
+  
+  registerDoParallel(numCores-3)
+  foreach (i=1:nrow(experiments)) %dopar% {
+    w = experiments$w[i]
+    d = experiments$d[i]
+    try(data.preparation.previous.work(
+      w,d,
+      output=paste('original_features',paste("w",w,sep=""),paste("d",d,sep=""),sep="_")) )
+  }
+  
+  end_time <- Sys.time()
+  total.time = end_time - start_time
+  print(paste("total time ",prefix))
+  print(total.time)
+  
+}

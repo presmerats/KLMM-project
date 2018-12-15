@@ -86,7 +86,7 @@ discretization <- function(df.new, p, q, maxBer){
   the.ranges = c(-.Machine$double.xmax, seq(-max.slope,max.slope,interval.length), .Machine$double.xmax)
 
   dsx1 <- cut(df.new$slope.x1, breaks = the.ranges, labels=median.labels(the.ranges,maxval=max.slope))
-  dsx1b <- cut(df.new$slope.x1, breaks = the.ranges)
+  #dsx1b <- cut(df.new$slope.x1, breaks = the.ranges)
   dsx2 <- cut(df.new$slope.x2, breaks = the.ranges, labels=median.labels(the.ranges,maxval=max.slope))
   dsx3 <- cut(df.new$slope.x3, breaks = the.ranges, labels=median.labels(the.ranges,maxval=max.slope))
   
@@ -96,7 +96,7 @@ discretization <- function(df.new, p, q, maxBer){
   dy <- cut(df.new$error, breaks = seq(0, maxBer, interval.length), labels=median.labels(seq(0, maxBer, interval.length),maxval=maxBer))
   dfuturey <- cut(df.new$futurey, breaks = seq(0, maxBer, interval.length), labels=median.labels(seq(0, maxBer, interval.length),maxval=maxBer))
   
-  return(data.frame(x1=dx1,x2=dx2,x3=dx3,sx1=dsx1,sx1b=dsx1b,sx2=dsx2,sx3=dsx3,error=dy,futurey=dfuturey, real.futurey=df.new$futurey))
+  return(data.frame(x1=dx1,x2=dx2,x3=dx3,sx1=dsx1,sx2=dsx2,sx3=dsx3,error=dy,futurey=dfuturey, real.futurey=df.new$futurey))
 }
 
 data.preparation.previous.work <- function(w,d, output){
