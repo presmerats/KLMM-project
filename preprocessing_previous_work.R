@@ -55,19 +55,24 @@ discretization <- function(df.new, p, q, maxBer){
   # how to discretize trend?? slope can be -inf, inf....
   # approach 1) q-2 between -1000,1000 then 2 other ranges under-1000, above1000
   max.slope=1000
-  #interval = 2*max.slope
-  #interval.length = interval/(q-2)
-  #the.ranges = c(-.Machine$double.xmax, seq(-max.slope,max.slope,interval.length), .Machine$double.xmax)
+  
   # logarithmic interval
   # we observe slope varies between 1e-3 and 1e-1
-  q2 = q 
-  q2 = q2/2
-  log.seq = c(1 %o% 10^((-q2/2):(-1)))
-  the.ranges = c(-.Machine$double.xmax, -1*rev(log.seq) ,  log.seq, .Machine$double.xmax)
+  # q2 = q 
+  # q2 = q2/2
+  # log.seq = c(1 %o% 10^((-q2/2):(-1)))
+  # the.ranges = c(-.Machine$double.xmax, -1*rev(log.seq) ,  log.seq, .Machine$double.xmax)
+  # approach 2) user polar coordinates approach? with x=1 y=slope
+  # approach 3) use max slope given w -> (1 - (-1))/w and min slope (-1 - 1)/w
+  max.slope= 2/w
+  min.slope=-2/w
+  interval = 2*max.slope
+  interval.length = interval/(q-2)
+  the.ranges = c(-.Machine$double.xmax, seq(-max.slope,max.slope,interval.length), .Machine$double.xmax)
+
   dsx1 <- cut(df.new$slope.x1, breaks = the.ranges)
   dsx2 <- cut(df.new$slope.x2, breaks = the.ranges)
   dsx3 <- cut(df.new$slope.x3, breaks = the.ranges)
-  # approach 2) user polar coordinates approach? with x=1 y=slope
   
   # q is the number of ranges for BER error (between 0 and ? max(BER) in all dataset)
   interval = maxBer 
@@ -75,7 +80,7 @@ discretization <- function(df.new, p, q, maxBer){
   dy <- cut(df.new$error, breaks = seq(0, maxBer, interval.length))
   dfuturey <- cut(df.new$futurey, breaks = seq(0, maxBer, interval.length))
   
-  return(data.frame(x1=dx1,x2=dx2,x3=dx3,sx1=dsx1,sx2=dsx2,sx3=dsx3,error=dy,futurey=dfuturey))
+  return(data.frame(x1=dx1,x2=dx2,x3=dx3,sx1=dsx1,sx2=dsx2,sx3=dsx3,error=dy,futurey=dfuturey, real.futurey=df.new$futurey))
 }
 
 data.preparation.previous.work <- function(w,d, output){
@@ -96,6 +101,18 @@ data.preparation.previous.work <- function(w,d, output){
     rm("dfsubset")
     n <- nrow(df.downsampled)
     
+    #no NA here
+    # if (i==11){
+    #   print(176169-16000*i)
+    #   a = 176169-16000*i
+    #   print(df.downsampled[a,])
+    #   b = 176172-16000*i
+    #   print(df.downsampled[b,])
+    #   c = 176793-16000*i
+    #   print(df.downsampled[c,])
+    #   print(176169-16000*i)
+    # }
+    
     # compute the slope and add as a new column for each SOP var
     df.new <- add.slopes(df.downsampled,w,d)
     rm("df.downsampled")
@@ -105,8 +122,9 @@ data.preparation.previous.work <- function(w,d, output){
     df.new <- cbind(df.new, futurey)
     
     # discretize -> convert to p=16 and q=8 ranges
+    if (sum(is.na(df.new$x1))>0) { print("before discretization"); print(df.new$x1[is.na(df.new$x1)]); print(i); print(" which row is NA? ");print(which(is.na(df.new$x1)))  }
     df.new <- discretization(df.new, p=16, q=8,maxBer)
-    
+    if (sum(is.na(df.new$x1))>0) { print("after discretization"); print(df.new$x1[is.na(df.new$x1)]); print(i); print(" which row is NA? ");print(which(is.na(df.new$x1))) }
     # group 
     df.new$group <- rep(groups[i],nrow(df.new))
     
