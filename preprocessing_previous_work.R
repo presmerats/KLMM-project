@@ -155,5 +155,5 @@ data.preparation.previous.work <- function(w ,d, output){
   
   # save to disk
   filename <- paste("./data/preprocessed/real_",output,".Rdata",sep="")
-  save(df_final_disc, file = filename)
+  save(df_final_real, file = filename)
 }
