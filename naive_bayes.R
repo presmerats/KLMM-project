@@ -2,31 +2,33 @@ rm(list = ls())
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 load(file = 'data/preprocessed/original_features_w10_d10.Rdata')
-df <- df3[,0:8]
+df <- df3
 rm(df3)
 
 library(e1071)
-?naiveBayes
 head(df)
 
-test_size <- floor(0.7*nrow(df))
-
-# Let's sample indices 10 times so have an average accuracy.
-# Each sampling will use different seeds
-accuracy <- 0
-for(k in 1:10) {
+runNaiveBayes <- function(df, features) {
+  features <- c(features, "futurey","real.futurey")
+  df <- df[features]
+  test_size <- floor(0.75*nrow(df))
+  
   train_ind <- sample(seq_len(nrow(df)), size = test_size)
   
   train <- df[train_ind,]
   test <- df[-train_ind,]
   
   nb <- naiveBayes(futurey ~ ., data = train)
-  nb_pred <- predict(nb, test)
+  pred <- predict(nb, test)
+  pred <- as.numeric(as.character(pred))
   
-  pred_res <- table(nb_pred, test$futurey)
+  real <- test$real.futurey
+  mape <- sum(abs(real-pred)/pred)/length(pred)
   
-  accuracy <- accuracy + sum(diag(pred_res))/sum(pred_res)
+  return(list(model=nb, mape=mape))
 }
 
-average_accuracy <- accuracy/10
+features <- c("x1","x2","x3","sx1","sx2","sx3")
+
+mod_res <- runNaiveBayes(df, features)
 
