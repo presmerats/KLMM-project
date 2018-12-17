@@ -1,0 +1,44 @@
+
+
+Intro
+	problem statement
+	quickly present previous work
+	sections organization
+
+Previous Work
+	present paper, 
+	present dataset,
+	present results
+
+Replication of previous results
+	data preprocessing
+		discretization
+		train/test splits
+	naive Bayes model
+		model 
+		training procedure
+	Results
+		plots
+
+Improvements
+
+	SVM with discr.
+	SVM for regression
+	RVM for regression
+	Other Improvements
+		playing with downsampling
+
+Results
+	results table
+	plot of naive bayes, svm and svm for regression
+
+Conclusion
+
+
+-----
+	ok- intro
+	ok- previous work
+	ok- previous work error measure, plot1, plot2
+	ok- previous work images
+	- model run train and fix
+	- svm model

@@ -291,35 +291,73 @@ done:
         ok- discretize sop values, sop trends, and ber error
           ok- review sxi values!
           ok- slope xi are quite small -> adapt slope discretization ranges
+
+      - ask 
+          ok- ask for the slope discretization
+            -> max and min slope given fixed w! -> done  linearly
+          ok- ask for the error discretization (normalization or not?) NO
+          
+
   
-pending:        
-        - use the seleccio as input data
+        
+
+        ok- renameRanges?  
+            to min value, or max?, or median?
+            median: low + (max-low)/2
+        
+        ko- use the seleccio as input data
           ok- first build
           - review NA's on x1
+            > which(is.na(df3$x1))
+            [1] 176169 176172 176793
 
-        - ask 
+            [1] 45
+            [1] " which row is NA? "
+            [1] 1059 1062 1683
+            so look at: 
+            45*16000+1059
+            45*16000+1062
+            45*16000+1683
+
+
+      ok- training-test set
           - only 100 for test and train? or 100 and 100? ~50
-          - ask for the slope discretization
-            -> max and min slope given fixed w! -> done  linearly
-          - ask for the error discretization (normalization or not?)
-          - model2
-              fixed accuracy and increment delta
-          - option ber discr 
-              avg de la key[sop config]
-              key[sop] non observed -> put mean of all BER observed
+            select similiar for training and testing..
+          
           - how are the experiments mixed?  
               custom
               70 30 pero mirar que testing siguin similar
 
+          -> sample 70%30% 10 times -> also very good approach
+
+
         
-        - renameRanges?  
-        - rebuild dataset
-        - build the df for different values of w and d
+    ok- build the df for different values of w and d
 
+    ok- compute the error as in the paper
+    
+ pending: 
 
-    - naive bayes -> review + train with df of each w-d combination
-    - compute the error as in the paper
-    - comparison
+    - naive bayes 
+        - review + train with df of each w-d combination
+        - option ber discr 
+              avg de la key[sop config]
+              key[sop] non observed -> put mean of all BER observed
+
+        - review error for each w,d -> if not like the paper.. review test set configuration
+
+    
+    - comparison: and compare the values of the error with the paper
+
+    - plot for model1
+
+    - model2
+        fixed w (best one) and increment delta
+        test that for diff d the error increases
+        see if accuracy decreases, ERROR measure increases
+
+    - plot for model2
+
 
     - svm implementation
     - svm optimization e,C,sigma other kernels...
@@ -328,8 +366,8 @@ pending:
     - play with signal processing
 
 
-
-  ---------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  
   
   - KLMM correct small glitch at the beginning of new group
     forloop that looks for jumps of more than 20,100,200 in the sop vars
