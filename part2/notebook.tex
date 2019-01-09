@@ -1,0 +1,867 @@
+
+% Default to the notebook output style
+
+    
+
+
+% Inherit from the specified cell style.
+
+
+
+
+    
+\documentclass[11pt]{article}
+
+    
+    
+    \usepackage[T1]{fontenc}
+    % Nicer default font (+ math font) than Computer Modern for most use cases
+    \usepackage{mathpazo}
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % We will generate all images so they have a width \maxwidth. This means
+    % that they will get their normal width if they fit onto the page, but
+    % are scaled down if they would overflow the margins.
+    \makeatletter
+    \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth
+    \else\Gin@nat@width\fi}
+    \makeatother
+    \let\Oldincludegraphics\includegraphics
+    % Set max figure width to be 80% of text width, for now hardcoded.
+    \renewcommand{\includegraphics}[1]{\Oldincludegraphics[width=.8\maxwidth]{#1}}
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionLabelFormat{nolabel}{}
+    \captionsetup{labelformat=nolabel}
+
+    \usepackage{adjustbox} % Used to constrain images to a maximum size 
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage[utf8x]{inputenc} % Allow utf-8 characters in the tex document
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range 
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    
+
+    
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatability definitions
+    \def\gt{>}
+    \def\lt{<}
+    % Document parameters
+    \title{Project-part2}
+    
+    
+    
+
+    % Pygments definitions
+    
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@fm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sa\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@dl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % Exact colors from NB
+    \definecolor{incolor}{rgb}{0.0, 0.0, 0.5}
+    \definecolor{outcolor}{rgb}{0.545, 0.0, 0.0}
+
+
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+    \begin{document}
+    
+    
+    \maketitle
+    
+    
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}26}]:} \PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+         \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+         \PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+         \PY{k+kn}{from} \PY{n+nn}{math} \PY{k}{import} \PY{n}{floor}
+         \PY{k+kn}{from} \PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{stats}\PY{n+nn}{.}\PY{n+nn}{stats} \PY{k}{import} \PY{n}{pearsonr}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}27}]:} \PY{n}{project\PYZus{}folder} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{.}\PY{l+s+s2}{\PYZdq{}}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}28}]:} \PY{c+c1}{\PYZsh{} Read time series for McDonald\PYZsq{}s stock and drop non open/high/low/close/volume columns}
+         \PY{n}{mcd} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{n}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZob{}project\PYZus{}folder\PYZcb{}}\PY{l+s+s1}{/EOD\PYZhy{}MCD.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{index\PYZus{}col}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+         \PY{n}{mcd}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Adj\PYZus{}Open}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Adj\PYZus{}High}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Adj\PYZus{}Low}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Adj\PYZus{}Close}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Adj\PYZus{}Volume}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Dividend}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Split}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{errors}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{skip}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{mcd}\PY{o}{.}\PY{n}{sort\PYZus{}index}\PY{p}{(}\PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+         \PY{n}{mcd}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}28}]:}              Open   High   Low  Close   Volume
+         Date                                          
+         1970-01-02  43.00  44.25  43.0  44.25  23256.0
+         1970-01-05  44.25  45.00  44.0  45.00  18193.0
+         1970-01-06  45.00  45.75  45.0  45.25  16059.0
+         1970-01-07  45.25  45.75  45.0  45.00  22459.0
+         1970-01-08  45.00  45.38  45.0  45.00  18456.0
+\end{Verbatim}
+            
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}29}]:} \PY{k+kn}{import} \PY{n+nn}{os}\PY{o}{,} \PY{n+nn}{sys}\PY{o}{,} \PY{n+nn}{inspect}
+         \PY{n}{sys}\PY{o}{.}\PY{n}{path}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{project\PYZus{}folder}\PY{p}{)}
+         \PY{k+kn}{from} \PY{n+nn}{pyESN} \PY{k}{import} \PY{n}{ESN}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}30}]:} \PY{c+c1}{\PYZsh{} Get Features and predicting variable, which is chosen to be Adj\PYZus{}Close since it determines the price of a stock at the end of a day}
+         \PY{n}{X} \PY{o}{=} \PY{n}{mcd}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Close}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{.}\PY{n}{values}
+         \PY{n}{Y} \PY{o}{=} \PY{n}{mcd}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Close}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{values}
+         
+         \PY{c+c1}{\PYZsh{} Split data into 75/25 train/test}
+         \PY{n}{train\PYZus{}len} \PY{o}{=} \PY{n}{floor}\PY{p}{(}\PY{n}{X}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{*}\PY{l+m+mf}{0.75}\PY{p}{)}
+         \PY{n}{train\PYZus{}x} \PY{o}{=} \PY{n}{X}\PY{p}{[}\PY{p}{:}\PY{n}{train\PYZus{}len}\PY{p}{]}
+         \PY{n}{train\PYZus{}y} \PY{o}{=} \PY{n}{Y}\PY{p}{[}\PY{p}{:}\PY{n}{train\PYZus{}len}\PY{p}{]}
+         \PY{n}{test\PYZus{}x} \PY{o}{=} \PY{n}{X}\PY{p}{[}\PY{n}{train\PYZus{}len}\PY{p}{:}\PY{p}{]}
+         \PY{n}{test\PYZus{}y} \PY{o}{=} \PY{n}{Y}\PY{p}{[}\PY{n}{train\PYZus{}len}\PY{p}{:}\PY{p}{]}
+         
+         \PY{k}{assert}\PY{p}{(}\PY{n}{train\PYZus{}x}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{+} \PY{n}{test\PYZus{}x}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{==} \PY{n}{X}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Reshape Y so that ESN work}
+         \PY{n}{train\PYZus{}y} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{n}{train\PYZus{}y}\PY{p}{,}\PY{n}{newshape}\PY{o}{=}\PY{p}{(}\PY{n}{train\PYZus{}y}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
+         \PY{n}{test\PYZus{}y} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{n}{test\PYZus{}y}\PY{p}{,}\PY{n}{newshape}\PY{o}{=}\PY{p}{(}\PY{n}{test\PYZus{}y}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}31}]:} \PY{k}{def} \PY{n+nf}{nrmse}\PY{p}{(}\PY{n}{y}\PY{p}{,} \PY{n}{yhat}\PY{p}{)}\PY{p}{:}
+             \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+         \PY{l+s+sd}{        Function to output Normalized Mean Square Error of two numpy arrays}
+         \PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+             \PY{n}{y} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{n}{y}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
+             \PY{n}{yhat} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{n}{yhat}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}
+             \PY{n}{error} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{(}\PY{n}{y}\PY{o}{\PYZhy{}}\PY{n}{yhat}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{)}\PY{o}{/}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{max}\PY{p}{(}\PY{n}{y}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{n}{np}\PY{o}{.}\PY{n}{min}\PY{p}{(}\PY{n}{y}\PY{p}{)}\PY{p}{)}
+             \PY{k}{return} \PY{n}{error}
+\end{Verbatim}
+
+
+    \subsection{Task 1: Impact of input and RNN weight scalings on
+performance of
+ESN}\label{task-1-impact-of-input-and-rnn-weight-scalings-on-performance-of-esn}
+
+In order to solve Task 1, i.e. check how performance is affected by
+scaling input weights \(W_{ax}\) and RNN weights \(W_{aa}\), we need to
+generate various scalings for each of four inputs and run train/test for
+this specific model.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}32}]:} \PY{k}{def} \PY{n+nf}{cartprod}\PY{p}{(}\PY{o}{*}\PY{n}{arrays}\PY{p}{)}\PY{p}{:}
+             \PY{n}{N} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{arrays}\PY{p}{)}
+             \PY{k}{return} \PY{n}{np}\PY{o}{.}\PY{n}{transpose}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{meshgrid}\PY{p}{(}\PY{o}{*}\PY{n}{arrays}\PY{p}{,} \PY{n}{indexing}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ij}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{roll}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{n}{N} \PY{o}{+} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{N}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}33}]:} \PY{c+c1}{\PYZsh{} Generate scalings for each of four inputs}
+         \PY{n}{scalings} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+         \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{4}\PY{p}{)}\PY{p}{:}
+             \PY{n}{scalings}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{l+m+mf}{0.5}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{,} \PY{n}{step} \PY{o}{=} \PY{l+m+mf}{0.5}\PY{p}{)}\PY{p}{)}
+         
+         \PY{n}{input\PYZus{}scalings} \PY{o}{=} \PY{n}{cartprod}\PY{p}{(}\PY{o}{*}\PY{n}{scalings}\PY{p}{)}
+         \PY{n}{input\PYZus{}scalings}\PY{o}{.}\PY{n}{shape}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}33}]:} (6561, 4)
+\end{Verbatim}
+            
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{c+c1}{\PYZsh{} For each combination of input scalings run training and testing on McDonald\PYZsq{}s stock data and record the results.}
+        \PY{n}{input\PYZus{}scaling\PYZus{}nrmse} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+        \PY{n}{input\PYZus{}scaling\PYZus{}labels} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+        \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{input\PYZus{}scalings}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{:}
+            \PY{n}{esn} \PY{o}{=} \PY{n}{ESN}\PY{p}{(}\PY{n}{n\PYZus{}inputs} \PY{o}{=} \PY{l+m+mi}{4}\PY{p}{,}
+                  \PY{n}{n\PYZus{}outputs} \PY{o}{=} \PY{l+m+mi}{1}\PY{p}{,}
+                  \PY{n}{spectral\PYZus{}radius} \PY{o}{=} \PY{l+m+mf}{0.25}\PY{p}{,}
+                  \PY{n}{sparsity} \PY{o}{=} \PY{l+m+mf}{0.95}\PY{p}{,}
+                  \PY{n}{input\PYZus{}scaling} \PY{o}{=} \PY{n}{input\PYZus{}scalings}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)}
+            
+            \PY{n}{esn}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{train\PYZus{}x}\PY{p}{,} \PY{n}{train\PYZus{}y}\PY{p}{)}
+            \PY{n}{predictions} \PY{o}{=} \PY{n}{esn}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{test\PYZus{}x}\PY{p}{)}
+            \PY{n}{error} \PY{o}{=} \PY{n}{nrmse}\PY{p}{(}\PY{n}{test\PYZus{}y}\PY{p}{,} \PY{n}{predictions}\PY{p}{)}
+            \PY{n}{label} \PY{o}{=} \PY{n}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}input\PYZus{}scalings[i][0]\PYZcb{}}\PY{l+s+s2}{\PYZhy{}}\PY{l+s+si}{\PYZob{}input\PYZus{}scalings[i][1]\PYZcb{}}\PY{l+s+s2}{\PYZhy{}}\PY{l+s+si}{\PYZob{}input\PYZus{}scalings[i][2]\PYZcb{}}\PY{l+s+s2}{\PYZhy{}}\PY{l+s+si}{\PYZob{}input\PYZus{}scalings[i][3]\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}
+            \PY{n+nb}{print}\PY{p}{(}\PY{n}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Iteration: }\PY{l+s+si}{\PYZob{}i\PYZcb{}}\PY{l+s+s2}{, label: }\PY{l+s+si}{\PYZob{}label\PYZcb{}}\PY{l+s+s2}{, NRMSE: }\PY{l+s+si}{\PYZob{}error\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+            \PY{n}{input\PYZus{}scaling\PYZus{}nrmse}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{error}\PY{p}{)}
+            \PY{n}{input\PYZus{}scaling\PYZus{}labels}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{label}\PY{p}{)}
+            
+            \PY{k}{if} \PY{n}{i}\PY{o}{\PYZpc{}}\PY{k}{100} == 0:
+                \PY{n}{df} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{label}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{input\PYZus{}scaling\PYZus{}labels}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{nrmse}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{input\PYZus{}scaling\PYZus{}nrmse}\PY{p}{\PYZcb{}}\PY{p}{)}
+                \PY{n}{df}\PY{o}{.}\PY{n}{to\PYZus{}csv}\PY{p}{(}\PY{n}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZob{}project\PYZus{}folder\PYZcb{}}\PY{l+s+s1}{/input\PYZus{}scaling\PYZus{}results.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{index}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+        
+        \PY{n}{df} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{label}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{input\PYZus{}scaling\PYZus{}labels}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{nrmse}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{input\PYZus{}scaling\PYZus{}nrmse}\PY{p}{\PYZcb{}}\PY{p}{)}
+        \PY{n}{df}\PY{o}{.}\PY{n}{to\PYZus{}csv}\PY{p}{(}\PY{n}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZob{}project\PYZus{}folder\PYZcb{}}\PY{l+s+s1}{/input\PYZus{}scaling\PYZus{}results.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{index}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+\end{Verbatim}
+
+
+    After running the training and testing for each input scaling, we can
+compare it with performance of ESN without providing input scalings and
+plot how error rate is changing for specific scaling. The result is
+saved in 'input\_sacling\_results.csv' file, which contains 2 columns:
+'label' and 'nrmse', where label is 4 numbers that are used in scaling 4
+inputs, separated by dash.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}34}]:} \PY{n}{scalings\PYZus{}results} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{n}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZob{}project\PYZus{}folder\PYZcb{}}\PY{l+s+s1}{/input\PYZus{}scaling\PYZus{}results.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{scalings\PYZus{}results}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}34}]:}              label     nrmse
+         0  0.5-0.5-0.5-0.5  0.002889
+         1  0.5-0.5-0.5-1.0  0.002888
+         2  0.5-0.5-0.5-1.5  0.002895
+         3  0.5-0.5-0.5-2.0  0.002893
+         4  0.5-0.5-0.5-2.5  0.002891
+\end{Verbatim}
+            
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}35}]:} \PY{c+c1}{\PYZsh{} Let\PYZsq{}s train/test ESN without providing any input scaling so that we can compare with the rest.}
+         \PY{n}{esn} \PY{o}{=} \PY{n}{ESN}\PY{p}{(}\PY{n}{n\PYZus{}inputs} \PY{o}{=} \PY{l+m+mi}{4}\PY{p}{,}
+                   \PY{n}{n\PYZus{}outputs} \PY{o}{=} \PY{l+m+mi}{1}\PY{p}{,}
+                   \PY{n}{spectral\PYZus{}radius} \PY{o}{=} \PY{l+m+mf}{0.25}\PY{p}{,}
+                   \PY{n}{sparsity} \PY{o}{=} \PY{l+m+mf}{0.95}\PY{p}{)}
+         \PY{n}{esn}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{train\PYZus{}x}\PY{p}{,} \PY{n}{train\PYZus{}y}\PY{p}{)}
+         \PY{n}{predictions} \PY{o}{=} \PY{n}{esn}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{test\PYZus{}x}\PY{p}{)}
+         \PY{n}{no\PYZus{}scaling\PYZus{}error} \PY{o}{=} \PY{n}{nrmse}\PY{p}{(}\PY{n}{test\PYZus{}y}\PY{p}{,} \PY{n}{predictions}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{n}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{No scaling NRMSE is: }\PY{l+s+si}{\PYZob{}no\PYZus{}scaling\PYZus{}error\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+No scaling NRMSE is: 0.002891794927350494
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}36}]:} \PY{n}{scaling\PYZus{}nrmses} \PY{o}{=} \PY{n}{scalings\PYZus{}results}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{nrmse}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{values}
+         \PY{n}{scaling\PYZus{}labels} \PY{o}{=} \PY{n}{scalings\PYZus{}results}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{label}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{values}
+         
+         \PY{n}{fig}\PY{p}{,} \PY{n}{ax} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{p}{)}
+         \PY{n}{ax}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{scaling\PYZus{}nrmses}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{o\PYZhy{}\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{NRMSEs for various combinations of input scalings VS no input scaling NRMSE}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{NRMSE}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{ax}\PY{o}{.}\PY{n}{axhline}\PY{p}{(}\PY{n}{no\PYZus{}scaling\PYZus{}error}\PY{p}{,} \PY{n}{linewidth}\PY{o}{=}\PY{l+m+mi}{4}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_13_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    Above given plot shows the NRMSE for various input scalings, while red
+line shows the error of ESN without scaling any input. Since the graph
+is not showing very well how error was improved due to big amount of
+points, we should plot only those errors that are below the red line.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}37}]:} \PY{n}{better\PYZus{}errors} \PY{o}{=} \PY{n}{scaling\PYZus{}nrmses}\PY{p}{[}\PY{n}{np}\PY{o}{.}\PY{n}{where}\PY{p}{(}\PY{n}{scaling\PYZus{}nrmses} \PY{o}{\PYZlt{}} \PY{n}{no\PYZus{}scaling\PYZus{}error}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{]}
+         
+         \PY{n}{fig}\PY{p}{,} \PY{n}{ax} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{p}{)}
+         \PY{n}{ax}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{better\PYZus{}errors}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{o\PYZhy{}\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Improved NRMSEs for various combinations of input scalings VS no input scaling NRMSE}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{NRMSE}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{ax}\PY{o}{.}\PY{n}{axhline}\PY{p}{(}\PY{n}{no\PYZus{}scaling\PYZus{}error}\PY{p}{,} \PY{n}{linewidth}\PY{o}{=}\PY{l+m+mi}{4}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+         \PY{n}{percentage\PYZus{}improvement} \PY{o}{=} \PY{l+m+mi}{100}\PY{o}{*}\PY{p}{(}\PY{n}{no\PYZus{}scaling\PYZus{}error}\PY{o}{/}\PY{n}{np}\PY{o}{.}\PY{n}{min}\PY{p}{(}\PY{n}{scaling\PYZus{}nrmses}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{)}
+         \PY{n}{best\PYZus{}scaling} \PY{o}{=} \PY{n}{scaling\PYZus{}labels}\PY{p}{[}\PY{n}{np}\PY{o}{.}\PY{n}{argmin}\PY{p}{(}\PY{n}{scaling\PYZus{}nrmses}\PY{p}{)}\PY{p}{]}
+         
+         \PY{n+nb}{print}\PY{p}{(}\PY{n}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{No scaling error is: }\PY{l+s+si}{\PYZob{}no\PYZus{}scaling\PYZus{}error\PYZcb{}}\PY{l+s+s2}{ and lowest with scaling error is: }\PY{l+s+s2}{\PYZob{}}\PY{l+s+s2}{np.min(scaling\PYZus{}nrmses)\PYZcb{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{n}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{The error is improved by: }\PY{l+s+si}{\PYZob{}percentage\PYZus{}improvement\PYZcb{}}\PY{l+s+s2}{\PYZpc{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{n}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{The best scaling for 4 inputs is: }\PY{l+s+si}{\PYZob{}best\PYZus{}scaling\PYZcb{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_15_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+No scaling error is: 0.002891794927350494 and lowest with scaling error is: 0.002866340332593146
+
+The error is improved by: 0.8880520735065511\%
+
+The best scaling for 4 inputs is: 4.0-4.5-3.0-0.5
+
+
+    \end{Verbatim}
+
+    As we can see the input scalings indeed improve the test error, aka
+performance compared to no scaling of inputs. However the improvement in
+error rate is just 0.32\%, which is not a lot. The error itself is quite
+low, so improving farther is obviously hard.
+
+    \subsubsection{Trying to detect extreme values for input
+scaling}\label{trying-to-detect-extreme-values-for-input-scaling}
+
+Values of the input scaling that cause the error to increase as the
+system acts in a non-linear regime (large scaling) or very basic linear
+regime (small scaling).
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}38}]:} \PY{k+kn}{import} \PY{n+nn}{copy}
+         \PY{c+c1}{\PYZsh{} Generate scalings for each of four inputs}
+         \PY{n}{scalings} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+         \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{4}\PY{p}{)}\PY{p}{:}
+             \PY{n}{scalings}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{100000}\PY{p}{,} \PY{n}{step} \PY{o}{=} \PY{l+m+mi}{50000}\PY{p}{)}\PY{p}{)}
+         
+         \PY{n}{scalings} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+         \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{4}\PY{p}{)}\PY{p}{:}
+             \PY{k}{if} \PY{n}{i}\PY{o}{\PYZlt{}}\PY{l+m+mi}{2}\PY{p}{:}
+                 \PY{c+c1}{\PYZsh{}scalings.append(np.arange(2, 100000000, step = 40000000))}
+                 \PY{c+c1}{\PYZsh{}scalings.append(np.array([2] + [2**i for i in (1,4,26) ]))}
+                 \PY{n}{scalings}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{400000000}\PY{p}{,}\PY{l+m+mi}{800000000}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+             \PY{k}{else}\PY{p}{:}    
+                 \PY{n}{scalings}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{,} \PY{n}{step}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
+         
+         
+         \PY{n}{input\PYZus{}scalings} \PY{o}{=} \PY{n}{cartprod}\PY{p}{(}\PY{o}{*}\PY{n}{scalings}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{n}{input\PYZus{}scalings}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+         \PY{n}{input\PYZus{}scalings} \PY{o}{=} \PY{n}{input\PYZus{}scalings}\PY{p}{[}\PY{p}{:}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+         \PY{n+nb}{print}\PY{p}{(}\PY{n}{input\PYZus{}scalings}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{3}\PY{p}{,}\PY{p}{:}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{)}
+         
+         \PY{n}{input\PYZus{}scalings} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{p}{[}\PY{l+m+mi}{40000002}\PY{p}{,} \PY{l+m+mi}{80000002}\PY{p}{,} \PY{l+m+mi}{80000002}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{]}\PY{p}{]}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{n}{input\PYZus{}scalings}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{3}\PY{p}{,}\PY{p}{:}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+(4, 4)
+[[800000000 800000000         2]
+ [800000000 400000000         2]
+ [400000000 800000000         2]]
+[[40000002 80000002 80000002]]
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}39}]:} \PY{c+c1}{\PYZsh{} For each combination of input scalings run training and testing on McDonald\PYZsq{}s stock data and record the results.}
+         \PY{n}{input\PYZus{}scaling\PYZus{}nrmse} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+         \PY{n}{input\PYZus{}scaling\PYZus{}labels} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+         \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{input\PYZus{}scalings}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{:}
+             \PY{n}{esn} \PY{o}{=} \PY{n}{ESN}\PY{p}{(}\PY{n}{n\PYZus{}inputs} \PY{o}{=} \PY{l+m+mi}{4}\PY{p}{,}
+                   \PY{n}{n\PYZus{}outputs} \PY{o}{=} \PY{l+m+mi}{1}\PY{p}{,}
+                   \PY{n}{spectral\PYZus{}radius} \PY{o}{=} \PY{l+m+mf}{0.25}\PY{p}{,}
+                   \PY{n}{sparsity} \PY{o}{=} \PY{l+m+mf}{0.95}\PY{p}{,}
+                   \PY{n}{input\PYZus{}scaling} \PY{o}{=} \PY{n}{input\PYZus{}scalings}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)}
+             
+             \PY{n}{esn}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{train\PYZus{}x}\PY{p}{,} \PY{n}{train\PYZus{}y}\PY{p}{)}
+             \PY{n}{predictions} \PY{o}{=} \PY{n}{esn}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{test\PYZus{}x}\PY{p}{)}
+             \PY{n}{error} \PY{o}{=} \PY{n}{nrmse}\PY{p}{(}\PY{n}{test\PYZus{}y}\PY{p}{,} \PY{n}{predictions}\PY{p}{)}
+             \PY{n}{label} \PY{o}{=} \PY{n}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}input\PYZus{}scalings[i][0]\PYZcb{}}\PY{l+s+s2}{\PYZhy{}}\PY{l+s+si}{\PYZob{}input\PYZus{}scalings[i][1]\PYZcb{}}\PY{l+s+s2}{\PYZhy{}}\PY{l+s+si}{\PYZob{}input\PYZus{}scalings[i][2]\PYZcb{}}\PY{l+s+s2}{\PYZhy{}}\PY{l+s+si}{\PYZob{}input\PYZus{}scalings[i][3]\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}
+             \PY{n+nb}{print}\PY{p}{(}\PY{n}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Iteration: }\PY{l+s+si}{\PYZob{}i\PYZcb{}}\PY{l+s+s2}{, label: }\PY{l+s+si}{\PYZob{}label\PYZcb{}}\PY{l+s+s2}{, NRMSE: }\PY{l+s+si}{\PYZob{}error\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+             \PY{n}{input\PYZus{}scaling\PYZus{}nrmse}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{error}\PY{p}{)}
+             \PY{n}{input\PYZus{}scaling\PYZus{}labels}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{label}\PY{p}{)}
+         
+         \PY{n}{df} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{label}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{input\PYZus{}scaling\PYZus{}labels}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{nrmse}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{input\PYZus{}scaling\PYZus{}nrmse}\PY{p}{\PYZcb{}}\PY{p}{)}
+         \PY{n}{df}\PY{o}{.}\PY{n}{to\PYZus{}csv}\PY{p}{(}\PY{n}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZob{}project\PYZus{}folder\PYZcb{}}\PY{l+s+s1}{/input\PYZus{}scaling\PYZus{}results\PYZus{}extreme.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{index}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Iteration: 0, label: 40000002-80000002-80000002-2, NRMSE: 0.003307190551772968
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}40}]:} \PY{n}{scalings\PYZus{}results} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{n}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZob{}project\PYZus{}folder\PYZcb{}}\PY{l+s+s1}{/input\PYZus{}scaling\PYZus{}results\PYZus{}extreme.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{scalings\PYZus{}results}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{p}{)}
+         \PY{n}{scalings\PYZus{}results}\PY{o}{.}\PY{n}{sort\PYZus{}values}\PY{p}{(}\PY{n}{by}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{nrmse}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{ascending}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}40}]:}                           label     nrmse
+         0  40000002-80000002-80000002-2  0.003307
+\end{Verbatim}
+            
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}41}]:} \PY{c+c1}{\PYZsh{} Let\PYZsq{}s train/test ESN without providing any input scaling so that we can compare with the rest.}
+         \PY{n}{esn} \PY{o}{=} \PY{n}{ESN}\PY{p}{(}\PY{n}{n\PYZus{}inputs} \PY{o}{=} \PY{l+m+mi}{4}\PY{p}{,}
+                   \PY{n}{n\PYZus{}outputs} \PY{o}{=} \PY{l+m+mi}{1}\PY{p}{,}
+                   \PY{n}{spectral\PYZus{}radius} \PY{o}{=} \PY{l+m+mf}{0.25}\PY{p}{,}
+                   \PY{n}{sparsity} \PY{o}{=} \PY{l+m+mf}{0.95}\PY{p}{)}
+         \PY{n}{esn}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{train\PYZus{}x}\PY{p}{,} \PY{n}{train\PYZus{}y}\PY{p}{)}
+         \PY{n}{predictions} \PY{o}{=} \PY{n}{esn}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{test\PYZus{}x}\PY{p}{)}
+         \PY{n}{no\PYZus{}scaling\PYZus{}error} \PY{o}{=} \PY{n}{nrmse}\PY{p}{(}\PY{n}{test\PYZus{}y}\PY{p}{,} \PY{n}{predictions}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{n}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{No scaling NRMSE is: }\PY{l+s+si}{\PYZob{}no\PYZus{}scaling\PYZus{}error\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+No scaling NRMSE is: 0.0028945356047457736
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}42}]:} \PY{n}{scaling\PYZus{}nrmses} \PY{o}{=} \PY{n}{scalings\PYZus{}results}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{nrmse}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{values}
+         \PY{n}{scaling\PYZus{}labels} \PY{o}{=} \PY{n}{scalings\PYZus{}results}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{label}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{values}
+         
+         \PY{n}{fig}\PY{p}{,} \PY{n}{ax} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{p}{)}
+         \PY{n}{ax}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{scaling\PYZus{}nrmses}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{o\PYZhy{}\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{ax}\PY{o}{.}\PY{n}{axhline}\PY{p}{(}\PY{n}{no\PYZus{}scaling\PYZus{}error}\PY{p}{,} \PY{n}{linewidth}\PY{o}{=}\PY{l+m+mi}{4}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_22_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{n}{scalings\PYZus{}results} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{n}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZob{}project\PYZus{}folder\PYZcb{}}\PY{l+s+s1}{/input\PYZus{}scaling\PYZus{}results.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n}{scalings\PYZus{}results}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{p}{)}
+        \PY{n}{scalings\PYZus{}results}\PY{o}{.}\PY{n}{sort\PYZus{}values}\PY{p}{(}\PY{n}{by}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{nrmse}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{ascending}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+\end{Verbatim}
+
+
+    \subsection{Task 2: Impact of Teacher Signal scaling and shifting on
+performance of
+ESN}\label{task-2-impact-of-teacher-signal-scaling-and-shifting-on-performance-of-esn}
+
+Since we saw what was the impact on performance from scaling of inputs,
+we can proceed and check the impact on scaling and shifting of teacher
+signal. First we need to generate 2 arrays and perform cartesian product
+to form all possible combinations of scaling and shifting teacher signal
+parameters.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}43}]:} \PY{n}{teach\PYZus{}scaling} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{round}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{l+m+mf}{0.1}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{,} \PY{n}{step}\PY{o}{=}\PY{l+m+mf}{0.1}\PY{p}{)}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+         \PY{n}{teach\PYZus{}shift} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{round}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{,} \PY{n}{step}\PY{o}{=}\PY{l+m+mf}{0.1}\PY{p}{)}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+         
+         \PY{n}{teacher\PYZus{}scalings} \PY{o}{=} \PY{n}{cartprod}\PY{p}{(}\PY{n}{teach\PYZus{}scaling}\PY{p}{,} \PY{n}{teach\PYZus{}shift}\PY{p}{)}
+         \PY{n}{teacher\PYZus{}scalings}\PY{o}{.}\PY{n}{shape}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}43}]:} (4900, 2)
+\end{Verbatim}
+            
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{c+c1}{\PYZsh{} For each combination of teaching scalings run training and testing on McDonald\PYZsq{}s stock data and record the results.}
+        \PY{n}{teacher\PYZus{}scaling\PYZus{}nrmse} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+        \PY{n}{teacher\PYZus{}scaling\PYZus{}labels} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+        \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{teacher\PYZus{}scalings}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{:}
+            \PY{n}{esn} \PY{o}{=} \PY{n}{ESN}\PY{p}{(}\PY{n}{n\PYZus{}inputs} \PY{o}{=} \PY{l+m+mi}{4}\PY{p}{,}
+                  \PY{n}{n\PYZus{}outputs} \PY{o}{=} \PY{l+m+mi}{1}\PY{p}{,}
+                  \PY{n}{spectral\PYZus{}radius} \PY{o}{=} \PY{l+m+mf}{0.25}\PY{p}{,}
+                  \PY{n}{sparsity} \PY{o}{=} \PY{l+m+mf}{0.95}\PY{p}{,}
+                  \PY{n}{teacher\PYZus{}scaling} \PY{o}{=} \PY{n}{teacher\PYZus{}scalings}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}
+                  \PY{n}{teacher\PYZus{}shift} \PY{o}{=} \PY{n}{teacher\PYZus{}scalings}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+            
+            \PY{n}{esn}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{train\PYZus{}x}\PY{p}{,} \PY{n}{train\PYZus{}y}\PY{p}{)}
+            \PY{n}{predictions} \PY{o}{=} \PY{n}{esn}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{test\PYZus{}x}\PY{p}{)}
+            \PY{n}{error} \PY{o}{=} \PY{n}{nrmse}\PY{p}{(}\PY{n}{test\PYZus{}y}\PY{p}{,} \PY{n}{predictions}\PY{p}{)}
+            \PY{n}{label} \PY{o}{=} \PY{n}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}teacher\PYZus{}scalings[i][0]\PYZcb{}}\PY{l+s+s2}{\PYZus{}}\PY{l+s+si}{\PYZob{}teacher\PYZus{}scalings[i][1]\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}
+            \PY{n+nb}{print}\PY{p}{(}\PY{n}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Iteration: }\PY{l+s+si}{\PYZob{}i\PYZcb{}}\PY{l+s+s2}{, label: }\PY{l+s+si}{\PYZob{}label\PYZcb{}}\PY{l+s+s2}{, NRMSE: }\PY{l+s+si}{\PYZob{}error\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+            \PY{n}{teacher\PYZus{}scaling\PYZus{}nrmse}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{error}\PY{p}{)}
+            \PY{n}{teacher\PYZus{}scaling\PYZus{}labels}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{label}\PY{p}{)}
+            
+            \PY{k}{if} \PY{n}{i}\PY{o}{\PYZpc{}}\PY{k}{100} == 0:
+              \PY{n}{df} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{label}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{teacher\PYZus{}scaling\PYZus{}labels}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{nrmse}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{teacher\PYZus{}scaling\PYZus{}nrmse}\PY{p}{\PYZcb{}}\PY{p}{)}
+              \PY{n}{df}\PY{o}{.}\PY{n}{to\PYZus{}csv}\PY{p}{(}\PY{n}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZob{}project\PYZus{}folder\PYZcb{}}\PY{l+s+s1}{/teacher\PYZus{}scaling\PYZus{}results.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{index}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+        
+        \PY{n}{df} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{label}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{teacher\PYZus{}scaling\PYZus{}labels}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{nrmse}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{teacher\PYZus{}scaling\PYZus{}nrmse}\PY{p}{\PYZcb{}}\PY{p}{)}
+        \PY{n}{df}\PY{o}{.}\PY{n}{to\PYZus{}csv}\PY{p}{(}\PY{n}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZob{}project\PYZus{}folder\PYZcb{}}\PY{l+s+s1}{/teacher\PYZus{}scaling\PYZus{}results.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{index}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}44}]:} \PY{n}{teacher\PYZus{}scaling\PYZus{}results} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{n}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZob{}project\PYZus{}folder\PYZcb{}}\PY{l+s+s1}{/teacher\PYZus{}scaling\PYZus{}results.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{teacher\PYZus{}scaling\PYZus{}results}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}44}]:}       label     nrmse
+         0  0.1\_-5.0  0.002872
+         1  0.1\_-4.9  0.002885
+         2  0.1\_-4.8  0.002877
+         3  0.1\_-4.7  0.002877
+         4  0.1\_-4.6  0.002875
+\end{Verbatim}
+            
+    After running training and testing for all combinations of teacher
+scaling and shifting, we can proceed to understand how they affect the
+overall performance in terms of testing error.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}46}]:} \PY{n}{teacher\PYZus{}scaling\PYZus{}nrmses} \PY{o}{=} \PY{n}{teacher\PYZus{}scaling\PYZus{}results}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{nrmse}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{values}
+         \PY{n}{teacher\PYZus{}scaling\PYZus{}labels} \PY{o}{=} \PY{n}{teacher\PYZus{}scaling\PYZus{}results}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{label}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{values}
+         
+         \PY{n}{fig}\PY{p}{,} \PY{n}{ax} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{p}{)}
+         \PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{NRMSEs for various teacher scalings and shiftings combinations VS no scaling error}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{NRMSE}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{ax}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{teacher\PYZus{}scaling\PYZus{}nrmses}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{o\PYZhy{}\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{ax}\PY{o}{.}\PY{n}{axhline}\PY{p}{(}\PY{n}{no\PYZus{}scaling\PYZus{}error}\PY{p}{,} \PY{n}{linewidth}\PY{o}{=}\PY{l+m+mi}{4}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_29_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    As with input scalings we see that some values are below the no scaling
+error, so we need to again plot a graph where values are only less than
+error without scaling.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}48}]:} \PY{n}{teacher\PYZus{}better\PYZus{}errors} \PY{o}{=} \PY{n}{teacher\PYZus{}scaling\PYZus{}nrmses}\PY{p}{[}\PY{n}{np}\PY{o}{.}\PY{n}{where}\PY{p}{(}\PY{n}{teacher\PYZus{}scaling\PYZus{}nrmses} \PY{o}{\PYZlt{}} \PY{n}{no\PYZus{}scaling\PYZus{}error}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{]}
+         
+         \PY{n}{fig}\PY{p}{,} \PY{n}{ax} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{p}{)}
+         \PY{n}{ax}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{teacher\PYZus{}better\PYZus{}errors}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{o\PYZhy{}\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Improved NRMSEs for various teacher scalings and shiftings combinations VS no scaling error}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{NRMSE}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{ax}\PY{o}{.}\PY{n}{axhline}\PY{p}{(}\PY{n}{no\PYZus{}scaling\PYZus{}error}\PY{p}{,} \PY{n}{linewidth}\PY{o}{=}\PY{l+m+mi}{4}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+         \PY{n}{percentage\PYZus{}improvement} \PY{o}{=} \PY{l+m+mi}{100}\PY{o}{*}\PY{p}{(}\PY{n}{no\PYZus{}scaling\PYZus{}error}\PY{o}{/}\PY{n}{np}\PY{o}{.}\PY{n}{min}\PY{p}{(}\PY{n}{teacher\PYZus{}better\PYZus{}errors}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{)}
+         \PY{n}{best\PYZus{}scaling} \PY{o}{=} \PY{n}{teacher\PYZus{}scaling\PYZus{}labels}\PY{p}{[}\PY{n}{np}\PY{o}{.}\PY{n}{argmin}\PY{p}{(}\PY{n}{teacher\PYZus{}scaling\PYZus{}nrmses}\PY{p}{)}\PY{p}{]}
+         
+         \PY{n+nb}{print}\PY{p}{(}\PY{n}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{No scaling error is: }\PY{l+s+si}{\PYZob{}no\PYZus{}scaling\PYZus{}error\PYZcb{}}\PY{l+s+s2}{ and lowest with scaling error is: }\PY{l+s+s2}{\PYZob{}}\PY{l+s+s2}{np.min(scaling\PYZus{}nrmses)\PYZcb{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{n}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{The error is improved by: }\PY{l+s+si}{\PYZob{}percentage\PYZus{}improvement\PYZcb{}}\PY{l+s+s2}{\PYZpc{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{n}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{The best scaling for teacher and shiftings are: }\PY{l+s+si}{\PYZob{}best\PYZus{}scaling\PYZcb{}}\PY{l+s+s2}{ respectively}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_31_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+No scaling error is: 0.0028945356047457736 and lowest with scaling error is: 0.003307190551772968
+
+The error is improved by: 1.5213051947950085\%
+
+The best scaling for teacher and shiftings are: 0.1\_-4.0 respectively
+
+
+    \end{Verbatim}
+
+    Again as with scaling of inputs, the error wasn't improved much. It is
+mainly due to the fact that the initial error without any scaling was
+already very small.
+
+\subsection{Task 3: Memory capacity of ESN
+Network}\label{task-3-memory-capacity-of-esn-network}
+
+    \paragraph{Quantification of the memory
+capacity}\label{quantification-of-the-memory-capacity}
+
+We need to compute the following measure:
+\(C = \sum_{i=1,2,..} r^2(u(n-i),y_{i}(n))\)
+
+where \(r^2(u(n−i),y_{i}(n))\) is the squared correlation coefficient
+between the input signal delayed by i and a trained output signal
+\(y_i(n)\) which was trained on the task to retrodict (memorize)
+\(u(n−i)\) on the input signal \(u(n)\) .
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{k+kn}{from} \PY{n+nn}{math} \PY{k}{import} \PY{n}{floor}
+        \PY{n}{c} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{train\PYZus{}x}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+        \PY{n}{capacities} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{n}{floor}\PY{p}{(}\PY{n}{test\PYZus{}x}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{/}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{n}{train\PYZus{}x}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+        
+        \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{n}{floor}\PY{p}{(}\PY{n}{test\PYZus{}x}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{/}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+            \PY{n}{esn} \PY{o}{=} \PY{n}{ESN}\PY{p}{(}\PY{n}{n\PYZus{}inputs} \PY{o}{=} \PY{l+m+mi}{1}\PY{p}{,}
+                      \PY{n}{n\PYZus{}outputs} \PY{o}{=} \PY{l+m+mi}{1}\PY{p}{,}
+                      \PY{n}{spectral\PYZus{}radius} \PY{o}{=} \PY{l+m+mf}{0.25}\PY{p}{,}
+                      \PY{n}{sparsity} \PY{o}{=} \PY{l+m+mf}{0.95}\PY{p}{,}
+                      \PY{n}{teacher\PYZus{}scaling} \PY{o}{=} \PY{l+m+mf}{0.1}\PY{p}{,}
+                      \PY{n}{teacher\PYZus{}shift} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{l+m+mf}{4.0}
+                     \PY{p}{)}
+            
+            \PY{n}{train\PYZus{}y2} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)}
+            \PY{n}{train\PYZus{}y2} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{hstack}\PY{p}{(}\PY{p}{(}\PY{n}{train\PYZus{}y2}\PY{p}{,}\PY{n}{train\PYZus{}x}\PY{p}{[}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{n}{i}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+            
+            \PY{c+c1}{\PYZsh{} For each input (out of 4) train the ESN network and calculate the memory capacity}
+            \PY{c+c1}{\PYZsh{} Expressed by above given formula}
+            \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{train\PYZus{}x}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{:}
+              \PY{n}{esn}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{train\PYZus{}x}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{n}{j}\PY{p}{]}\PY{p}{,} \PY{n}{train\PYZus{}y2}\PY{p}{)}
+              \PY{n}{predictions} \PY{o}{=} \PY{n}{esn}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{test\PYZus{}x}\PY{p}{[}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{n}{i}\PY{p}{,}\PY{n}{j}\PY{p}{]}\PY{p}{)}
+              \PY{n}{ci} \PY{o}{=} \PY{n}{pearsonr}\PY{p}{(}\PY{n}{predictions}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}\PY{n}{test\PYZus{}x}\PY{p}{[}\PY{n}{i}\PY{p}{:}\PY{p}{,}\PY{n}{j}\PY{p}{]}\PY{p}{)}
+              \PY{n}{ci} \PY{o}{=} \PY{n}{ci}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
+              
+              \PY{n}{c}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{n}{c}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{+} \PY{n}{ci}
+              \PY{n}{capacities}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{n}{ci}
+              \PY{n+nb}{print}\PY{p}{(}\PY{n}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Delay: }\PY{l+s+si}{\PYZob{}i\PYZcb{}}\PY{l+s+s2}{\PYZhy{}}\PY{l+s+si}{\PYZob{}j\PYZcb{}}\PY{l+s+s2}{. Capacity: }\PY{l+s+si}{\PYZob{}ci\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+            
+            \PY{k}{if} \PY{n}{i}\PY{o}{\PYZpc{}}\PY{k}{100} == 0:
+              \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Saving DF}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+              \PY{n}{df} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{data}\PY{o}{=}\PY{n}{capacities}\PY{p}{,} \PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{memory\PYZus{}cap\PYZus{}open}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{memory\PYZus{}cap\PYZus{}high}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{memory\PYZus{}cap\PYZus{}low}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{memory\PYZus{}cap\PYZus{}volume}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+              \PY{n}{df}\PY{o}{.}\PY{n}{to\PYZus{}csv}\PY{p}{(}\PY{n}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}project\PYZus{}folder\PYZcb{}}\PY{l+s+s2}{/memory\PYZus{}capacities.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{index}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+        
+        \PY{n}{df} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{data}\PY{o}{=}\PY{n}{capacities}\PY{p}{,} \PY{n}{columns}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{memory\PYZus{}cap\PYZus{}open}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{memory\PYZus{}cap\PYZus{}high}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{memory\PYZus{}cap\PYZus{}low}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{memory\PYZus{}cap\PYZus{}volume}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+        \PY{n}{df}\PY{o}{.}\PY{n}{to\PYZus{}csv}\PY{p}{(}\PY{n}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}project\PYZus{}folder\PYZcb{}}\PY{l+s+s2}{/memory\PYZus{}capacities.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{index}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}52}]:} \PY{n}{df\PYZus{}capacities} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{n}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}project\PYZus{}folder\PYZcb{}}\PY{l+s+s2}{/memory\PYZus{}capacities.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{df\PYZus{}capacities} \PY{o}{=} \PY{n}{df\PYZus{}capacities}\PY{p}{[}\PY{p}{(}\PY{n}{df\PYZus{}capacities}\PY{o}{.}\PY{n}{T} \PY{o}{!=} \PY{l+m+mi}{0}\PY{p}{)}\PY{o}{.}\PY{n}{any}\PY{p}{(}\PY{p}{)}\PY{p}{]}
+         \PY{n}{df\PYZus{}capacities}\PY{o}{.}\PY{n}{shape}
+         \PY{n}{c} \PY{o}{=} \PY{p}{[}\PY{l+m+mi}{0} \PY{k}{for} \PY{n}{\PYZus{}} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{train\PYZus{}x}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{]}
+         \PY{k}{with} \PY{n+nb}{open}\PY{p}{(}\PY{n}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}project\PYZus{}folder\PYZcb{}}\PY{l+s+s2}{/total\PYZus{}capacities.txt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)} \PY{k}{as} \PY{n}{f}\PY{p}{:}
+             \PY{n}{c} \PY{o}{=} \PY{n}{f}\PY{o}{.}\PY{n}{readlines}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+\end{Verbatim}
+
+
+    After having all memory capacities up to 1500 delays, we can plot how
+they are changing for each of 4 inputs.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}53}]:} \PY{n}{inputs} \PY{o}{=} \PY{n}{df\PYZus{}capacities}\PY{o}{.}\PY{n}{columns}
+         \PY{n}{caps} \PY{o}{=} \PY{n}{df\PYZus{}capacities}\PY{o}{.}\PY{n}{values}
+         \PY{n}{df\PYZus{}capacities}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n}{bins}\PY{o}{=}\PY{l+m+mi}{100}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{n}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Total memory capacity for each input is: }\PY{l+s+si}{\PYZob{}c\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Total memory capacity for each input is: 0.5271293  0.02827466 0.52461713 0. 
+
+
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_37_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    As we can see from above histrograms of memory capacities are mostly
+close to 0 in all inputs. However when it comes to memory capacities for
+each of 1500 states above 0, they are distributed equally same for 3
+inputs. Except volume. The maximum memory capacity for volume seems to
+be slighty more than 0.1. Which can mean that volume should not be a
+good choice of input for LSTM algorithm.
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+    \end{document}
